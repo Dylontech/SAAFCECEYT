@@ -54,20 +54,23 @@
     </div>
 </div>
 <div class="form-group mb-3">
-    <label class="form-label">   {{ Form::label('estatus') }}</label>
+    <label class="form-label">{{ Form::label('Estatus') }}</label>
     <div>
-        {{ Form::text('estatus', $alumno->estatus, ['class' => 'form-control' .
-        ($errors->has('estatus') ? ' is-invalid' : ''), 'placeholder' => 'Estatus']) }}
-        {!! $errors->first('estatus', '<div class="invalid-feedback">:message</div>') !!}
-        <small class="form-hint">alumno <b>estatus</b> instruction.</small>
-    </div>
+        {{ Form::select('Estatus', 
+            ['Activo' => 'Activo', 'Inactivo' => 'Inactivo', 'Adeudo' => 'Adeudo'], 
+            $alumno->Estatus, 
+            ['class' => 'form-control' . ($errors->has('Estatus') ? ' is-invalid' : '')]
+        ) }}
+        {!! $errors->first('Estatus', '<div class="invalid-feedback">:message</div>') !!}
+        <small class="form-hint">alumno <b>Estatus</b> agrega.</small>
+    </div>
 </div>
 
     <div class="form-footer">
         <div class="text-end">
             <div class="d-flex">
-                <a href="{{ route('alumnos.index') }}" class="btn btn-danger">Cancel</a>
-                <button type="submit" class="btn btn-primary ms-auto ajax-submit">Submit</button>
+                <a href="{{ route('alumnos.index') }}" class="btn btn-danger">Cancelar</a>
+                <button type="submit" class="btn btn-primary ms-auto ajax-submit">Guardar</button>
             </div>
         </div>
     </div>

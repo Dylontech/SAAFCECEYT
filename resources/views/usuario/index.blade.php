@@ -21,6 +21,17 @@
                 <!-- Page title actions -->
                 <div class="col-12 col-md-auto ms-auto d-print-none">
                     <div class="btn-list">
+                        <a href="{{ route('filtrar') }}" class="btn btn-secondary d-none d-sm-inline-block">
+                            <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                 stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <line x1="12" y1="5" x2="12" y2="19"/>
+                                <line x1="5" y1="12" x2="19" y2="12"/>
+                            </svg>
+                            Filtrar
+                        </a>
                         <a href="{{ route('usuarios.create') }}" class="btn btn-warning d-none d-sm-inline-block">
                             <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
@@ -125,18 +136,59 @@
                                                            href="{{ route('usuarios.edit',$usuario->id) }}">
                                                             Editar
                                                         </a>
-                                                        <form
-                                                            action="{{ route('usuarios.destroy',$usuario->id) }}"
-                                                            method="POST">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit"
-                                                                    onclick="if(!confirm('Do you Want to Proceed?')){return false;}"
-                                                                    class="dropdown-item text-red"><i
-                                                                    class="fa fa-fw fa-trash"></i>
-                                                                Eliminar
-                                                            </button>
-                                                        </form>
+                                                        <!DOCTYPE html>
+                                                        <html lang="es">
+                                                        <head>
+                                                            <meta charset="UTF-8">
+                                                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                                            <title>Eliminar Registro</title>
+                                                            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+                                                            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                                                            <script>
+                                                                function cancelarRegistro(event) {
+                                                                    event.preventDefault(); // Evita el comportamiento predeterminado del botón
+                                                        
+                                                                    const swalWithBootstrapButtons = Swal.mixin({
+                                                                        customClass: {
+                                                                            confirmButton: "btn btn-success",
+                                                                            cancelButton: "btn btn-danger"
+                                                                        },
+                                                                        buttonsStyling: false
+                                                                    });
+                                                        
+                                                                    swalWithBootstrapButtons.fire({
+                                                                        title: "¿Estas seguro de eliminar el registro?",
+                                                                        text: "¡Esta accion no es reversible!",
+                                                                        icon: "warning",
+                                                                        showCancelButton: true,
+                                                                        confirmButtonText: "¡Si, eliminalo!",
+                                                                        cancelButtonText: "¡Cancelar!",
+                                                                        reverseButtons: true
+                                                                    }).then((result) => {
+                                                                        if (result.isConfirmed) {
+                                                                            // Si se confirma la eliminación, envía el formulario
+                                                                            document.getElementById("eliminarForm").submit();
+                                                                        } else if (result.dismiss === Swal.DismissReason.cancel) {
+                                                                            swalWithBootstrapButtons.fire({
+                                                                                title: "Accion cancelada",
+                                                                                text: "Tu archivo esta a salvo :)",
+                                                                                icon: "error"
+                                                                            });
+                                                                        }
+                                                                    });
+                                                                }
+                                                            </script>
+                                                        </head>
+                                                        <body>
+                                                            <form id="eliminarForm" action="{{ route('alumnos.destroy', $alumno->id) }}" method="POST">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" onclick="cancelarRegistro(event)" class="dropdown-item text-red">
+                                                                    <i class="fa fa-fw fa-trash"></i> Eliminar
+                                                                </button>
+                                                            </form>
+                                                        </body>
+                                                        </html>
                                                     </div>
                                                 </div>
                                             </div>
