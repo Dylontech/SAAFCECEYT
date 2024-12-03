@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\DB;
 
 class RoleAndPermissionsSeeder extends Seeder
 {
@@ -13,23 +14,29 @@ class RoleAndPermissionsSeeder extends Seeder
      */
     public function run(): void
     {
-        $roleAdministrador =Role::firstOrCreate(['name' => 'Administrador']);
-        $roleControl =Role::firstOrCreate(['name' => 'Control-escolar']);
-        $roleFinanciero =Role::firstOrCreate(['name' => 'Recursos-Financieros']);
-        Role::firstOrCreate(['name' => 'Alumno']);
+        try {
+            DB::transaction(function () {
+                $roleAdministrador = Role::firstOrCreate(['name' => 'Administrador']);
+                $roleControl = Role::firstOrCreate(['name' => 'Control-escolar']);
+                $roleFinanciero = Role::firstOrCreate(['name' => 'Recursos-Financieros']);
+                $roleAlumno = Role::firstOrCreate(['name' => 'Alumno']);
 
-        Permission::firstOrCreate(['name' => 'Registrar alumnos']);
-        Permission::firstOrCreate(['name' => 'Editar alumnos']);
-        Permission::firstOrCreate(['name' => 'Eliminar alumnos']);
-   
-        $roleAdministrador->givePermissionTo('Registrar alumnos');
-        $roleAdministrador->givePermissionTo('Editar alumnos');
-        $roleAdministrador->givePermissionTo('Eliminar alumnos');
-   $roleControl->givePermissionTo('Registrar alumnos');
-   $roleControl->givePermissionTo('Editar alumnos');
-   $roleControl->givePermissionTo('Eliminar alumnos');
-   
+                $permissions = [
+                    'Registrar alumnos',
+                    'Editar alumnos',
+                    'Eliminar alumnos'
+                ];
+
+                foreach ($permissions as $permission) {
+                    Permission::firstOrCreate(['name' => $permission]);
+                }
+
+                $roleAdministrador->givePermissionTo($permissions);
+                $roleControl->givePermissionTo($permissions);
+            });
+        } catch (\Exception $e) {
+            // Manejo de errores
+            echo "Error: " . $e->getMessage();
+        }
     }
-
-
 }
