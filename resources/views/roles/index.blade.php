@@ -14,38 +14,64 @@
                 <label for="role_id">Rol</label>
                 <select name="role_id" class="form-control" required>
                     @foreach($roles as $role)
-                        <option value="{{ $role->id }}">{{ $role->name }}</option>
+                        @if(in_array($role->name, ['admin', 'control_escolar', 'servicio_financiero']))
+                            <option value="{{ $role->id }}">{{ $role->name }}</option>
+                        @endif
                     @endforeach
                 </select>
             </div>
             <div class="form-group">
                 <label for="user_ids">Usuarios</label>
-                <select name="user_ids[]" class="form-control" multiple required>
-                    @foreach($users as $user)
-                        <option value="{{ $user->id }}">{{ $user->name }}</option>
-                    @endforeach
-                </select>
+                <div class="accordion" id="usersAccordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="heading-users">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-users" aria-expanded="false" aria-controls="collapse-users">
+                                Seleccionar Usuarios
+                            </button>
+                        </h2>
+                        <div id="collapse-users" class="accordion-collapse collapse" aria-labelledby="heading-users" data-bs-parent="#usersAccordion">
+                            <div class="accordion-body">
+                                @foreach($users as $user)
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="user_ids[]" value="{{ $user->id }}" id="user-checkbox-{{ $user->id }}">
+                                        <label class="form-check-label" for="user-checkbox-{{ $user->id }}">
+                                            {{ $user->name }}
+                                        </label>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <button type="submit" class="btn btn-primary">Asignar Roles</button>
         </form>
 
-        <!-- Lista de Roles y Usuarios Asignados -->
+        <!-- Lista de Roles y Usuarios Asignados con Menús Desplegables -->
         <div class="mt-5">
             <h3>Lista de Roles y Usuarios Asignados</h3>
-            <form method="GET" action="{{ route('roles.index') }}">
-                <div class="input-group mb-3">
-                    <input type="text" name="search" class="form-control" placeholder="Buscar usuario por nombre" value="{{ request('search') }}">
-                    <button class="btn btn-outline-secondary" type="submit">Buscar</button>
-                </div>
-            </form>
-            @foreach($roles as $role)
-                <h4>{{ $role->name }}</h4>
-                <ul class="list-group mb-3">
-                    @foreach($role->users as $user)
-                        <li class="list-group-item">{{ $user->name }}</li>
-                    @endforeach
-                </ul>
-            @endforeach
+            <div class="accordion" id="rolesAccordion">
+                @foreach($roles as $role)
+                    @if(in_array($role->name, ['admin', 'control_escolar', 'servicio_financiero']))
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading-{{ $role->id }}">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ $role->id }}" aria-expanded="false" aria-controls="collapse-{{ $role->id }}">
+                                    {{ $role->name }}
+                                </button>
+                            </h2>
+                            <div id="collapse-{{ $role->id }}" class="accordion-collapse collapse" aria-labelledby="heading-{{ $role->id }}" data-bs-parent="#rolesAccordion">
+                                <div class="accordion-body">
+                                    <ul class="list-group mb-3">
+                                        @foreach($role->users as $user)
+                                            <li class="list-group-item">{{ $user->name }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                @endforeach
+            </div>
         </div>
 
         <!-- Paginación para Usuarios -->

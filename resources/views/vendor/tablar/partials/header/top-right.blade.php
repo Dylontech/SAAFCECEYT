@@ -1,17 +1,22 @@
 @auth
+    @php
+        $user = Auth()->user();
+        $userName = $user ? ($user->name ?? 'Usuario') : 'Usuario';
+        $userRoles = $user ? ($user->roles->pluck('name')->implode(', ') ?? 'Sin rol') : 'Sin rol';
+    @endphp
     <div class="nav-item dropdown">
         <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Abrir menú de usuario">
-            <span class="avatar">{{ Auth()->user()->name[0] }}</span>
+            <span class="avatar">{{ $userName[0] }}</span>
             <div class="d-none d-xl-block ps-2">
-                <div>{{ Auth()->user()->name }}</div>
-                <div class="mt-1 small text-muted">{{ Auth()->user()->roles->pluck('name')->implode(', ') }}</div>
+                <div>{{ $userName }}</div>
+                <div class="mt-1 small text-muted">{{ $userRoles }}</div>
             </div>
         </a>
         <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
             @php( $logout_url = View::getSection('logout_url') ?? config('tablar.logout_url', 'logout') )
             @php( $profile_url = View::getSection('profile_url') ?? config('tablar.profile_url', 'profile') )
             @php( $setting_url = View::getSection('setting_url') ?? config('tablar.setting_url', 'roles.index') )
-            @php( $users_index_url = route('users.index') ) <!-- Cambiamos a la URL del CRUD de usuarios -->
+            @php( $users_index_url = route('users.index') ) <!-- URL del CRUD de usuarios -->
 
             @if (config('tablar.use_route_url', true))
                 @php( $profile_url = $profile_url ? route($profile_url) : '' )
@@ -24,7 +29,12 @@
             @endif
 
             @role('admin') <!-- Verificar si el usuario tiene el rol de admin -->
-                <a href="{{ $users_index_url }}" class="dropdown-item">Registro</a> <!-- Botón ajustado para redirigir al CRUD de usuarios -->
+                <a href="{{ $users_index_url }}" class="dropdown-item">Registro</a> <!-- Botón para el CRUD de usuarios -->
+                <a href="{{ $setting_url }}" class="dropdown-item">Configuraciones</a>
+            @endrole
+            
+            @role('alumno') <!-- Verificar si el usuario tiene el rol de alumno -->
+                <a href="{{ route('alumnos_user.index') }}" class="dropdown-item">Mi perfil</a> <!-- Enlace a la vista de alumnos -->
                 <a href="{{ $setting_url }}" class="dropdown-item">Configuraciones</a>
             @endrole
 

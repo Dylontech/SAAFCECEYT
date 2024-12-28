@@ -1,37 +1,42 @@
 @extends('tablar::auth.layout')
-@section('title', 'Register')
+@section('title', 'Registrar')
 @section('content')
     <div class="container container-tight py-4">
+        @if (session('warning'))
+            <div class="alert alert-warning">
+                {{ session('warning') }}
+            </div>
+        @endif
         <div class="text-center mb-1 mt-5">
             <a href="" class="navbar-brand navbar-brand-autodark">
-                <img src="{{asset(config('tablar.auth_logo.img.path','assets/logo.svg'))}}" height="36"
-                     alt=""></a>
+                <img src="{{asset(config('tablar.auth_logo.img.path','assets/logo.svg'))}}" height="36" alt="">
+            </a>
         </div>
         <form class="card card-md" action="{{route('register')}}" method="post" autocomplete="off" novalidate>
             @csrf
             <div class="card-body">
-                <h2 class="card-title text-center mb-4">Create new account</h2>
+                <h2 class="card-title text-center mb-4">Crear nueva cuenta</h2>
                 <div class="mb-3">
-                    <label class="form-label">Name</label>
-                    <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" placeholder="Enter name">
+                    <label class="form-label">Nombre</label>
+                    <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" placeholder="Ingresa tu nombre">
                     @error('name')
                     <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Email address</label>
-                    <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" placeholder="Enter email">
+                    <label class="form-label">Correo Electrónico</label>
+                    <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" placeholder="Ingresa tu correo electrónico">
                     @error('email')
                     <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Password</label>
+                    <label class="form-label">Contraseña</label>
                     <div class="input-group input-group-flat">
-                        <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="Password"
+                        <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="Contraseña"
                                autocomplete="off">
                         <span class="input-group-text">
-                  <a href="#" class="link-secondary" title="Show password" data-bs-toggle="tooltip"><!-- Download SVG icon from http://tabler-icons.io/i/eye -->
+                  <a href="#" class="link-secondary" title="Mostrar contraseña" data-bs-toggle="tooltip">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
                          stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
                          stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="12"
@@ -47,12 +52,12 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Confirm Password</label>
+                    <label class="form-label">Confirmar Contraseña</label>
                     <div class="input-group input-group-flat">
-                        <input type="password" name="password_confirmation" class="form-control @error('password_confirmation') is-invalid @enderror" placeholder="Password"
+                        <input type="password" name="password_confirmation" class="form-control @error('password_confirmation') is-invalid @enderror" placeholder="Confirmar Contraseña"
                                autocomplete="off">
                         <span class="input-group-text">
-                  <a href="#" class="link-secondary" title="Show password" data-bs-toggle="tooltip"><!-- Download SVG icon from http://tabler-icons.io/i/eye -->
+                  <a href="#" class="link-secondary" title="Mostrar contraseña" data-bs-toggle="tooltip">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
                          stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
                          stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="12"
@@ -69,16 +74,16 @@
                 <div class="mb-3">
                     <label class="form-check">
                         <input type="checkbox" class="form-check-input"/>
-                        <span class="form-check-label">Agree the <a href="#" tabindex="-1">terms and policy</a>.</span>
+                        <span class="form-check-label">Aceptar los <a href="#" tabindex="-1">términos y políticas</a>.</span>
                     </label>
                 </div>
                 <div class="form-footer">
-                    <button type="submit" class="btn btn-primary w-100">Create new account</button>
+                    <button type="submit" class="btn btn-primary w-100">Crear nueva cuenta</button>
                 </div>
             </div>
         </form>
         <div class="text-center text-muted mt-3">
-            Already have account? <a href="{{route('login')}}" tabindex="-1">Sign in</a>
+            ¿Ya tienes una cuenta? <a href="{{route('login')}}" tabindex="-1">Iniciar sesión</a>
         </div>
     </div>
 @endsection

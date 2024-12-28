@@ -40,7 +40,7 @@
     <!-- Cuerpo de la página -->
     <div class="page-body">
         <div class="container-xl">
-            @if(config('tablar','display_alert'))
+            @if(config('tablar', 'display_alert'))
                 @include('tablar::common.alert')
             @endif
             <div class="row row-deck row-cards">
@@ -84,24 +84,19 @@
                                             <polyline points="6 15 12 9 18 15"/>
                                         </svg>
                                     </th>
-                                    
-                                        <th>Nombre</th>
-                                        <th>Correo Electrónico</th>
-
+                                    <th>Nombre</th>
+                                    <th>Correo Electrónico</th>
                                     <th class="w-1"></th>
                                 </tr>
                                 </thead>
-
                                 <tbody>
                                 @forelse ($users as $user)
                                     <tr>
                                         <td><input class="form-check-input m-0 align-middle" type="checkbox"
                                                    aria-label="Seleccionar usuario"></td>
                                         <td>{{ ++$i }}</td>
-                                        
-                                            <td>{{ $user->name }}</td>
-                                            <td>{{ $user->email }}</td>
-
+                                        <td>{{ $user->name }}</td>
+                                        <td>{{ $user->email }}</td>
                                         <td>
                                             <div class="btn-list flex-nowrap">
                                                 <div class="dropdown">
@@ -111,24 +106,26 @@
                                                     </button>
                                                     <div class="dropdown-menu dropdown-menu-end">
                                                         <a class="dropdown-item"
-                                                           href="{{ route('users.show',$user->id) }}">
+                                                           href="{{ route('users.show', $user->id) }}">
                                                             Ver
                                                         </a>
                                                         <a class="dropdown-item"
-                                                           href="{{ route('users.edit',$user->id) }}">
+                                                           href="{{ route('users.edit', $user->id) }}">
                                                             Editar
                                                         </a>
-                                                        <form class="delete-form"
-                                                            action="{{ route('users.destroy',$user->id) }}"
-                                                            method="POST">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="button" 
-                                                                    class="dropdown-item text-red delete-button"><i
-                                                                    class="fa fa-fw fa-trash"></i>
-                                                                Eliminar
-                                                            </button>
-                                                        </form>
+                                                        @if(auth()->user()->hasRole('admin'))
+                                                            <form class="delete-form"
+                                                                action="{{ route('users.destroy', $user->id) }}"
+                                                                method="POST">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="button"
+                                                                        class="dropdown-item text-red delete-button">
+                                                                    <i class="fa fa-fw fa-trash"></i>
+                                                                    Eliminar
+                                                                </button>
+                                                            </form>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -138,10 +135,9 @@
                                     <td>No se encontraron datos</td>
                                 @endforelse
                                 </tbody>
-
                             </table>
                         </div>
-                       <div class="card-footer d-flex align-items-center">
+                        <div class="card-footer d-flex align-items-center">
                             {!! $users->links('tablar::pagination') !!}
                         </div>
                     </div>
@@ -172,21 +168,12 @@
                         cancelButtonText: "Cancelar"
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            @can('delete users')
-                                form.submit();
-                                Swal.fire({
-                                    title: "¡Eliminado!",
-                                    text: "El usuario ha sido eliminado.",
-                                    icon: "success"
-                                });
-                            @else
-                                Swal.fire({
-                                    icon: "error",
-                                    title: "Oops...",
-                                    text: "¡Algo salió mal!",
-                                    footer: 'No tienes los permisos necesarios.'
-                                });
-                            @endcan
+                            form.submit();
+                            Swal.fire({
+                                title: "¡Eliminado!",
+                                text: "El usuario ha sido eliminado.",
+                                icon: "success"
+                            });
                         }
                     });
                 });
@@ -194,4 +181,3 @@
         });
     </script>
 @endsection
-

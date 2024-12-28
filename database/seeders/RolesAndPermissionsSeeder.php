@@ -32,15 +32,14 @@ class RolesAndPermissionsSeeder extends Seeder
         ];
 
         foreach ($permissions as $permission) {
-            // Verificar si el permiso ya existe antes de crearlo
             if (!Permission::where('name', $permission)->exists()) {
-                Permission::create(['name' => $permission]);
+                Permission::create(['name' => $permission, 'guard_name' => 'alumno']);
             }
         }
 
         // Crear Roles y Asignar Permisos
         if (!Role::where('name', 'admin')->exists()) {
-            $adminRole = Role::create(['name' => 'admin']);
+            $adminRole = Role::create(['name' => 'admin', 'guard_name' => 'web']);
             $adminRole->givePermissionTo([
                 'crear alumnos', 'editar alumnos', 'eliminar alumnos', 'ver alumnos',
                 'crear usuarios', 'editar usuarios', 'eliminar usuarios', 'ver usuarios'
@@ -48,25 +47,25 @@ class RolesAndPermissionsSeeder extends Seeder
         }
 
         if (!Role::where('name', 'control_escolar')->exists()) {
-            $controlEscolarRole = Role::create(['name' => 'control_escolar']);
+            $controlEscolarRole = Role::create(['name' => 'control_escolar', 'guard_name' => 'web']);
             $controlEscolarRole->givePermissionTo([
                 'crear alumnos', 'editar alumnos', 'ver alumnos', 'gestionar solicitud'
             ]);
         }
 
-        if (!Role::where('name', 'alumno')->exists()) {
-            $alumnoRole = Role::create(['name' => 'alumno']);
-            $alumnoRole->givePermissionTo([
-                'ver alumnos', 'crear solicitud', 'ver propias solicitudes'
-            ]);
-        }
+        // Eliminar la creación del rol 'alumno'
+        // if (!Role::where('name', 'alumno')->exists()) {
+        //     $alumnoRole = Role::create(['name' => 'alumno', 'guard_name' => 'alumno']);
+        //     $alumnoRole->givePermissionTo([
+        //         'ver alumnos', 'crear solicitud', 'ver propias solicitudes'
+        //     ]);
+        // }
 
         if (!Role::where('name', 'servicio_financiero')->exists()) {
-            $servicioFinancieroRole = Role::create(['name' => 'servicio_financiero']);
+            $servicioFinancieroRole = Role::create(['name' => 'servicio_financiero', 'guard_name' => 'web']);
             $servicioFinancieroRole->givePermissionTo([
                 'ver pagos', 'procesar pagos', 'generar liga de pago'
             ]);
         }
     }
 }
-

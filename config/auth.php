@@ -14,7 +14,7 @@ return [
         ],
 
         'alumno' => [
-            'driver' => 'alumno',
+            'driver' => 'session', // Cambiado de 'alumno' a 'session'
             'provider' => 'alumnos',
         ],
     ],
