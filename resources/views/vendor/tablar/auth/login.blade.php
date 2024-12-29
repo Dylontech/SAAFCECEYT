@@ -19,7 +19,7 @@
                     @csrf
                     <div class="mb-3">
                         <label class="form-label">Correo Electrónico o CURP</label>
-                        <input type="text" class="form-control @error('user_identifier') is-invalid @enderror" name="user_identifier" placeholder="Correo Electrónico o CURP" autocomplete="off">
+                        <input type="text" class="form-control @error('user_identifier') is-invalid @enderror" name="user_identifier" placeholder="Correo Electrónico o CURP" value="{{ old('user_identifier', Cookie::get('user_identifier') ?? '') }}" autocomplete="off">
                         @error('user_identifier')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -32,7 +32,7 @@
                             </span>
                         </label>
                         <div class="input-group input-group-flat">
-                            <input type="password" id="password" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="Contraseña o Matrícula" autocomplete="off">
+                            <input type="password" id="password" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="Contraseña o Matrícula" value="{{ old('password', Cookie::get('password') ?? '') }}" autocomplete="off">
                             <span class="input-group-text">
                                 <a href="#" class="link-secondary" title="Mostrar contraseña" data-bs-toggle="tooltip" id="toggle-password">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -66,7 +66,7 @@
                     
                     <div class="mb-2">
                         <label class="form-check">
-                            <input type="checkbox" class="form-check-input"/>
+                            <input type="checkbox" class="form-check-input" name="remember" id="remember" {{ Cookie::get('remember') ? 'checked' : '' }} />
                             <span class="form-check-label">Recuérdame</span>
                         </label>
                     </div>

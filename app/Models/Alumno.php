@@ -48,7 +48,8 @@ class Alumno extends Model implements AuthenticatableContract
         'Grupo',
         'Nombre',
         'email',
-        'estatus'
+        'estatus',
+        'remember_token'
     ];
 
     /**

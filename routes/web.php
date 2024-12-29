@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SolicitudController;
+use App\Http\Controllers\AlumnoController; // Añadimos este controlador
 
 // Página principal
 Route::get('/', function () {
@@ -30,7 +31,7 @@ Route::post('/password/reset', [\App\Http\Controllers\Auth\ResetPasswordControll
 // Rutas para usuarios autenticados
 Route::middleware(['auth:web'])->group(function () {
     Route::get('/home', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
-    Route::resource('/alumnos', \App\Http\Controllers\AlumnoController::class);
+    Route::resource('/alumnos', AlumnoController::class);
     Route::resource('/materias', \App\Http\Controllers\MateriaController::class);
     Route::resource('/especialidades', \App\Http\Controllers\EspecialidadeController::class);
     Route::resource('/solicitudes', \App\Http\Controllers\SolicitudeController::class);
@@ -39,6 +40,9 @@ Route::middleware(['auth:web'])->group(function () {
     Route::get('/configuracion', [RoleController::class, 'index'])->name('roles.index');
     Route::post('/configuracion/asignar', [RoleController::class, 'assignRoles'])->name('roles.assign');
     Route::resource('users', UserController::class);
+
+    // Ruta para búsqueda de alumnos
+    Route::get('/search/alumnos', [AlumnoController::class, 'search'])->name('search.alumnos');
 });
 
 // Rutas para alumnos autenticados
@@ -51,6 +55,14 @@ Route::middleware(['auth:alumno'])->group(function () {
     Route::get('/formulario', function () {
         return view('alumnos_user.formulario');
     })->name('formulario');
+
+    // Ruta para la vista de servicios
+    Route::get('/servicios', function () {
+        return view('alumnos_user.servicios');
+    })->name('servicios');
+
+    // Ruta para la vista del editor
+    Route::get('/editor', function () {
+        return view('alumnos_user.editor');
+    })->name('editor');
 });
-
-

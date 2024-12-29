@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use App\Models\User;
 use App\Models\Alumno;
 
@@ -32,6 +33,7 @@ class LoginController extends Controller
 
         $userIdentifier = $request->input('user_identifier');
         $password = $request->input('password');
+        $remember = $request->input('remember'); // Obtener la opción de recordar
 
         // Verificar si los inputs están definidos
         if (isset($userIdentifier) && isset($password)) {
@@ -39,7 +41,18 @@ class LoginController extends Controller
 
             if ($loginType == 'email') {
                 // Autenticar usuarios con email y contraseña
-                if (Auth::attempt(['email' => $userIdentifier, 'password' => $password])) {
+                if (Auth::attempt(['email' => $userIdentifier, 'password' => $password], $remember)) {
+                    if ($remember) {
+                        // Guardar en cookies
+                        Cookie::queue('user_identifier', $userIdentifier, 120);
+                        Cookie::queue('password', $password, 120);
+                        Cookie::queue('remember', $remember, 120);
+                    } else {
+                        // Eliminar cookies
+                        Cookie::queue(Cookie::forget('user_identifier'));
+                        Cookie::queue(Cookie::forget('password'));
+                        Cookie::queue(Cookie::forget('remember'));
+                    }
                     return $this->sendLoginResponse($request);
                 }
             } else {
@@ -49,7 +62,18 @@ class LoginController extends Controller
                                 ->first();
 
                 if ($alumno) {
-                    Auth::guard('alumno')->login($alumno);
+                    Auth::guard('alumno')->login($alumno, $remember);
+                    if ($remember) {
+                        // Guardar en cookies
+                        Cookie::queue('user_identifier', $userIdentifier, 120);
+                        Cookie::queue('password', $password, 120);
+                        Cookie::queue('remember', $remember, 120);
+                    } else {
+                        // Eliminar cookies
+                        Cookie::queue(Cookie::forget('user_identifier'));
+                        Cookie::queue(Cookie::forget('password'));
+                        Cookie::queue(Cookie::forget('remember'));
+                    }
                     return redirect()->route('alumnos_user.index');
                 }
             }
@@ -67,4 +91,5 @@ class LoginController extends Controller
         ]);
     }
 }
+
 

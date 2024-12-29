@@ -5,6 +5,8 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Gate;
+use App\Models\User;
+use App\Models\Alumno;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,6 +29,21 @@ class AppServiceProvider extends ServiceProvider
         // Esto funciona en la aplicación utilizando funciones relacionadas con la puerta (gate) como auth()->user->can() y @can()
         Gate::before(function ($user, $ability) {
             return $user->hasRole('Super Admin') ? true : null;
+        });
+
+        // Definir la lógica de autorización para ver el menú de administrador
+        Gate::define('view-admin-menu', function ($user) {
+            // Verificar el rol del usuario si es instancia de User
+            if ($user instanceof User) {
+                return $user->hasRole('admin');
+            }
+
+            // Verificar el rol del alumno si es instancia de Alumno
+            if ($user instanceof Alumno) {
+                return $user->hasRole('admin');
+            }
+
+            return false;
         });
     }
 }

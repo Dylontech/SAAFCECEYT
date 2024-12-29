@@ -148,6 +148,7 @@ return [
             'text' => 'Home',
             'icon' => 'ti ti-home',
             'url' => 'home'
+            
         ],
 
         [

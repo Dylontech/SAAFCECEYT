@@ -24,7 +24,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                                  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                                  stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path stroke="none" d="M0 0h24V24H0z" fill="none"/>
                                 <line x1="12" y1="5" x2="12" y2="19"/>
                                 <line x1="5" y1="12" x2="19" y2="12"/>
                             </svg>
@@ -68,14 +68,36 @@
                                 @if (auth()->user()->hasRole('admin'))
                                 <div class="mb-3">
                                     <label class="form-label">Contraseña</label>
-                                    <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="Introduce tu contraseña">
+                                    <div class="input-group">
+                                        <input type="password" name="password" id="password" class="form-control @error('password') is-invalid @enderror" placeholder="Introduce tu contraseña">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text toggle-password">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24V24H0z" fill="none"/>
+                                                    <circle cx="12" cy="12" r="2"/>
+                                                    <path d="M22 12c0 4.97-8.03 9-10 9s-10-4.03-10-9 8.03-9 10-9 10 4.03 10 9z"/>
+                                                </svg>
+                                            </span>
+                                        </div>
+                                    </div>
                                     @error('password')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Confirmar Contraseña</label>
-                                    <input type="password" name="password_confirmation" class="form-control @error('password_confirmation') is-invalid @enderror" placeholder="Confirma tu contraseña">
+                                    <div class="input-group">
+                                        <input type="password" name="password_confirmation" id="password_confirmation" class="form-control @error('password_confirmation') is-invalid @enderror" placeholder="Confirma tu contraseña">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text toggle-password">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24V24H0z" fill="none"/>
+                                                    <circle cx="12" cy="12" r="2"/>
+                                                    <path d="M22 12c0 4.97-8.03 9-10 9s-10-4.03-10-9 8.03-9 10-9 10 4.03 10 9z"/>
+                                                </svg>
+                                            </span>
+                                        </div>
+                                    </div>
                                     @error('password_confirmation')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -94,4 +116,17 @@
             </div>
         </div>
     </div>
+
+<script>
+    document.querySelectorAll('.toggle-password').forEach(function(element) {
+        element.addEventListener('click', function () {
+            var passwordInput = this.parentElement.previousElementSibling;
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+            } else {
+                passwordInput.type = 'password';
+            }
+        });
+    });
+</script>
 @endsection

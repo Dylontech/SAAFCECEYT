@@ -1,12 +1,8 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alumnos - Inicio</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
+@extends('tablar::page')
+
+@section('title', 'Alumnos - Inicio')
+
+@section('content')
     <div class="container">
         <div class="row justify-content-center mt-5">
             <div class="col-md-8">
@@ -23,6 +19,9 @@
                             <a href="{{ route('home') }}" class="btn btn-primary">Ir al Dashboard</a>
                             <!-- Botón para mostrar el formulario -->
                             <a href="{{ route('formulario') }}" class="btn btn-secondary mt-3">Solicitud</a>
+                            <!-- Botón para acceder a la vista de servicios -->
+                            <a href="{{ route('servicios') }}" class="btn btn-secondary mt-3">Solicitud de Servicios</a>
+                            
                         @else
                             <p>No tienes acceso a esta vista. Por favor, <a href="{{ route('login') }}">inicia sesión</a>.</p>
                         @endauth
@@ -31,7 +30,7 @@
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+@endsection
+
+
 

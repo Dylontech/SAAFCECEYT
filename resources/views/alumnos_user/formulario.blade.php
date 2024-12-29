@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="container">
-        <h2 class="text-center mb-4">Formulario Independiente</h2>
+        <h2 class="text-center mb-4">Solicitud pago de examen</h2>
         <form method="POST" action="#">
             @csrf
             <div class="mb-3">

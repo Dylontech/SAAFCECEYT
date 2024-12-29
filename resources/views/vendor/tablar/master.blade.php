@@ -27,7 +27,6 @@
 
     {{-- Custom Stylesheets (post Tablar) --}}
     @yield('tablar_css')
-
 </head>
 @yield('body')
 @include('tablar::extra.modal')
@@ -37,5 +36,6 @@
     @livewireScripts
 @endif
 
+{{-- Custom Scripts (post Tablar) --}}
 @yield('tablar_js')
 </html>
