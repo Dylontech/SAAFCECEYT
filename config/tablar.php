@@ -143,43 +143,53 @@ return [
     */
 
     'menu' => [
-        // Navbar items:
-        [
-            'text' => 'Home',
-            'icon' => 'ti ti-home',
-            'url' => 'home'
-            
-        ],
-
-        [
-            'text' => 'alumnos',
-            'url' => 'alumnos',
-            'icon' => 'ti ti-user',
-            
-        ],
-
-        [
-            'text' => 'Materias',
-            'url' => 'materias',
-            'icon' => 'ti ti-help',
-            
-        ],
-
-        [
-            'text' => 'Especialidades',
-            'url' => 'especialidades',
-            'icon' => 'ti ti-help',
-            
-        ],
-        [
-            'text' => 'Solicitudes',
-            'url' => 'solicitudes',
-            'icon' => 'ti ti-help',
-            
-            
-        ],
-
+    // Navbar items:
+    [
+        'text' => 'Home',
+        'icon' => 'ti ti-home',
+        'url' => 'home',
+        'roles' => ['admin', 'control_escolar', 'servicio_financiero'] // Excluir rol 'alumno'
     ],
+    [
+        'text' => 'Alumnos',
+        'url' => 'alumnos',
+        'icon' => 'ti ti-user',
+        'roles' => ['control_escolar', 'admin'] // Excluir rol 'alumno'
+    ],
+    [
+        'text' => 'Materias',
+        'url' => 'materias',
+        'icon' => 'ti ti-help',
+        'roles' => ['control_escolar', 'admin'] // Excluir rol 'alumno'
+    ],
+    [
+        'text' => 'Especialidades',
+        'url' => 'especialidades',
+        'icon' => 'ti ti-help',
+        'roles' => ['control_escolar', 'admin'] // Excluir rol 'alumno'
+    ],
+    [
+        'text' => 'Solicitudes',
+        'url' => 'solicitudes',
+        'icon' => 'ti ti-help',
+        'roles' => ['control_escolar', 'admin', 'servicio_financiero'] // Excluir rol 'alumno'
+    ],
+    // Ítem de menú para el formulario de examen, visible solo para alumnos
+    [
+        'text' => 'Nueva solicitud de pago de examenes',
+        'url' => 'formulario',
+        'icon' => 'ti ti-file',
+        'roles' => ['alumno']
+    ],
+    // Ítem de menú para los servicios, visible solo para alumnos
+    [
+        'text' => 'Nueva solicitud de servicios',
+        'url' => 'servicios',
+        'icon' => 'ti ti-file',
+        'roles' => ['alumno']
+    ],
+],
+
 
     /*
     |--------------------------------------------------------------------------
@@ -191,16 +201,16 @@ return [
     | For detailed instructions you can look the menu filters section here:
     |
     */
-
-    'filters' => [
-        TakiElias\Tablar\Menu\Filters\GateFilter::class,
-        TakiElias\Tablar\Menu\Filters\HrefFilter::class,
-        TakiElias\Tablar\Menu\Filters\SearchFilter::class,
-        TakiElias\Tablar\Menu\Filters\ActiveFilter::class,
-        TakiElias\Tablar\Menu\Filters\ClassesFilter::class,
-        TakiElias\Tablar\Menu\Filters\LangFilter::class,
-        TakiElias\Tablar\Menu\Filters\DataFilter::class,
-    ],
+'filters' => [
+    TakiElias\Tablar\Menu\Filters\GateFilter::class,
+    TakiElias\Tablar\Menu\Filters\HrefFilter::class,
+    TakiElias\Tablar\Menu\Filters\SearchFilter::class,
+    TakiElias\Tablar\Menu\Filters\ActiveFilter::class,
+    TakiElias\Tablar\Menu\Filters\ClassesFilter::class,
+    TakiElias\Tablar\Menu\Filters\LangFilter::class,
+    TakiElias\Tablar\Menu\Filters\DataFilter::class,
+    App\Filter\RolePermissionMenuFilter::class, // Agregamos la nueva clase de filtro
+],
 
     /*
     |--------------------------------------------------------------------------

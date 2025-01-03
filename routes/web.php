@@ -7,6 +7,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SolicitudController;
 use App\Http\Controllers\AlumnoController; // Añadimos este controlador
+use App\Http\Controllers\AdminController; // Añadimos este controlador también
 
 // Página principal
 Route::get('/', function () {
@@ -66,3 +67,13 @@ Route::middleware(['auth:alumno'])->group(function () {
         return view('alumnos_user.editor');
     })->name('editor');
 });
+
+// Ruta para la vista de administración sin bloqueo de rol
+Route::get('/admin/index', function () {
+    $tables = \Illuminate\Support\Facades\DB::select('SHOW TABLES');
+    $tables = array_map('current', $tables); // Convertir objetos stdClass a array simple
+    return view('admin.index', compact('tables'));
+})->name('admin.index');
+
+Route::post('/admin/download-backup-database', [AdminController::class, 'downloadBackupDatabase'])->name('admin.download-backup-database');
+Route::post('/admin/download-backup-table', [AdminController::class, 'downloadBackupTable'])->name('admin.download-backup-table');

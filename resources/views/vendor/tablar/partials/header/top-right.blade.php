@@ -40,6 +40,7 @@
             @role('admin')
                 <a href="{{ $users_index_url }}" class="dropdown-item">Registro</a>
                 <a href="{{ $setting_url }}" class="dropdown-item">Configuraciones</a>
+                <a href="{{ route('admin.index') }}" class="dropdown-item">Respaldo de base de datos</a> <!-- Enlace a la vista de administración -->
             @endrole
 
             @role('control_escolar')
