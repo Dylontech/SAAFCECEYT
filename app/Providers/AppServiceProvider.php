@@ -5,6 +5,8 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\View;
 use App\Models\User;
 use App\Models\Alumno;
 
@@ -45,5 +47,9 @@ class AppServiceProvider extends ServiceProvider
 
             return false;
         });
+
+        // Compartir la configuración de WhatsApp en todas las vistas
+        $settings = DB::table('whatsapp_settings')->first();
+        View::share('whatsappSettings', $settings);
     }
 }

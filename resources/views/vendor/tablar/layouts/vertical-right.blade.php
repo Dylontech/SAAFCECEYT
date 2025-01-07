@@ -2,7 +2,7 @@
     $layoutData['cssClasses'] =  'navbar navbar-vertical navbar-right navbar-expand-lg';
 @endphp
 @section('body')
-    <body>
+<body>
     <div class="page">
         <!-- Sidebar -->
         @include('tablar::partials.navbar.sidebar')
@@ -16,5 +16,6 @@
             @include('tablar::partials.footer.bottom')
         </div>
     </div>
-    </body>
+</body>
 @stop
+

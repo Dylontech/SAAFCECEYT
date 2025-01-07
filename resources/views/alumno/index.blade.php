@@ -85,14 +85,14 @@
                                         </svg>
                                     </th>
                                     
-										<th>Matricula</th>
-										<th>Curp</th>
-										<th>Carrera</th>
-										<th>Grupo</th>
-										<th>Nombre</th>
-										<th>Email</th>
-                                      
-										<th>Estatus</th>
+                                    <th>Numero de Control</th>
+                                    <th>Curp</th>
+                                    <th>Especialidad</th>
+                                    <th>Semestre</th> <!-- Añadido -->
+                                    <th>Grupo</th>
+                                    <th>Nombre</th>
+                                    <th>Email</th>
+                                    <th>Estatus</th>
 
                                     <th class="w-1"></th>
                                 </tr>
@@ -105,13 +105,14 @@
                                                    aria-label="Select alumno"></td>
                                         <td>{{ ++$i }}</td>
                                         
-											<td>{{ $alumno->Matricula }}</td>
-											<td>{{ $alumno->CURP }}</td>
-											<td>{{ $alumno->Carrera }}</td>
-											<td>{{ $alumno->Grupo }}</td>
-											<td>{{ $alumno->Nombre }}</td>
-											<td>{{ $alumno->email }}</td>
-											<td>{{ $alumno->estatus }}</td>
+                                        <td>{{ $alumno->numero_control }}</td>
+                                        <td>{{ $alumno->CURP }}</td>
+                                        <td>{{ $alumno->especialidad }}</td>
+                                        <td>{{ $alumno->semestre }}</td> <!-- Añadido -->
+                                        <td>{{ $alumno->Grupo }}</td>
+                                        <td>{{ $alumno->Nombre }}</td>
+                                        <td>{{ $alumno->email }}</td>
+                                        <td>{{ $alumno->estatus }}</td>
 
                                         <td>
                                             <div class="btn-list flex-nowrap">

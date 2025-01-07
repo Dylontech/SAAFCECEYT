@@ -38,9 +38,10 @@
             @endif
 
             @role('admin')
-                <a href="{{ $users_index_url }}" class="dropdown-item">Registro</a>
-                <a href="{{ $setting_url }}" class="dropdown-item">Configuraciones</a>
-                <a href="{{ route('admin.index') }}" class="dropdown-item">Respaldo de base de datos</a> <!-- Enlace a la vista de administración -->
+                <a href="{{ $users_index_url }}" class="dropdown-item">Registro de Usuarios</a>
+                <a href="{{ $setting_url }}" class="dropdown-item">Asignación de roles</a>
+                <a href="{{ route('admin.index') }}" class="dropdown-item">Respaldo de base de datos</a>
+                <a href="{{ route('edit.whatsapp.settings') }}" class="dropdown-item">Configuración de WhatsApp</a>
             @endrole
 
             @role('control_escolar')

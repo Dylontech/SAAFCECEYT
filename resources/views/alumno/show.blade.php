@@ -50,16 +50,20 @@
                         <div class="card-body">
                             
 <div class="form-group">
-<strong>Matricula:</strong>
-{{ $alumno->Matricula }}
+<strong>Numero de Control:</strong>
+{{ $alumno->numero_control }} <!-- Actualizado -->
 </div>
 <div class="form-group">
 <strong>Curp:</strong>
 {{ $alumno->CURP }}
 </div>
 <div class="form-group">
-<strong>Carrera:</strong>
-{{ $alumno->Carrera }}
+<strong>Especialidad:</strong>
+{{ $alumno->especialidad }} <!-- Actualizado -->
+</div>
+<div class="form-group">
+<strong>Semestre:</strong>
+{{ $alumno->semestre }} <!-- Añadido -->
 </div>
 <div class="form-group">
 <strong>Grupo:</strong>
@@ -85,5 +89,3 @@
         </div>
     </div>
 @endsection
-
-

@@ -56,9 +56,9 @@ class LoginController extends Controller
                     return $this->sendLoginResponse($request);
                 }
             } else {
-                // Autenticar alumnos con CURP y matrícula
+                // Autenticar alumnos con CURP y número de control
                 $alumno = Alumno::where('CURP', $userIdentifier)
-                                ->where('Matricula', $password)
+                                ->where('numero_control', $password)
                                 ->first();
 
                 if ($alumno) {
@@ -91,5 +91,3 @@ class LoginController extends Controller
         ]);
     }
 }
-
-

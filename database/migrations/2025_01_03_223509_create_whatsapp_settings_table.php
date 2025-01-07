@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddRememberTokenToAlumnosTable extends Migration
+class CreateWhatsappSettingsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class AddRememberTokenToAlumnosTable extends Migration
      */
     public function up()
     {
-        Schema::table('alumnos', function (Blueprint $table) {
-            $table->rememberToken()->nullable()->after('numero_control');  // Actualizado
+        Schema::create('whatsapp_settings', function (Blueprint $table) {
+            $table->id();
+            $table->string('phone_number', 15);
+            $table->text('message');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +28,6 @@ class AddRememberTokenToAlumnosTable extends Migration
      */
     public function down()
     {
-        Schema::table('alumnos', function (Blueprint $table) {
-            $table->dropColumn('remember_token');
-        });
+        Schema::dropIfExists('whatsapp_settings');
     }
 }

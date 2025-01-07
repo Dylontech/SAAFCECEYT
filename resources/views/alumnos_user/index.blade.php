@@ -16,12 +16,6 @@
                             <p>Bienvenido, {{ Auth::guard('alumno')->user()->Nombre ?? 'Alumno' }}!</p>
                             <p>Rol: {{ Auth::guard('alumno')->user()->roles->pluck('name')->implode(', ') ?? 'Sin rol' }}</p>
                             <p>Esta es la vista de inicio para los alumnos. Aquí puedes acceder a tus recursos y funcionalidades específicas.</p>
-                            <a href="{{ route('home') }}" class="btn btn-primary">Ir al Dashboard</a>
-                            <!-- Botón para mostrar el formulario -->
-                            <a href="{{ route('formulario') }}" class="btn btn-secondary mt-3">Solicitud</a>
-                            <!-- Botón para acceder a la vista de servicios -->
-                            <a href="{{ route('servicios') }}" class="btn btn-secondary mt-3">Solicitud de Servicios</a>
-                            
                         @else
                             <p>No tienes acceso a esta vista. Por favor, <a href="{{ route('login') }}">inicia sesión</a>.</p>
                         @endauth
@@ -31,6 +25,3 @@
         </div>
     </div>
 @endsection
-
-
-

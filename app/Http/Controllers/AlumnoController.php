@@ -43,9 +43,33 @@ class AlumnoController extends Controller
      */
     public function store(Request $request)
     {
-        request()->validate(Alumno::$rules);
+        $request->validate([
+            'numero_control' => 'required|string|max:255',
+            'CURP' => 'required|string|max:255',
+            'especialidad' => 'required|string|max:255',
+            'semestre' => 'required|integer',
+            'Grupo' => 'required|string|max:255',
+            'Nombre' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255',
+            'estatus' => 'required|string|max:255'
+        ]);
 
-        $alumno = Alumno::create($request->all());
+        $alumno = new Alumno([
+            'numero_control' => $request->numero_control,
+            'CURP' => $request->CURP,
+            'especialidad' => $request->especialidad,
+            'semestre' => $request->semestre,
+            'Grupo' => $request->Grupo,
+            'Nombre' => $request->Nombre,
+            'email' => $request->email,
+            'estatus' => $request->estatus
+        ]);
+
+        $alumno->save();
+
+        if ($request->ajax()) {
+            return response()->json(['success' => 'Alumno creado exitosamente.']);
+        }
 
         return redirect()->route('alumnos.index')
             ->with('success', 'Alumno creado exitosamente.');
@@ -86,12 +110,21 @@ class AlumnoController extends Controller
      */
     public function update(Request $request, Alumno $alumno)
     {
-        request()->validate(Alumno::$rules);
+        $request->validate([
+            'numero_control' => 'required|string|max:255',
+            'CURP' => 'required|string|max:255',
+            'especialidad' => 'required|string|max:255',
+            'semestre' => 'required|integer',
+            'Grupo' => 'required|string|max:255',
+            'Nombre' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255',
+            'estatus' => 'required|string|max:255'
+        ]);
 
         $alumno->update($request->all());
 
         return redirect()->route('alumnos.index')
-            ->with('success', 'Alumno actualizado exitosamente');
+            ->with('success', 'Alumno actualizado exitosamente.');
     }
 
     /**

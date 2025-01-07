@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('alumnos', function (Blueprint $table) {
             $table->id();
-            $table->string('Matricula');
+            $table->string('numero_control');  // Actualizado
             $table->string('CURP');
-            $table->string('Carrera');
+            $table->string('especialidad');  // Actualizado
+            $table->string('semestre');  // Añadido
             $table->string('Grupo');
             $table->string('Nombre');
             $table->string('email');
@@ -32,3 +33,4 @@ return new class extends Migration
         Schema::dropIfExists('alumnos');
     }
 };
+

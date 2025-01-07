@@ -5,7 +5,7 @@
 @section('content')
 <div class="container">
     <h2 class="text-center mb-4">Solicitud pago de examen</h2>
-    <form method="POST" action="#">
+    <form method="POST" action="{{ route('formulario.store') }}" data-ajax="true">
         @csrf
         <div class="mb-3">
             <label for="nombre" class="form-label">Nombre del Alumno</label>
@@ -43,7 +43,7 @@
 
         <div class="mb-3">
             <label for="fecha_pago" class="form-label">Fecha de Pago</label>
-            <input type="date" id="fecha_pago" name="fecha_pago" class="form-control" min="{{ date('Y-m-d') }}">
+            <input type="date" id="fecha_pago" name="fecha_pago" class="form-control" value="{{ date('Y-m-d') }}">
         </div>
 
         <h3 class="mt-4">Materias y Exámenes</h3>
@@ -86,3 +86,4 @@
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 @endsection
+

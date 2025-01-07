@@ -46,16 +46,18 @@
 <body>
     @if (Auth::guard('alumno')->check())
         <!-- Botones para el alumno -->
-        <a href="{{ route('formulario') }}" class="btn btn-secondary mt-3">Nueva solicitud de pago de Examen</a>
-        <a href="{{ route('servicios') }}" class="btn btn-secondary mt-3">Nueva solicitud de pago de servicios</a>
-    @elseif (Auth::user() && Auth::user()->hasAnyRole(['admin', 'control_escolar']))
-        <!-- Botón de filtrar para admin y control escolar -->
-        <button class="btn-filter">Filtrar</button>
+        <a href="{{ route('solicitudesE.index') }}" class="btn-filter">Ver Solicitudes de Exámenes</a>
+        <a href="{{ route('formularios.index') }}" class="btn-filter">Ver Solicitudes de Servicios</a>
+    @elseif (Auth::user() && Auth::user()->hasRole('control_escolar'))
+        <!-- Botón para control escolar -->
+        <a href="{{ route('control_user.index') }}" class="btn-filter">Solicitudes de Examenes</a>
+        <!-- Botón para acceder a la vista GestionS -->
+        <a href="{{ route('gestions.index') }}" class="btn-filter">Solicitudes de Servicios</a>
     @endif
 
     <div id="results"></div>
 
-    <a href="https://wa.me/524471103795?text=Buen%20dia%20apreciable%20alumno.%20%C2%BFEn%20que%20podemos%20ayudarte%3F%2C%20te%20recordamos%20que%20el%20horario%20de%20atencion%20es%20de%208%20de%20la%20mañana%20a%203%20de%20la%20tarde%2C%20agradecemos%20tu%20entendimiento." class="btn-whatsapp" target="_blank" rel="noreferrer">
+    <a href="https://wa.me/{{ $whatsappSettings->phone_number }}?text={{ urlencode($whatsappSettings->message) }}" class="btn-whatsapp" target="_blank" rel="noreferrer">
         <!-- WhatsApp SVG icon -->
         <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24V24H0z" fill="none"/>
@@ -64,4 +66,3 @@
     </a>
 </body>
 </html>
-

@@ -12,9 +12,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * Class Alumno
  *
  * @property $id
- * @property $Matricula
+ * @property $numero_control
  * @property $CURP
- * @property $Carrera
+ * @property $especialidad
+ * @property $semestre
  * @property $Grupo
  * @property $Nombre
  * @property $email
@@ -30,9 +31,10 @@ class Alumno extends Model implements AuthenticatableContract
     use Authenticatable, HasRoles, HasFactory;
 
     static $rules = [
-        'Matricula' => 'required',
+        'numero_control' => 'required',
         'CURP' => 'required',
-        'Carrera' => 'required',
+        'especialidad' => 'required',
+        'semestre' => 'required',
         'Grupo' => 'required',
         'Nombre' => 'required',
         'email' => 'required',
@@ -42,9 +44,10 @@ class Alumno extends Model implements AuthenticatableContract
     protected $perPage = 20;
 
     protected $fillable = [
-        'Matricula',
+        'numero_control',
         'CURP',
-        'Carrera',
+        'especialidad',
+        'semestre',  // Añadido antes de Grupo
         'Grupo',
         'Nombre',
         'email',

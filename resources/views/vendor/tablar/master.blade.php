@@ -15,7 +15,9 @@
         @yield('title_postfix', config('tablar.title_postfix', ''))
     </title>
 
-    <!-- CSS/JS files -->
+    <!-- Incluir jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
     @if(config('tablar','vite'))
         @vite('resources/js/app.js')
     @endif
@@ -28,14 +30,52 @@
     {{-- Custom Stylesheets (post Tablar) --}}
     @yield('tablar_css')
 </head>
-@yield('body')
-@include('tablar::extra.modal')
+<body>
+    @yield('body')
+    @include('tablar::extra.modal')
 
-{{-- Livewire Script --}}
-@if(config('tablar.livewire'))
-    @livewireScripts
-@endif
+    {{-- Livewire Script --}}
+    @if(config('tablar.livewire'))
+        @livewireScripts
+    @endif
 
-{{-- Custom Scripts (post Tablar) --}}
-@yield('tablar_js')
+    {{-- Custom Scripts (post Tablar) --}}
+    @yield('tablar_js')
+
+    <!-- Configuración global de AJAX y CSRF -->
+    <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        function sendAjaxRequest(url, method, data, successCallback, errorCallback) {
+            $.ajax({
+                url: url,
+                type: method,
+                data: data,
+                success: successCallback,
+                error: errorCallback
+            });
+        }
+
+        $(document).ready(function() {
+            $('body').on('submit', 'form[data-ajax="true"]', function(event) {
+                event.preventDefault();
+                var form = $(this);
+                var url = form.attr('action');
+                var method = form.attr('method');
+                var data = form.serialize();
+                sendAjaxRequest(url, method, data, function(response) {
+                    // Muestra una notificación de éxito o realiza cualquier acción deseada
+                    alert('Formulario enviado con éxito');
+                }, function(error) {
+                    // Maneja errores
+                    alert('Hubo un error al enviar el formulario');
+                });
+            });
+        });
+    </script>
+</body>
 </html>

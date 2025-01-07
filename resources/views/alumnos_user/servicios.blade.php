@@ -39,49 +39,17 @@
             <label for="curp" class="form-label">CURP:</label>
             <input type="text" id="curp" name="curp" class="form-control" value="{{ old('curp', Auth::guard('alumno')->user()->CURP ?? '') }}">
         </div>
-
-        <table class="table mt-4">
-            <thead>
-                <tr>
-                    <th>Tipo de Servicio</th>
-                    <th>Marcar</th>
-                    <th>No. de Recibo de Pago</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Constancia de Inscripción y/o Estudios</td>
-                    <td><input type="checkbox" name="servicio1"></td>
-                    <td><input type="text" name="recibo1" class="form-control"></td>
-                </tr>
-                <tr>
-                    <td>Duplicado de Credencial</td>
-                    <td><input type="checkbox" name="servicio2"></td>
-                    <td><input type="text" name="recibo2" class="form-control"></td>
-                </tr>
-                <tr>
-                    <td>Certificado Incompleto (Parcial)</td>
-                    <td><input type="checkbox" name="servicio3"></td>
-                    <td><input type="text" name="recibo3" class="form-control"></td>
-                </tr>
-                <tr>
-                    <td>Duplicado de Certificado de Estudios</td>
-                    <td><input type="checkbox" name="servicio4"></td>
-                    <td><input type="text" name="recibo4" class="form-control"></td>
-                </tr>
-                <tr>
-                    <td>Examen de Titulación (Protocolo)</td>
-                    <td><input type="checkbox" name="servicio5"></td>
-                    <td><input type="text" name="recibo5" class="form-control"></td>
-                </tr>
-                <tr>
-                    <td>Titulación (Tit. y Exp. de Ced. Prof.)</td>
-                    <td><input type="checkbox" name="servicio6"></td>
-                    <td><input type="text" name="recibo6" class="form-control"></td>
-                </tr>
-            </tbody>
-        </table>
-
+        <div class="mb-3">
+            <label for="tipo_servicio" class="form-label">Tipo de Servicio:</label>
+            <select id="tipo_servicio" name="tipo_servicio" class="form-control">
+                <option value="Constancia de Inscripción y/o Estudios">Constancia de Inscripción y/o Estudios</option>
+                <option value="Duplicado de Credencial">Duplicado de Credencial</option>
+                <option value="Certificado Incompleto (Parcial)">Certificado Incompleto (Parcial)</option>
+                <option value="Duplicado de Certificado de Estudios">Duplicado de Certificado de Estudios</option>
+                <option value="Examen de Titulación (Protocolo)">Examen de Titulación (Protocolo)</option>
+                <option value="Titulación (Tit. y Exp. de Ced. Prof.)">Titulación (Tit. y Exp. de Ced. Prof.)</option>
+            </select>
+        </div>
         <button type="submit" class="btn btn-primary w-100 mt-4">Enviar Solicitud</button>
     </form>
 </div>
