@@ -11,8 +11,9 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\WhatsappSettingsController;
 use App\Http\Controllers\FormularioEController;
 use App\Http\Controllers\FormularioController;
-use App\Http\Controllers\ControlUserController; // Importa el controlador
-use App\Http\Controllers\GestionSController; // Importa el nuevo controlador
+use App\Http\Controllers\ControlUserController;
+use App\Http\Controllers\GestionSController;
+use App\Http\Controllers\FinanzasUserController; // Importa el nuevo controlador
 
 // Página principal
 Route::get('/', function () {
@@ -84,6 +85,15 @@ Route::middleware(['auth:alumno'])->group(function () {
     Route::get('/formularios', [FormularioController::class, 'index'])->name('formularios.index'); // Ruta para ver las solicitudes
     Route::post('/ruta-de-envio', [FormularioController::class, 'store']); // Ruta para enviar el formulario
     Route::patch('/formularios/{id}/status', [FormularioController::class, 'updateStatus'])->name('formularios.updateStatus'); // Ruta para actualizar el estado de la solicitud
+
+    // Rutas para subir y descargar archivos
+    Route::post('/formularios/upload', [FormularioController::class, 'upload'])->name('formularios.upload');
+    Route::get('/formularios/download-liga/{id}', [FormularioController::class, 'downloadLigaDePago'])->name('formularios.downloadLigaDePago');
+    Route::get('/formularios/download-comprobante/{id}', [FormularioController::class, 'downloadComprobanteAlumno'])->name('formularios.downloadComprobanteAlumno');
+    Route::post('/formularios/upload-comprobante-alumno/{id}', [FormularioController::class, 'uploadComprobanteAlumno'])->name('formularios.uploadComprobanteAlumno'); // Nueva ruta añadida
+
+    // Ruta para eliminar una solicitud
+    Route::delete('/formularios/{id}', [FormularioController::class, 'destroy'])->name('formulario.destroy');
 });
 
 // Ruta para la vista de administración sin bloqueo de rol
@@ -108,9 +118,13 @@ Route::get('/gestions', [GestionSController::class, 'index'])->name('gestions.in
 Route::get('/formularios/{id}', [GestionSController::class, 'show'])->name('formularios.show'); // Ruta para ver la solicitud
 Route::patch('/formularios/{id}/status', [GestionSController::class, 'updateStatus'])->name('gestions.updateStatus'); // Corregida la ruta para actualizar el estado de la solicitud
 
+// Rutas para la vista de finanzas sin protección de middleware
+Route::get('/finanzas', [FinanzasUserController::class, 'index'])->name('finanzas.index');
+Route::get('/finanzas/comprobantes/{id}', [FinanzasUserController::class, 'show'])->name('finanzas.show');
+Route::get('/finanzas/comprobantes/subir', [FinanzasUserController::class, 'create'])->name('finanzas.create');
+Route::post('/finanzas/comprobantes/subir', [FinanzasUserController::class, 'store'])->name('finanzas.store');
 
-
-
-
-
+// Rutas para descargar archivos
+Route::get('/finanzas/comprobantes/descargar-liga/{id}', [FinanzasUserController::class, 'downloadLigaDePago'])->name('finanzas.downloadLigaDePago');
+Route::get('/finanzas/comprobantes/descargar-comprobante/{id}', [FinanzasUserController::class, 'downloadComprobanteAlumno'])->name('finanzas.downloadComprobanteAlumno');
 

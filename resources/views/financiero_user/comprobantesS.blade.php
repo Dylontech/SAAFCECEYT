@@ -19,17 +19,7 @@
                 <!-- Acciones del título de la página -->
                 <div class="col-12 col-md-auto ms-auto d-print-none">
                     <div class="btn-list">
-                        <a href="{{ route('gestions.index') }}" class="btn btn-primary d-none d-sm-inline-block">
-                            <!-- Descargar icono SVG desde http://www.tabler-icons.io/i/plus -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                 stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                <line x1="12" y1="5" x2="12" y2="19"/>
-                                <line x1="5" y1="12" x2="19" y2="12"/>
-                            </svg>
-                            Lista de Solicitudes
-                        </a>
+                        <!-- Botón eliminado -->
                     </div>
                 </div>
             </div>
@@ -40,8 +30,23 @@
         <div class="container-xl">
             <div class="row row-deck row-cards">
                 <div class="col-12">
-                    @if(config('tablar','display_alert'))
-                        @include('tablar::common.alert')
+                    @if($errors->any())
+                        <div class="alert alert-danger">
+                            <ul class="mb-0">
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    @if(session('success'))
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
+                    @elseif(session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
                     @endif
                     <div class="card">
                         <div class="card-header">
@@ -86,17 +91,33 @@
                             </div>
                             <div class="form-group">
                                 <strong>Status:</strong>
-                                <form action="{{ route('gestions.updateStatus', $formulario->id) }}" method="POST" id="status-form">
+                                <form action="{{ route('finanzas.store') }}" method="POST" id="status-form" enctype="multipart/form-data">
                                     @csrf
-                                    @method('PATCH')
+                                    <input type="hidden" name="formulario_id" value="{{ $formulario->id }}">
                                     <select name="status" id="status-select" class="form-control form-control-sm">
                                         <option value="aprobada" {{ $formulario->status == 'aprobada' ? 'selected' : '' }}>Aprobada</option>
                                         <option value="generando_liga_pago" {{ $formulario->status == 'generando_liga_pago' ? 'selected' : '' }}>Generando Liga de Pago</option>
+                                        <option value="liga_de_pago_disponible" {{ $formulario->status == 'liga_de_pago_disponible' ? 'selected' : '' }}>Liga de Pago Disponible</option>
                                         <option value="declinada" {{ $formulario->status == 'declinada' ? 'selected' : '' }}>Declinada</option>
                                     </select>
                                     <div id="comentario-div" class="mt-3">
                                         <label for="comentario">Comentario:</label>
-                                        <textarea name="comentario" id="comentario" class="form-control">{{ $formulario->comentarios }}</textarea>
+                                        <textarea name="comentario" id="comentario" class="form-control">{{ $formulario->comentario }}</textarea>
+                                    </div>
+                                    <div class="form-group mt-3">
+                                        <label for="liga_de_pago">Subir Liga de Pago:</label>
+                                        <input type="file" name="liga_de_pago" id="liga_de_pago" class="form-control">
+                                        @if($formulario->liga_de_pago)
+                                            <a href="{{ route('finanzas.downloadLigaDePago', $formulario->id) }}" target="_blank" class="btn btn-link">Descargar Liga de Pago</a>
+                                        @endif
+                                    </div>
+                                    <div class="form-group mt-3">
+                                        <label for="comprobante_alumno">Comprobante de Alumno:</label>
+                                        @if($formulario->comprobante_alumno)
+                                            <a href="{{ route('finanzas.downloadComprobanteAlumno', ['id' => $formulario->id]) }}" target="_blank" class="btn btn-link">Descargar Comprobante de Alumno</a>
+                                        @else
+                                            <p>Sin comprobante de alumno</p>
+                                        @endif
                                     </div>
                                     <button type="submit" class="btn btn-primary mt-3">Guardar</button>
                                 </form>
@@ -108,7 +129,6 @@
         </div>
     </div>
 @endsection
-
 @section('scripts')
     <script>
         document.getElementById('status-select').addEventListener('change', function () {

@@ -118,6 +118,14 @@
                                                                 <i class="fa fa-fw fa-eye"></i> Ver Comentario
                                                             </button>
                                                         @endif
+                                                        @if ($formulario->liga_de_pago)
+                                                            <a href="{{ route('formularios.downloadLigaDePago', $formulario->id) }}" class="dropdown-item">
+                                                                <i class="fa fa-fw fa-download"></i> Descargar Liga de Pago
+                                                            </a>
+                                                            <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#cargarComprobanteModal{{ $formulario->id }}">
+                                                                <i class="fa fa-fw fa-upload"></i> Cargar Comprobante
+                                                            </button>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -131,7 +139,7 @@
                                 </tbody>
                             </table>
                         </div>
-                       <div class="card-footer d-flex align-items-center">
+                        <div class="card-footer d-flex align-items-center">
                             {!! $formularios->links('tablar::pagination') !!}
                         </div>
                     </div>
@@ -161,6 +169,33 @@
             </div>
         @endif
     @endforeach
+
+    <!-- Modal para cargar comprobante -->
+    @foreach ($formularios as $formulario)
+        <div class="modal fade" id="cargarComprobanteModal{{ $formulario->id }}" tabindex="-1" aria-labelledby="cargarComprobanteModalLabel{{ $formulario->id }}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="cargarComprobanteModalLabel{{ $formulario->id }}">Cargar Comprobante</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{ route('formularios.uploadComprobanteAlumno', $formulario->id) }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <div class="mb-3">
+                                <label for="comprobante_alumno" class="form-label">Seleccionar archivo</label>
+                                <input type="file" class="form-control" id="comprobante_alumno" name="comprobante_alumno" required>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="submit" class="btn btn-primary">Cargar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
 @endsection
 
 @section('scripts')
@@ -172,4 +207,3 @@
         });
     </script>
 @endsection
-

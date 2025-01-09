@@ -44,15 +44,17 @@
     </style>
 </head>
 <body>
-    @if (Auth::guard('alumno')->check())
-        <!-- Botones para el alumno -->
+    @if (Auth::check() && Auth::user()->hasRole('alumno'))
+        <!-- Botones exclusivos para alumnos -->
         <a href="{{ route('solicitudesE.index') }}" class="btn-filter">Ver Solicitudes de Exámenes</a>
         <a href="{{ route('formularios.index') }}" class="btn-filter">Ver Solicitudes de Servicios</a>
-    @elseif (Auth::user() && Auth::user()->hasRole('control_escolar'))
-        <!-- Botón para control escolar -->
+    @elseif (Auth::check() && Auth::user()->hasRole('control_escolar') && !Auth::user()->hasRole('admin'))
+        <!-- Botones para control escolar, excluyendo admin -->
         <a href="{{ route('control_user.index') }}" class="btn-filter">Solicitudes de Examenes</a>
-        <!-- Botón para acceder a la vista GestionS -->
         <a href="{{ route('gestions.index') }}" class="btn-filter">Solicitudes de Servicios</a>
+    @elseif (Auth::check() && Auth::user()->hasRole('servicio_financiero'))
+        <!-- Botón para servicio financiero -->
+        <a href="{{ route('finanzas.index') }}" class="btn-filter">Solicitudes de Servicios Financieros</a>
     @endif
 
     <div id="results"></div>

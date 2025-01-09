@@ -23,7 +23,10 @@ class Formulario extends Model
         'curp',
         'tipo_servicio',
         'status',
-        'comentario', // Añadido
+        'comentario',
+        'liga_de_pago',            // Añadido
+        'comprobante_alumno',      // Añadido
+        'comprobante',             // Añadido
     ];
 
     public function alumno()

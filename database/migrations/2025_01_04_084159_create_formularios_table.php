@@ -22,6 +22,9 @@ class CreateFormulariosTable extends Migration
             $table->string('tipo_servicio')->nullable(); // Tipo de servicio solicitado
             $table->string('status')->default('pendiente'); // Estado de la solicitud
             $table->text('comentario')->nullable(); // Comentario del formulario
+            $table->string('liga_de_pago')->nullable(); // Liga de pago
+            $table->string('comprobante_alumno')->nullable(); // Comprobante de alumno
+            $table->string('comprobante')->nullable(); // Comprobante
             $table->timestamps(); // Marcas de tiempo de creación y actualización del registro
         });
     }
@@ -31,4 +34,3 @@ class CreateFormulariosTable extends Migration
         Schema::dropIfExists('formularios'); // Elimina la tabla formularios si existe
     }
 }
-
