@@ -89,7 +89,7 @@
                                 <form action="{{ route('gestions.updateStatus', $formulario->id) }}" method="POST" id="status-form">
                                     @csrf
                                     @method('PATCH')
-                                    <select name="status" id="status-select" class="form-control form-control-sm">
+                                    <select name="status" id="status-select" class="form-control mb-3">
                                         <option value="aprobada" {{ $formulario->status == 'aprobada' ? 'selected' : '' }}>Aprobada</option>
                                         <option value="generando_liga_pago" {{ $formulario->status == 'generando_liga_pago' ? 'selected' : '' }}>Generando Liga de Pago</option>
                                         <option value="declinada" {{ $formulario->status == 'declinada' ? 'selected' : '' }}>Declinada</option>
@@ -99,6 +99,20 @@
                                         <textarea name="comentario" id="comentario" class="form-control">{{ $formulario->comentarios }}</textarea>
                                     </div>
                                     <button type="submit" class="btn btn-primary mt-3">Guardar</button>
+                                </form>
+                            </div>
+                            <div class="form-group mt-4">
+                                <a href="{{ route('gestions.downloadComprobanteAlumno', $formulario->id) }}" class="btn btn-secondary mt-2"
+                                   @if(!$formulario->comprobante_alumno) disabled @endif>
+                                    Descargar Comprobante de Alumno
+                                </a>
+                            </div>
+                            <div class="form-group mt-4">
+                                <form action="{{ route('gestions.uploadComprobante', $formulario->id) }}" method="POST" enctype="multipart/form-data">
+                                    @csrf
+                                    <label for="comprobante">Subir Comprobante:</label>
+                                    <input type="file" name="comprobante" id="comprobante" class="form-control">
+                                    <button type="submit" class="btn btn-primary mt-3">Subir</button>
                                 </form>
                             </div>
                         </div>

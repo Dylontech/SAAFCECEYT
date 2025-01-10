@@ -11,8 +11,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\WhatsappSettingsController;
 use App\Http\Controllers\FormularioEController;
 use App\Http\Controllers\FormularioController;
-use App\Http\Controllers\ControlUserController;
-use App\Http\Controllers\GestionSController;
+use App\Http\Controllers\ControlUserController; // Importa el controlador
+use App\Http\Controllers\GestionSController; // Importa el nuevo controlador
 use App\Http\Controllers\FinanzasUserController; // Importa el nuevo controlador
 
 // Página principal
@@ -34,7 +34,6 @@ Route::get('/password/reset', [\App\Http\Controllers\Auth\ForgotPasswordControll
 Route::post('/password/email', [\App\Http\Controllers\Auth\ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
 Route::get('/password/reset/{token}', [\App\Http\Controllers\Auth\ResetPasswordController::class, 'showResetForm'])->name('password.reset');
 Route::post('/password/reset', [\App\Http\Controllers\Auth\ResetPasswordController::class, 'reset'])->name('password.update');
-
 // Rutas para usuarios autenticados
 Route::middleware(['auth:web'])->group(function () {
     Route::get('/home', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -42,7 +41,6 @@ Route::middleware(['auth:web'])->group(function () {
     Route::resource('/materias', \App\Http\Controllers\MateriaController::class);
     Route::resource('/especialidades', \App\Http\Controllers\EspecialidadeController::class);
     Route::resource('/solicitudes', \App\Http\Controllers\SolicitudeController::class);
-
     Route::get('/search', [\App\Http\Controllers\SearchController::class, 'search'])->name('search');
     Route::get('/configuracion', [RoleController::class, 'index'])->name('roles.index');
     Route::post('/configuracion/asignar', [RoleController::class, 'assignRoles'])->name('roles.assign');
@@ -95,7 +93,6 @@ Route::middleware(['auth:alumno'])->group(function () {
     // Ruta para eliminar una solicitud
     Route::delete('/formularios/{id}', [FormularioController::class, 'destroy'])->name('formulario.destroy');
 });
-
 // Ruta para la vista de administración sin bloqueo de rol
 Route::get('/admin/index', function () {
     $tables = \Illuminate\Support\Facades\DB::select('SHOW TABLES');
@@ -128,3 +125,10 @@ Route::post('/finanzas/comprobantes/subir', [FinanzasUserController::class, 'sto
 Route::get('/finanzas/comprobantes/descargar-liga/{id}', [FinanzasUserController::class, 'downloadLigaDePago'])->name('finanzas.downloadLigaDePago');
 Route::get('/finanzas/comprobantes/descargar-comprobante/{id}', [FinanzasUserController::class, 'downloadComprobanteAlumno'])->name('finanzas.downloadComprobanteAlumno');
 
+
+Route::get('/download/comprobante/{id}', [FormularioController::class, 'downloadComprobante'])->name('formularios.downloadComprobante');
+
+Route::get('/gestions/{id}', [GestionSController::class, 'show'])->name('gestions.show');
+Route::get('/gestions/{id}', [GestionSController::class, 'show'])->name('gestions.show');
+Route::get('/gestions/comprobante-alumno/{id}', [GestionSController::class, 'downloadComprobanteAlumno'])->name('gestions.downloadComprobanteAlumno');
+Route::post('/gestions/upload-comprobante/{id}', [GestionSController::class, 'uploadComprobante'])->name('gestions.uploadComprobante');

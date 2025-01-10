@@ -108,5 +108,19 @@ class FormularioController extends Controller
         }
     }
 
+    // Método para descargar el comprobante
+    public function downloadComprobante($id)
+    {
+        // Obtener el formulario específico usando el identificador de solicitud
+        $formulario = Formulario::where('alumno_id', Auth::guard('alumno')->id())->where('id', $id)->first();
+
+        if ($formulario && Storage::exists($formulario->comprobante)) {
+            return Storage::download($formulario->comprobante);
+        } else {
+            return redirect()->back()->with('error', 'No se encontró el comprobante o no tiene permisos para descargarlo.');
+        }
+    }
+
     // Otros métodos del controlador...
 }
+

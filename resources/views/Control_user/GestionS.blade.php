@@ -74,50 +74,41 @@
                                 </thead>
                                 <tbody>
                                 @forelse ($formularios as $formulario)
-                                    @if (Auth::user()->hasRole('control_escolar') || $formulario->alumno_id == Auth::guard('alumno')->id())
-                                        <tr>
-                                            <td><input class="form-check-input m-0 align-middle" type="checkbox"
-                                                       aria-label="Select solicitud"></td>
-                                            <td>{{ $formulario->nombre }}</td>
-                                            <td>{{ $formulario->control }}</td>
-                                            <td>{{ $formulario->especialidad }}</td>
-                                            <td>{{ $formulario->grupo }}</td>
-                                            <td>{{ $formulario->generacion }}</td>
-                                            <td>{{ $formulario->semestre }}</td>
-                                            <td>{{ $formulario->fecha }}</td>
-                                            <td>
-                                                <span title="{{ $formulario->curp }}">{{ Str::limit($formulario->curp, 10) }}</span>
-                                            </td>
-                                            <td>
-                                                <span title="{{ $formulario->tipo_servicio }}">{{ Str::limit($formulario->tipo_servicio, 10) }}</span>
-                                            </td>
-                                            <td>
-                                                {{ $formulario->status }}
-                                            </td>
-                                            <td>
-                                                <div class="btn-list flex-nowrap">
-                                                    <div class="dropdown">
-                                                        <button class="btn dropdown-toggle align-text-top"
-                                                                data-bs-toggle="dropdown">
-                                                            Acciones
-                                                        </button>
-                                                        <div class="dropdown-menu dropdown-menu-end">
-                                                            <a href="{{ route('formularios.show', $formulario->id) }}" class="dropdown-item">
-                                                                Ver
-                                                            </a>
-                                                            <form action="{{ route('formulario.destroy', $formulario->id) }}" method="POST" class="delete-form">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button type="submit" class="dropdown-item text-red delete-button">
-                                                                    Eliminar
-                                                                </button>
-                                                            </form>
-                                                        </div>
+                                    <tr>
+                                        <td><input class="form-check-input m-0 align-middle" type="checkbox"
+                                                   aria-label="Select solicitud"></td>
+                                        <td>{{ $formulario->nombre }}</td>
+                                        <td>{{ $formulario->control }}</td>
+                                        <td>{{ $formulario->especialidad }}</td>
+                                        <td>{{ $formulario->grupo }}</td>
+                                        <td>{{ $formulario->generacion }}</td>
+                                        <td>{{ $formulario->semestre }}</td>
+                                        <td>{{ $formulario->fecha }}</td>
+                                        <td>
+                                            <span title="{{ $formulario->curp }}">{{ Str::limit($formulario->curp, 10) }}</span>
+                                        </td>
+                                        <td>
+                                            <span title="{{ $formulario->tipo_servicio }}">{{ Str::limit($formulario->tipo_servicio, 10) }}</span>
+                                        </td>
+                                        <td>
+                                            {{ $formulario->comprobante_alumno ? 'subir comprobante' : $formulario->status }}
+                                        </td>
+                                        <td>
+                                            <div class="btn-list flex-nowrap">
+                                                <div class="dropdown">
+                                                    <button class="btn dropdown-toggle align-text-top"
+                                                            data-bs-toggle="dropdown">
+                                                        Acciones
+                                                    </button>
+                                                    <div class="dropdown-menu dropdown-menu-end">
+                                                        <a href="{{ route('gestions.show', $formulario->id) }}" class="dropdown-item">
+                                                            Ver
+                                                        </a>
                                                     </div>
                                                 </div>
-                                            </td>
-                                        </tr>
-                                    @endif
+                                            </div>
+                                        </td>
+                                    </tr>
                                 @empty
                                     <tr>
                                         <td colspan="12">Sin información</td>
@@ -138,5 +129,3 @@
 
 @section('scripts')
 @endsection
-
-
