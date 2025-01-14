@@ -26,7 +26,8 @@ class GestionSController extends Controller
     {
         $formulario = Formulario::findOrFail($id);
         $formulario->status = $request->input('status');
-        $formulario->comentario = $request->input('comentario'); 
+        $formulario->comentario = $request->input('comentario');
+        $formulario->comentario_financiero = $request->input('comentario_financiero'); // Añadido
         $formulario->save();
 
         return redirect()->route('gestions.index')->with('success', 'Estado actualizado correctamente.');
@@ -39,8 +40,9 @@ class GestionSController extends Controller
         $ligaDePagoExiste = Storage::exists('public/' . $formulario->liga_de_pago);
         $comprobanteExiste = Storage::exists('public/' . $formulario->comprobante);
         $comprobanteAlumnoExiste = Storage::exists('public/' . $formulario->comprobante_alumno);
+        $comprobanteOficialExiste = Storage::exists('public/' . $formulario->comprobante_oficial); // Añadido
 
-        return view('Control_user.show', compact('formulario', 'ligaDePagoExiste', 'comprobanteExiste', 'comprobanteAlumnoExiste'));
+        return view('Control_user.show', compact('formulario', 'ligaDePagoExiste', 'comprobanteExiste', 'comprobanteAlumnoExiste', 'comprobanteOficialExiste')); // Añadido
     }
 
     private function revisarYActualizarEstatus($formulario)
@@ -58,7 +60,9 @@ class GestionSController extends Controller
     {
         // Validación de tipos de archivo permitidos
         $validator = Validator::make($request->all(), [
-            'comprobante' => 'required|file|mimes:jpeg,jpg,png,pdf|max:2048',
+            'comprobante' => 'required|file|mimes:jpeg,jpg,png,pdf|max:10240', // Tamaño actualizado
+            'comentario_financiero' => 'nullable|string', // Añadido
+            'comprobante_oficial' => 'nullable|file|mimes:jpeg,jpg,png,pdf|max:10240', // Añadido
         ]);
 
         if ($validator->fails()) {
@@ -69,6 +73,14 @@ class GestionSController extends Controller
         if ($request->hasFile('comprobante')) {
             $filePath = $request->file('comprobante')->store('public/comprobantes');
             $formulario->comprobante = $filePath;
+
+            if ($request->hasFile('comprobante_oficial')) {
+                $fileOficial = $request->file('comprobante_oficial');
+                $pathOficial = $fileOficial->store('public/comprobantes');
+                $formulario->comprobante_oficial = $pathOficial;
+            }
+
+            $formulario->comentario_financiero = $request->input('comentario_financiero'); // Añadido
             $formulario->save();
         }
 
@@ -78,6 +90,11 @@ class GestionSController extends Controller
     public function downloadComprobanteAlumno($id)
     {
         return $this->downloadFile($id, 'comprobante_alumno');
+    }
+
+    public function downloadComprobanteOficial($id) // Añadido
+    {
+        return $this->downloadFile($id, 'comprobante_oficial');
     }
 
     private function downloadFile($id, $fileType)

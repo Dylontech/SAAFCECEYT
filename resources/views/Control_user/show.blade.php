@@ -96,15 +96,19 @@
                                     </select>
                                     <div id="comentario-div" class="mt-3">
                                         <label for="comentario">Comentario:</label>
-                                        <textarea name="comentario" id="comentario" class="form-control">{{ $formulario->comentarios }}</textarea>
+                                        <textarea name="comentario" id="comentario" class="form-control">{{ $formulario->comentario }}</textarea>
+                                    </div>
+                                    <div class="mt-3">
+                                        <label for="comentario_financiero">Comentario a Servicio Financiero:</label>
+                                        <textarea name="comentario_financiero" id="comentario_financiero" class="form-control">{{ $formulario->comentario_financiero }}</textarea>
                                     </div>
                                     <button type="submit" class="btn btn-primary mt-3">Guardar</button>
                                 </form>
                             </div>
                             <div class="form-group mt-4">
-                                <a href="{{ route('gestions.downloadComprobanteAlumno', $formulario->id) }}" class="btn btn-secondary mt-2"
-                                   @if(!$formulario->comprobante_alumno) disabled @endif>
-                                    Descargar Comprobante de Alumno
+                                <a href="{{ route('finanzas.downloadComprobanteOficial', $formulario->id) }}" class="btn btn-secondary mt-2"
+                                   @if(!$formulario->comprobante_oficial) style="display: none;" @endif>
+                                    Descargar Comprobante Oficial
                                 </a>
                             </div>
                             <div class="form-group mt-4">
@@ -112,6 +116,9 @@
                                     @csrf
                                     <label for="comprobante">Subir Comprobante:</label>
                                     <input type="file" name="comprobante" id="comprobante" class="form-control">
+                                    <div class="alert alert-warning mt-2" role="alert">
+                                        El tamaño máximo permitido para los archivos es de 10 MB.
+                                    </div>
                                     <button type="submit" class="btn btn-primary mt-3">Subir</button>
                                 </form>
                             </div>

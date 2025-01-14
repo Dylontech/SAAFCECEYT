@@ -21,11 +21,7 @@
         </div>
         <div class="mb-3">
             <label for="grupo" class="form-label">Grupo:</label>
-            <input type="text" id="grupo" name="grupo" class="form-control" value="{{ old('grupo', Auth::guard('alumno')->user()->grupo ?? '') }}">
-        </div>
-        <div class="mb-3">
-            <label for="generacion" class="form-label">Generación:</label>
-            <input type="text" id="generacion" name="generacion" class="form-control" value="{{ old('generacion', Auth::guard('alumno')->user()->generacion ?? '') }}">
+            <input type="text" id="grupo" name="grupo" class="form-control" value="{{ old('grupo', Auth::guard('alumno')->user()->Grupo ?? '') }}">
         </div>
         <div class="mb-3">
             <label for="semestre" class="form-label">Semestre que Cursa:</label>

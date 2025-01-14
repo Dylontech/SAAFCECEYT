@@ -76,8 +76,10 @@
                                             <td>{{ $formulario->grupo }}</td>
                                             <td>{{ $formulario->tipo_servicio }}</td>
                                             <td>{{ $formulario->fecha }}</td>
-                                            <td data-bs-toggle="tooltip" title="{{ $formulario->comentario ?? 'Sin comentario' }}">
-                                                @if($formulario->comprobante_alumno)
+                                            <td data-bs-toggle="tooltip" title="{{ $formulario->comentario_financiero ?? 'Sin comentario' }}">
+                                                @if($formulario->comprobante_oficial)
+                                                    Finalizada
+                                                @elseif($formulario->comprobante_alumno)
                                                     Comprobante del alumno disponible
                                                 @else
                                                     {{ $formulario->status }}
@@ -90,20 +92,17 @@
                                                             Acciones
                                                         </button>
                                                         <div class="dropdown-menu dropdown-menu-end">
-                                                            <form action="{{ route('formulario.destroy', $formulario->id) }}" method="POST" class="delete-form">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button type="submit" class="dropdown-item text-red delete-button">
-                                                                    <i class="fa fa-fw fa-trash"></i> Eliminar
-                                                                </button>
-                                                            </form>
-                                                            @if ($formulario->comentario)
+                                                            @if ($formulario->comentario_financiero)
                                                                 <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#comentarioModal{{ $formulario->id }}">
                                                                     <i class="fa fa-fw fa-eye"></i> Ver Comentario
                                                                 </button>
                                                             @endif
                                                             <a href="{{ route('finanzas.show', $formulario->id) }}" class="dropdown-item">
-                                                                <i class="fa fa-fw fa-upload"></i> Subir Liga de Pago
+                                                                @if ($formulario->comprobante_alumno)
+                                                                    <i class="fa fa-fw fa-download"></i> Descargar Comprobante del Alumno
+                                                                @else
+                                                                    <i class="fa fa-fw fa-upload"></i> Subir Liga de Pago
+                                                                @endif
                                                             </a>
                                                         </div>
                                                     </div>
@@ -128,16 +127,16 @@
     </div>
     <!-- Modal para mostrar el comentario -->
     @foreach ($formularios as $formulario)
-        @if ($formulario->comentario)
+        @if ($formulario->comentario_financiero)
             <div class="modal fade" id="comentarioModal{{ $formulario->id }}" tabindex="-1" aria-labelledby="comentarioModalLabel{{ $formulario->id }}" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="comentarioModalLabel{{ $formulario->id }}">Comentario</h5>
+                            <h5 class="modal-title" id="comentarioModalLabel{{ $formulario->id }}">Comentario Financiero</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <p>{{ $formulario->comentario }}</p>
+                            <p>{{ $formulario->comentario_financiero }}</p>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -148,6 +147,7 @@
         @endif
     @endforeach
 @endsection
+
 @section('scripts')
     <script>
         // Inicializar tooltips

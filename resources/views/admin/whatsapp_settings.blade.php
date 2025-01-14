@@ -43,11 +43,12 @@
                         @csrf
                         <div class="mb-3">
                             <label for="phoneNumber" class="form-label">Número de WhatsApp:</label>
-                            <input type="text" id="phoneNumber" name="phoneNumber" class="form-control" value="{{ $settings->phone_number }}" required>
+                            <input type="text" id="phoneNumber" name="phoneNumber" class="form-control" value="{{ $settings->phone_number ?? '' }}">
                         </div>
                         <div class="mb-3">
-                            <label for="message" class="form-label">Mensaje:</label>
-                            <input type="text" id="message" name="message" class="form-control" value="{{ $settings->message }}" required>
+                            <label for="message" class="form-label">Mensaje (opcional):</label>
+                            <input type="text" id="message" name="message" class="form-control" value="{{ $settings->message ?? '' }}">
+                            <small class="form-text text-muted">Puedes dejar este campo vacío si no deseas enviar un mensaje.</small>
                         </div>
                         <div class="form-footer">
                             <input type="submit" value="Actualizar" class="btn btn-primary">

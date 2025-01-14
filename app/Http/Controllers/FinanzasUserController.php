@@ -27,8 +27,10 @@ class FinanzasUserController extends Controller
     {
         $data = $request->validate([
             'formulario_id' => 'required|exists:formularios,id',
-            'liga_de_pago' => 'nullable|file|mimes:pdf,jpeg,png,jpg,gif',
-            'comprobante_alumno' => 'nullable|file|mimes:pdf,jpeg,png,jpg,gif',
+            'liga_de_pago' => 'nullable|file|mimes:pdf,jpeg,png,jpg,gif|max:10240', // Tamaño actualizado
+            'comprobante_alumno' => 'nullable|file|mimes:pdf,jpeg,png,jpg,gif|max:10240', // Tamaño actualizado
+            'comprobante_oficial' => 'nullable|file|mimes:pdf,jpeg,png,jpg,gif|max:10240', // Tamaño actualizado
+            'comentario_financiero' => 'nullable|string', // Añadido
             'status' => 'nullable|string',
         ]);
 
@@ -42,6 +44,15 @@ class FinanzasUserController extends Controller
         if ($request->hasFile('comprobante_alumno')) {
             $filePath = $request->file('comprobante_alumno')->store('comprobantes');
             $formulario->comprobante_alumno = $filePath;
+        }
+
+        if ($request->hasFile('comprobante_oficial')) {
+            $filePath = $request->file('comprobante_oficial')->store('comprobantes'); // Añadido
+            $formulario->comprobante_oficial = $filePath; // Añadido
+        }
+
+        if (!empty($data['comentario_financiero'])) { // Añadido
+            $formulario->comentario_financiero = $data['comentario_financiero'];
         }
 
         if (!empty($data['status'])) {
@@ -75,6 +86,31 @@ class FinanzasUserController extends Controller
         try {
             $formulario = Formulario::findOrFail($id);
             $nombreArchivo = basename(trim($formulario->comprobante_alumno)); // Obtener solo el nombre del archivo
+
+            Log::info("Intentando descargar el archivo para el formulario ID: $id, Nombre del archivo: $nombreArchivo");
+
+            // Directorio base donde buscar
+            $directorioBase = storage_path('app');
+            $rutaArchivo = $this->buscarArchivoRecursivamente($directorioBase, $nombreArchivo);
+
+            if ($rutaArchivo) {
+                Log::info('El archivo existe en el almacenamiento. Ruta completa: ' . $rutaArchivo);
+                return response()->download($rutaArchivo);
+            } else {
+                Log::warning('El archivo no existe en el almacenamiento.');
+                return redirect()->back()->with('error', 'El archivo no existe en el almacenamiento.');
+            }
+        } catch (\Exception $e) {
+            Log::error("Hubo un problema al intentar descargar el archivo: " . $e->getMessage());
+            return redirect()->back()->with('error', 'Hubo un problema al intentar descargar el archivo: ' . $e->getMessage());
+        }
+    }
+
+    public function downloadComprobanteOficial($id) // Añadido
+    {
+        try {
+            $formulario = Formulario::findOrFail($id);
+            $nombreArchivo = basename(trim($formulario->comprobante_oficial)); // Obtener solo el nombre del archivo
 
             Log::info("Intentando descargar el archivo para el formulario ID: $id, Nombre del archivo: $nombreArchivo");
 

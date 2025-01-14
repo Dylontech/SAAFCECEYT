@@ -17,16 +17,17 @@ class Formulario extends Model
         'control',
         'especialidad',
         'grupo',
-        'generacion',
         'semestre',
         'fecha',
         'curp',
         'tipo_servicio',
         'status',
         'comentario',
+        'comentario_financiero',   // Añadido
         'liga_de_pago',            // Añadido
         'comprobante_alumno',      // Añadido
         'comprobante',             // Añadido
+        'comprobante_oficial',     // Añadido
     ];
 
     public function alumno()

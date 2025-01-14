@@ -188,7 +188,15 @@ return [
         'icon' => 'ti ti-file',
         'roles' => ['alumno']
     ],
+    // Ítem de menú para el expediente de solicitudes, visible solo para alumnos
+    [
+        'text' => 'Expediente de solicitudes',
+        'url' => 'expediente',
+        'icon' => 'ti ti-folder',
+        'roles' => ['alumno']
+    ],
 ],
+
 
 
     /*

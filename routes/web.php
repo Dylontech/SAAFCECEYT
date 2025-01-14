@@ -34,6 +34,7 @@ Route::get('/password/reset', [\App\Http\Controllers\Auth\ForgotPasswordControll
 Route::post('/password/email', [\App\Http\Controllers\Auth\ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
 Route::get('/password/reset/{token}', [\App\Http\Controllers\Auth\ResetPasswordController::class, 'showResetForm'])->name('password.reset');
 Route::post('/password/reset', [\App\Http\Controllers\Auth\ResetPasswordController::class, 'reset'])->name('password.update');
+
 // Rutas para usuarios autenticados
 Route::middleware(['auth:web'])->group(function () {
     Route::get('/home', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -79,7 +80,7 @@ Route::middleware(['auth:alumno'])->group(function () {
         return view('alumnos_user.editor');
     })->name('editor');
 
-    // Nuevas rutas para FormularioController
+    // Rutas para FormularioController
     Route::get('/formularios', [FormularioController::class, 'index'])->name('formularios.index'); // Ruta para ver las solicitudes
     Route::post('/ruta-de-envio', [FormularioController::class, 'store']); // Ruta para enviar el formulario
     Route::patch('/formularios/{id}/status', [FormularioController::class, 'updateStatus'])->name('formularios.updateStatus'); // Ruta para actualizar el estado de la solicitud
@@ -125,10 +126,21 @@ Route::post('/finanzas/comprobantes/subir', [FinanzasUserController::class, 'sto
 Route::get('/finanzas/comprobantes/descargar-liga/{id}', [FinanzasUserController::class, 'downloadLigaDePago'])->name('finanzas.downloadLigaDePago');
 Route::get('/finanzas/comprobantes/descargar-comprobante/{id}', [FinanzasUserController::class, 'downloadComprobanteAlumno'])->name('finanzas.downloadComprobanteAlumno');
 
-
+// Rutas para FormularioController
 Route::get('/download/comprobante/{id}', [FormularioController::class, 'downloadComprobante'])->name('formularios.downloadComprobante');
 
+// Rutas para GestionSController
 Route::get('/gestions/{id}', [GestionSController::class, 'show'])->name('gestions.show');
 Route::get('/gestions/{id}', [GestionSController::class, 'show'])->name('gestions.show');
 Route::get('/gestions/comprobante-alumno/{id}', [GestionSController::class, 'downloadComprobanteAlumno'])->name('gestions.downloadComprobanteAlumno');
 Route::post('/gestions/upload-comprobante/{id}', [GestionSController::class, 'uploadComprobante'])->name('gestions.uploadComprobante');
+
+// Ruta para la nueva vista ExpedienteSS
+Route::get('/expediente', [FormularioController::class, 'expediente'])->name('formularios.expediente'); // Ruta para la nueva vista
+Route::get('alumnos/search', [AlumnoController::class, 'search'])->name('alumnos.search');
+// Rutas para descargar archivos_comprobante_oficial
+Route::get('gestions/downloadComprobanteOficial/{id}', [GestionSController::class, 'downloadComprobanteOficial'])->name('gestions.downloadComprobanteOficial');
+//ruta para revision
+Route::get('finanzas/downloadComprobanteOficial/{id}', [App\Http\Controllers\FinanzasUserController::class, 'downloadComprobanteOficial'])->name('finanzas.downloadComprobanteOficial');
+
+

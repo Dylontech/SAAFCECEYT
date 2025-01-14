@@ -15,6 +15,21 @@ class FormularioController extends Controller
         return view('alumnos_user.SolicitudesS', compact('formularios'));
     }
 
+    public function expediente()
+    {
+        if (Auth::guard('alumno')->check()) {
+            $formularios = Formulario::where('alumno_id', Auth::guard('alumno')->id())
+                ->whereNotNull('comprobante')
+                ->whereNotNull('liga_de_pago')
+                ->whereNotNull('comprobante_alumno')
+                ->paginate(10);
+
+            return view('alumnos_user.ExpedienteSS', compact('formularios'));
+        } else {
+            return redirect()->route('login')->with('error', 'No tienes permisos para acceder a esta sección.');
+        }
+    }
+
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -22,16 +37,17 @@ class FormularioController extends Controller
             'control' => 'required|string|max:255',
             'especialidad' => 'required|string|max:255',
             'grupo' => 'required|string|max:255',
-            'generacion' => 'required|string|max:255',
             'semestre' => 'required|string|max:255',
             'fecha' => 'required|date',
             'curp' => 'required|string|max:18',
             'tipo_servicio' => 'nullable|string',
             'status' => 'nullable|string',
             'comentario' => 'nullable|string',
-            'liga_de_pago' => 'nullable|file|mimes:pdf,jpeg,png,jpg,gif',
-            'comprobante_alumno' => 'nullable|file|mimes:pdf,jpeg,png,jpg,gif',
-            'comprobante' => 'nullable|file|mimes:pdf,jpeg,png,jpg,gif',
+            'comentario_financiero' => 'nullable|string', // Añadido
+            'liga_de_pago' => 'nullable|file|mimes:pdf,jpeg,png,jpg,gif|max:10240', // Tamaño actualizado
+            'comprobante_alumno' => 'nullable|file|mimes:pdf,jpeg,png,jpg,gif|max:10240', // Tamaño actualizado
+            'comprobante' => 'nullable|file|mimes:pdf,jpeg,png,jpg,gif|max:10240', // Tamaño actualizado
+            'comprobante_oficial' => 'nullable|file|mimes:pdf,jpeg,png,jpg,gif|max:10240', // Tamaño actualizado
         ]);
 
         $data['alumno_id'] = Auth::guard('alumno')->id();
@@ -45,12 +61,15 @@ class FormularioController extends Controller
         if ($request->hasFile('comprobante')) {
             $data['comprobante'] = $request->file('comprobante')->store('comprobantes');
         }
+        if ($request->hasFile('comprobante_oficial')) {
+            $data['comprobante_oficial'] = $request->file('comprobante_oficial')->store('comprobantes');
+        }
 
         try {
             Formulario::create($data);
             return redirect()->route('formularios.index')->with('success', 'Solicitud enviada con éxito');
         } catch (\Exception $e) {
-            return redirect()->route('formularios.index')->with('error', 'Hubo un problema al enviar la solicitud: ' . $e->getMessage());
+            return redirect()->route('formularios.index')->with('error', 'Hubo un problema al enviar la solicitud');
         }
     }
 
@@ -61,7 +80,7 @@ class FormularioController extends Controller
             $formulario->delete();
             return redirect()->route('formularios.index')->with('success', 'Solicitud eliminada con éxito');
         } catch (\Exception $e) {
-            return redirect()->route('formularios.index')->with('error', 'Hubo un problema al eliminar la solicitud: ' . $e->getMessage());
+            return redirect()->route('formularios.index')->with('error', 'Hubo un problema al eliminar la solicitud');
         }
     }
 
@@ -70,7 +89,7 @@ class FormularioController extends Controller
     {
         // Validar la solicitud
         $request->validate([
-            'comprobante_alumno' => 'required|file|mimes:pdf,jpg,png|max:2048',
+            'comprobante_alumno' => 'required|file|mimes:pdf,jpg,png|max:10240', // Tamaño actualizado
         ]);
 
         // Subir el archivo
@@ -121,6 +140,54 @@ class FormularioController extends Controller
         }
     }
 
+    // Método para descargar el comprobante del alumno
+    public function downloadComprobanteAlumno($id)
+    {
+        // Obtener el formulario específico usando el identificador de solicitud
+        $formulario = Formulario::where('alumno_id', Auth::guard('alumno')->id())->where('id', $id)->first();
+
+        if ($formulario && Storage::exists($formulario->comprobante_alumno)) {
+            return Storage::download($formulario->comprobante_alumno);
+        } else {
+            return redirect()->back()->with('error', 'No se encontró el comprobante del alumno o no tiene permisos para descargarlo.');
+        }
+    }
+
+    // Método para subir el comprobante y comentario financiero
+    public function uploadComprobante(Request $request, $id)
+    {
+        // Validar la solicitud
+        $request->validate([
+            'comprobante' => 'required|file|mimes:pdf,jpg,png|max:10240', // Tamaño actualizado
+            'comentario_financiero' => 'nullable|string', // Añadido
+            'comprobante_oficial' => 'nullable|file|mimes:pdf,jpg,png|max:10240', // Tamaño actualizado
+        ]);
+
+        // Subir el archivo y guardar el comentario financiero
+        if ($request->hasFile('comprobante')) {
+            $file = $request->file('comprobante');
+            $path = $file->store('comprobantes', 'public');
+
+            // Obtener el formulario específico usando el identificador de solicitud
+            $formulario = Formulario::findOrFail($id);
+
+            // Actualizar el campo comprobante, comentario_financiero y comprobante_oficial del formulario específico
+            $formulario->comprobante = $path;
+            $formulario->comentario_financiero = $request->input('comentario_financiero');
+
+            if ($request->hasFile('comprobante_oficial')) {
+                $fileOficial = $request->file('comprobante_oficial');
+                $pathOficial = $fileOficial->store('comprobantes', 'public');
+                $formulario->comprobante_oficial = $pathOficial;
+            }
+
+            $formulario->save();
+
+            return redirect()->back()->with('success', 'Comprobante y comentario financiero subidos exitosamente.');
+        }
+
+        return redirect()->back()->with('error', 'Error al subir el comprobante.');
+    }
+
     // Otros métodos del controlador...
 }
-

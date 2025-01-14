@@ -15,8 +15,8 @@ class CreateWhatsappSettingsTable extends Migration
     {
         Schema::create('whatsapp_settings', function (Blueprint $table) {
             $table->id();
-            $table->string('phone_number', 15);
-            $table->text('message');
+            $table->string('phone_number', 15)->nullable(); // Hacer el campo 'phone_number' opcional
+            $table->text('message')->nullable(); // Hacer el campo 'message' opcional
             $table->timestamps();
         });
     }

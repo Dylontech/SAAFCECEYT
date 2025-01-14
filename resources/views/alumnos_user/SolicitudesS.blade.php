@@ -1,7 +1,7 @@
 @extends('tablar::page')
 
 @section('title')
-    Solicitudes E
+    Solicitudes de Servicios
 @endsection
 
 @section('content')
@@ -97,7 +97,7 @@
                                         <td>{{ $formulario->grupo }}</td>
                                         <td>{{ $formulario->tipo_servicio }}</td>
                                         <td>{{ $formulario->fecha }}</td>
-                                        <td data-bs-toggle="tooltip" title="{{ $formulario->comentario ?? 'Sin comentario' }}">{{ $formulario->comprobante ? 'comprobante disponible' : $formulario->status }}</td>
+                                        <td data-bs-toggle="tooltip" title="{{ $formulario->comentario ?? 'Sin comentario' }}">{{ $formulario->liga_de_pago ? 'liga de pago disponible' : ($formulario->comprobante ? 'comprobante disponible' : $formulario->status) }}</td>
                                         <td>
                                             <div class="btn-list flex-nowrap">
                                                 <div class="dropdown">
@@ -130,77 +130,77 @@
                                                         <a href="{{ route('formularios.downloadComprobante', $formulario->id) }}" class="dropdown-item">
                                                             <i class="fa fa-fw fa-download"></i> Descargar Comprobante
                                                         </a>
-                                                    @endif
+                                                        @endif
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="10">Sin información</td>
-                                </tr>
-                            @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="card-footer d-flex align-items-center">
-                        {!! $formularios->links('tablar::pagination') !!}
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="10">Sin información</td>
+                                    </tr>
+                                @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="card-footer d-flex align-items-center">
+                            {!! $formularios->links('tablar::pagination') !!}
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
-<!-- Modal para mostrar el comentario -->
-@foreach ($formularios as $formulario)
-    @if ($formulario->comentario)
-        <div class="modal fade" id="comentarioModal{{ $formulario->id }}" tabindex="-1" aria-labelledby="comentarioModalLabel{{ $formulario->id }}" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="comentarioModalLabel{{ $formulario->id }}">Comentario</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>{{ $formulario->comentario }}</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endif
-@endforeach
-
-<!-- Modal para cargar comprobante -->
-@foreach ($formularios as $formulario)
-    <div class="modal fade" id="cargarComprobanteModal{{ $formulario->id }}" tabindex="-1" aria-labelledby="cargarComprobanteModalLabel{{ $formulario->id }}" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="cargarComprobanteModalLabel{{ $formulario->id }}">Cargar Comprobante</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form action="{{ route('formularios.uploadComprobanteAlumno', $formulario->id) }}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <div class="mb-3">
-                            <label for="comprobante_alumno" class="form-label">Seleccionar archivo</label>
-                            <input type="file" class="form-control" id="comprobante_alumno" name="comprobante_alumno" required>
+    
+    <!-- Modal para mostrar el comentario -->
+    @foreach ($formularios as $formulario)
+        @if ($formulario->comentario)
+            <div class="modal fade" id="comentarioModal{{ $formulario->id }}" tabindex="-1" aria-labelledby="comentarioModalLabel{{ $formulario->id }}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="comentarioModalLabel{{ $formulario->id }}">Comentario</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>{{ $formulario->comentario }}</p>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                            <button type="submit" class="btn btn-primary">Cargar</button>
                         </div>
-                    </form>
+                    </div>
+                </div>
+            </div>
+        @endif
+    @endforeach
+    
+    <!-- Modal para cargar comprobante -->
+    @foreach ($formularios as $formulario)
+        <div class="modal fade" id="cargarComprobanteModal{{ $formulario->id }}" tabindex="-1" aria-labelledby="cargarComprobanteModalLabel{{ $formulario->id }}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="cargarComprobanteModalLabel{{ $formulario->id }}">Cargar Comprobante</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{ route('formularios.uploadComprobanteAlumno', $formulario->id) }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <div class="mb-3">
+                                <label for="comprobante_alumno" class="form-label">Seleccionar archivo</label>
+                                <input type="file" class="form-control" id="comprobante_alumno" name="comprobante_alumno" required>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="submit" class="btn btn-primary">Cargar</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-@endforeach
+    @endforeach
 @endsection
 
 @section('scripts')
@@ -212,3 +212,4 @@
     });
 </script>
 @endsection
+

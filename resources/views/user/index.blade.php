@@ -49,31 +49,10 @@
                         <div class="card-header">
                             <h3 class="card-title">Usuario</h3>
                         </div>
-                        <div class="card-body border-bottom py-3">
-                            <div class="d-flex">
-                                <div class="text-muted">
-                                    Mostrar
-                                    <div class="mx-2 d-inline-block">
-                                        <input type="text" class="form-control form-control-sm" value="10" size="3"
-                                               aria-label="Invoices count">
-                                    </div>
-                                    entradas
-                                </div>
-                                <div class="ms-auto text-muted">
-                                    Buscar:
-                                    <div class="ms-2 d-inline-block">
-                                        <input type="text" class="form-control form-control-sm"
-                                               aria-label="Buscar factura">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         <div class="table-responsive min-vh-100">
                             <table class="table card-table table-vcenter text-nowrap datatable">
                                 <thead>
                                 <tr>
-                                    <th class="w-1"><input class="form-check-input m-0 align-middle" type="checkbox"
-                                                           aria-label="Seleccionar todas las facturas"></th>
                                     <th class="w-1">No.
                                         <!-- Descargar icono SVG de http://tabler-icons.io/i/chevron-up -->
                                         <svg xmlns="http://www.w3.org/2000/svg"
@@ -92,8 +71,6 @@
                                 <tbody>
                                 @forelse ($users as $user)
                                     <tr>
-                                        <td><input class="form-check-input m-0 align-middle" type="checkbox"
-                                                   aria-label="Seleccionar usuario"></td>
                                         <td>{{ ++$i }}</td>
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->email }}</td>
@@ -146,7 +123,6 @@
         </div>
     </div>
 @endsection
-
 @section('js')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>

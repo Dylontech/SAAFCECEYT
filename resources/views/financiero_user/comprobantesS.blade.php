@@ -94,15 +94,15 @@
                                 <form action="{{ route('finanzas.store') }}" method="POST" id="status-form" enctype="multipart/form-data">
                                     @csrf
                                     <input type="hidden" name="formulario_id" value="{{ $formulario->id }}">
-                                    <select name="status" id="status-select" class="form-control form-control-sm">
+                                    <select name="status" id="status-select" class="form-control form-control-sm" disabled>
                                         <option value="aprobada" {{ $formulario->status == 'aprobada' ? 'selected' : '' }}>Aprobada</option>
                                         <option value="generando_liga_pago" {{ $formulario->status == 'generando_liga_pago' ? 'selected' : '' }}>Generando Liga de Pago</option>
                                         <option value="liga_de_pago_disponible" {{ $formulario->status == 'liga_de_pago_disponible' ? 'selected' : '' }}>Liga de Pago Disponible</option>
                                         <option value="declinada" {{ $formulario->status == 'declinada' ? 'selected' : '' }}>Declinada</option>
                                     </select>
-                                    <div id="comentario-div" class="mt-3">
-                                        <label for="comentario">Comentario:</label>
-                                        <textarea name="comentario" id="comentario" class="form-control">{{ $formulario->comentario }}</textarea>
+                                    <div id="comentario-financiero-div" class="mt-3">
+                                        <label for="comentario_financiero">Comentario a Servicio Financiero:</label>
+                                        <textarea name="comentario_financiero" id="comentario_financiero" class="form-control" readonly>{{ $formulario->comentario_financiero }}</textarea>
                                     </div>
                                     <div class="form-group mt-3">
                                         <label for="liga_de_pago">Subir Liga de Pago:</label>
@@ -119,6 +119,13 @@
                                             <p>Sin comprobante de alumno</p>
                                         @endif
                                     </div>
+                                    <div class="form-group mt-3" id="comprobante-oficial-div" @if(!$formulario->liga_de_pago || !$formulario->comprobante_alumno) style="display: none;" @endif>
+                                        <label for="comprobante_oficial">Subir Comprobante Oficial:</label>
+                                        <input type="file" name="comprobante_oficial" id="comprobante_oficial" class="form-control">
+                                        @if($formulario->comprobante_oficial)
+                                            <a href="{{ route('finanzas.downloadComprobanteOficial', ['id' => $formulario->id]) }}" target="_blank" class="btn btn-link">Descargar Comprobante Oficial</a>
+                                        @endif
+                                    </div>
                                     <button type="submit" class="btn btn-primary mt-3">Guardar</button>
                                 </form>
                             </div>
@@ -129,8 +136,22 @@
         </div>
     </div>
 @endsection
+
 @section('scripts')
     <script>
+        // Mostrar u ocultar el campo de "Comprobante Oficial" según el estado de los otros campos
+        document.addEventListener('DOMContentLoaded', function () {
+            const ligaDePago = '{{ $formulario->liga_de_pago }}';
+            const comprobanteAlumno = '{{ $formulario->comprobante_alumno }}';
+            const comprobanteOficialDiv = document.getElementById('comprobante-oficial-div');
+
+            if (ligaDePago && comprobanteAlumno) {
+                comprobanteOficialDiv.style.display = 'block';
+            } else {
+                comprobanteOficialDiv.style.display = 'none';
+            }
+        });
+
         document.getElementById('status-select').addEventListener('change', function () {
             if (this.value === 'declinada') {
                 document.getElementById('comentario').setAttribute('required', 'required');
