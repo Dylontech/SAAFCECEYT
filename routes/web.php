@@ -15,6 +15,7 @@ use App\Http\Controllers\ControlUserController; // Importa el controlador
 use App\Http\Controllers\GestionSController; // Importa el nuevo controlador
 use App\Http\Controllers\FinanzasUserController; // Importa el nuevo controlador
 use App\Http\Controllers\GestionEController;
+use App\Http\Controllers\CarruselController;
 
 // Página principal
 Route::get('/', function () {
@@ -54,9 +55,7 @@ Route::middleware(['auth:web'])->group(function () {
 
 // Rutas para alumnos autenticados
 Route::middleware(['auth:alumno'])->group(function () {
-    Route::get('/alumnos_user', function () {
-        return view('alumnos_user.index');
-    })->name('alumnos_user.index');
+    Route::get('/alumnos_user', [App\Http\Controllers\alumnos_userController::class, 'index'])->name('alumnos_user.index');
 
     // Ruta para el formulario independiente
     Route::get('/formulario', [FormularioEController::class, 'create'])->name('formulario');
@@ -65,6 +64,7 @@ Route::middleware(['auth:alumno'])->group(function () {
     Route::get('/formulario/create', [FormularioEController::class, 'create'])->name('formulario.create');
     Route::post('/formulario/store', [FormularioEController::class, 'store'])->name('formulario.store');
     Route::delete('/formulario/{id}', [FormularioEController::class, 'destroy'])->name('formulario.destroy');
+    Route::delete('/solicitudesE/{id}', [FormularioEController::class, 'destroy'])->name('solicitudesE.destroy');
 
     // Ruta para la vista de solicitudesE
     Route::get('/solicitudesE', [FormularioEController::class, 'solicitudesE'])->name('solicitudesE.index');
@@ -173,3 +173,7 @@ Route::get('/control_user.index', [GestionEController::class, 'index'])->name('c
 // Ruta para la gestión de solicitudes
 Route::get('/gestionS', [GestionSController::class, 'index'])->name('Control_user.GestionS');
 
+// Ruta para el carrusel
+Route::resource('carrusels', CarruselController::class);
+Route::resource('/carrusel', App\Http\Controllers\CarruselController::class);
+Route::resource('/carrusel', App\Http\Controllers\CarruselController::class);

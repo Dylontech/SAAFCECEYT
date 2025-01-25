@@ -151,7 +151,7 @@
                                                     <div class="dropdown">
                                                         <button class="btn dropdown-toggle align-text-top" data-bs-toggle="dropdown">Acciones</button>
                                                         <div class="dropdown-menu dropdown-menu-end">
-                                                            <form action="{{ route('formulario.destroy', $formulario->id) }}" method="POST" class="delete-form">
+                                                            <form action="{{ route('solicitudesE.destroy', $formulario->id) }}" method="POST" class="delete-form">
                                                                 @csrf
                                                                 @method('DELETE')
                                                                 <button type="submit" class="dropdown-item text-red delete-button">

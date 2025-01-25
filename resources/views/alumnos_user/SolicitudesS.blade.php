@@ -37,7 +37,7 @@
                             <h3 class="card-title">Solicitudes</h3>
                         </div>
                         <div class="card-body border-bottom py-3">
-                            <form action="filterForm" method="GET" class="d-flex flex-wrap align-items-end">
+                            <form action="" method="GET" class="d-flex flex-wrap align-items-end">
                                 <div class="me-2">
                                     <label class="form-label">No. control</label>
                                     <select class="form-select form-select-sm" id="control" name="control">
@@ -60,9 +60,14 @@
                                     <label class="form-label">Tipo de Servicio</label>
                                     <select class="form-select form-select-sm" id="tipo_servicio" name="tipo_servicio">
                                         <option value="">Todos</option>
-                                        @foreach ($tipos_servicio as $tipo_servicio)
-                                            <option value="{{ $tipo_servicio }}">{{ $tipo_servicio }}</option>
-                                        @endforeach
+                                        <option value="">Selecciona un tipo de servicio</option>
+                                        <option value="Constancia de Inscripción y/o Estudios">Constancia de Inscripción y/o Estudios</option>
+                                        <option value="Duplicado de Credencial">Duplicado de Credencial</option>
+                                        <option value="Certificado Incompleto (Parcial)">Certificado Incompleto (Parcial)</option>
+                                        <option value="Duplicado de Certificado de Estudios">Duplicado de Certificado de Estudios</option>
+                                        <option value="Examen de Titulación (Protocolo)">Examen de Titulación (Protocolo)</option>
+                                        <option value="Titulación (Tit. y Exp. de Ced. Prof.)">Titulación (Tit. y Exp. de Ced. Prof.)</option>
+                                        <option value="reinscripcion">Reinscripción</option>
                                     </select>
                                 </div>
                                 <div class="me-2">

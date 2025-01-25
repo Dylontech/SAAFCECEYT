@@ -16,23 +16,19 @@ class FormularioController extends Controller
         $search = $request->input('search');
         $especialidad = $request->input('especialidad');
         $grupo = $request->input('grupo');
-        $tipo_pago = $request->input('tipo_pago');
+        $control = $request->input('control');
         
         $query = Formulario::query();
         
-       
-    
         if ($request->filled('search')) {
             $query->where('Nombre', 'like', '%' . $request->search . '%')
                   ->orWhere('numero_control', 'like', '%' . $request->search . '%')
                   ->orWhere('CURP', 'like', '%' . $request->search . '%')
                   ->orWhere('email', 'like', '%' . $request->search . '%');
-        
         }
         if ($request->filled('tipo_servicio')) {
             $query->where('tipo_servicio', $request->tipo_servicio);
         }
-    
         if ($request->filled('fecha_solicitud')) {
             $query->whereDate('fecha', $request->fecha_solicitud);
         }
@@ -41,14 +37,12 @@ class FormularioController extends Controller
     
         $tipos_servicio = Formulario::select('tipo_servicio')->distinct()->get();
         $fecha_solicitud = Formulario::select('fecha')->distinct()->get();
-         // Obtener las listas para los filtros
-         $especialidades = Formulario::distinct()->pluck('especialidad');
-         $grupos = Formulario::distinct()->pluck('grupo');
-         $tipo_pagos = Formulario::distinct()->pluck('tipo_pago');
-     
+        $especialidades = Formulario::distinct()->pluck('especialidad');
+        $grupos = Formulario::distinct()->pluck('grupo');
+        $controles = Formulario::distinct()->pluck('control');
     
-        return view('alumnos_user.SolicitudesS', compact('formularios', 'tipos_servicio'))
-        ->with('i', (request()->input('page', 1) - 1) * $formularios->perPage());
+        return view('alumnos_user.SolicitudesS', compact('formularios', 'especialidades', 'grupos', 'controles'))
+            ->with('i', (request()->input('page', 1) - 1) * $formularios->perPage());
     }
 
     public function expediente()

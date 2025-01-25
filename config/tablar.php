@@ -193,6 +193,13 @@ return [
         'icon' => 'ti ti-folder',
         'roles' => ['control_escolar','Admin']
     ],
+    [
+        'text' => 'Carrusel',
+        'url' => 'carrusel',
+        'icon' => 'ti ti-folder',
+        'roles' => ['control_escolar','Admin','servicio_financiero',]
+    ],
+   
 ],
 
 
