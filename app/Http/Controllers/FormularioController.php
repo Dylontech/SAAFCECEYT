@@ -7,12 +7,48 @@ use App\Models\Formulario;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
+
 class FormularioController extends Controller
 {
-    public function index()
+
+    public function index(Request $request)
     {
-        $formularios = Formulario::where('alumno_id', Auth::guard('alumno')->id())->paginate(10);
-        return view('alumnos_user.SolicitudesS', compact('formularios'));
+        $search = $request->input('search');
+        $especialidad = $request->input('especialidad');
+        $grupo = $request->input('grupo');
+        $tipo_pago = $request->input('tipo_pago');
+        
+        $query = Formulario::query();
+        
+       
+    
+        if ($request->filled('search')) {
+            $query->where('Nombre', 'like', '%' . $request->search . '%')
+                  ->orWhere('numero_control', 'like', '%' . $request->search . '%')
+                  ->orWhere('CURP', 'like', '%' . $request->search . '%')
+                  ->orWhere('email', 'like', '%' . $request->search . '%');
+        
+        }
+        if ($request->filled('tipo_servicio')) {
+            $query->where('tipo_servicio', $request->tipo_servicio);
+        }
+    
+        if ($request->filled('fecha_solicitud')) {
+            $query->whereDate('fecha', $request->fecha_solicitud);
+        }
+    
+        $formularios = $query->paginate(10);
+    
+        $tipos_servicio = Formulario::select('tipo_servicio')->distinct()->get();
+        $fecha_solicitud = Formulario::select('fecha')->distinct()->get();
+         // Obtener las listas para los filtros
+         $especialidades = Formulario::distinct()->pluck('especialidad');
+         $grupos = Formulario::distinct()->pluck('grupo');
+         $tipo_pagos = Formulario::distinct()->pluck('tipo_pago');
+     
+    
+        return view('alumnos_user.SolicitudesS', compact('formularios', 'tipos_servicio'))
+        ->with('i', (request()->input('page', 1) - 1) * $formularios->perPage());
     }
 
     public function expediente()

@@ -49,7 +49,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         // Compartir la configuración de WhatsApp en todas las vistas
-        $settings = DB::table('whatsapp_settings')->first();
-        View::share('whatsappSettings', $settings);
+       // $settings = DB::table('whatsapp_settings')->first();
+       // View::share('whatsappSettings', $settings);
     }
 }

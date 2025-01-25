@@ -50,23 +50,41 @@
                             <h3 class="card-title">Alumnos</h3>
                         </div>
                         <div class="card-body border-bottom py-3">
-                            <div class="d-flex">
-                                <div class="text-muted">
-                                    Mostrar
-                                    <div class="mx-2 d-inline-block">
-                                        <input type="text" class="form-control form-control-sm" value="10" size="3"
-                                               aria-label="Invoices count">
+                            <form method="GET" action="{{ route('alumnos.index') }}">
+                                <div class="d-flex align-items-center">
+                                    <div class="text-muted me-3">
+                                        <label for="search" class="form-label">Grupos</label>
+                                        <div class="mx-2 d-inline-block">
+                                            <select class="form-control form-control-sm" name="grupo">
+                                                <option value="">Todos</option>
+                                                @foreach($grupos as $grupo)
+                                                    <option value="{{ $grupo }}" {{ request('grupo') == $grupo ? 'selected' : '' }}>{{ $grupo }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                     </div>
-                                    Registros
-                                </div>
-                                <div class="ms-auto text-muted">
-                                    Buscar:
-                                    <div class="ms-2 d-inline-block">
-                                        <input type="text" class="form-control form-control-sm"
-                                               aria-label="Search invoice">
+                                    <div class="text-muted me-3">
+                                        <label for="search" class="form-label">Especialidad</label>
+                                        <div class="mx-2 d-inline-block">
+                                            <select class="form-control form-control-sm" name="especialidad">
+                                                <option value="">Todas</option>
+                                                @foreach($especialidades as $especialidad)
+                                                    <option value="{{ $especialidad }}" {{ request('especialidad') == $especialidad ? 'selected' : '' }}>{{ $especialidad }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="text-muted me-3">
+                                        <label for="search" class="form-label">Buscar</label>
+                                        <div class="mx-2 d-inline-block">
+                                            <input type="text" class="form-control form-control-sm" name="search" value="{{ request('search') }}" aria-label="Search invoice">
+                                        </div>
+                                    </div>
+                                    <div class="ms-2">
+                                        <button type="submit" class="btn btn-primary btn-sm">Filtrar</button>
                                     </div>
                                 </div>
-                            </div>
+                            </form>
                         </div>
                         <div class="table-responsive min-vh-100">
                             <table class="table card-table table-vcenter text-nowrap datatable">

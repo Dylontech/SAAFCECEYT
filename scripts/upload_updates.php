@@ -57,6 +57,11 @@ function uploadUpdates($sftp, $localDir, $remoteDir) {
                     $sftp->mkdir($remoteDirPath, -1, true);
                 }
 
+                // Eliminar el archivo antiguo en el servidor antes de subir el nuevo
+                if ($sftp->file_exists($remotePath)) {
+                    $sftp->delete($remotePath);
+                }
+
                 if ($sftp->put($remotePath, $localPath, SFTP::SOURCE_LOCAL_FILE)) {
                     echo "Archivo actualizado: $remotePath\n";
                 } else {
@@ -69,9 +74,10 @@ function uploadUpdates($sftp, $localDir, $remoteDir) {
 
 // Define el directorio local y remoto
 $localDirectory = 'D:/Proyecto/VersionDylon/SAAFCECEYT'; // Directorio local del proyecto
-$remoteDirectory = '/Prueba1'; // Directorio remoto donde se subirán los archivos actualizados
+$remoteDirectory = '/SAAFCECEYT'; // Directorio remoto donde se subirán los archivos actualizados
 
 // Sube solo los archivos actualizados
 uploadUpdates($sftp, $localDirectory, $remoteDirectory);
 
 echo "Subida de archivos actualizados completada.\n";
+

@@ -1,7 +1,7 @@
 @extends('tablar::page')
 
 @section('title')
-    GestionSE
+    Nuevas solicitudes de Examenes
 @endsection
 
 @section('content')
@@ -15,7 +15,7 @@
                         
                     </div>
                     <h2 class="page-title">
-                        {{ __('GestionSE') }}
+                        {{ __('Nuevas solicitudes de Servicios de Examenes') }}
                     </h2>
                 </div>
             </div>
@@ -35,23 +35,44 @@
                             <h3 class="card-title">Solicitudes</h3>
                         </div>
                         <div class="card-body border-bottom py-3">
-                            <div class="d-flex">
-                                <div class="text-muted">
-                                    Mostrar
-                                    <div class="mx-2 d-inline-block">
-                                        <input type="text" class="form-control form-control-sm" value="10" size="3"
-                                               aria-label="Invoices count">
+                            <form method="GET" action="{{ route('control_user.index') }}">
+                                <div class="d-flex align-items-end">
+                                    <div class="me-2">
+                                        <label class="form-label me-2">Buscar:</label>
+                                        <input type="text" class="form-control form-control-sm" name="search" value="{{ request('search') }}" aria-label="Search invoice">
                                     </div>
-                                    Registros
-                                </div>
-                                <div class="ms-auto text-muted">
-                                    Buscar:
-                                    <div class="ms-2 d-inline-block">
-                                        <input type="text" class="form-control form-control-sm"
-                                               aria-label="Search invoice">
+                                    <div class="me-2">
+                                        <label class="form-label me-2">Especialidad:</label>
+                                        <select class="form-select form-select-sm" name="especialidad">
+                                            <option value="">Todas</option>
+                                            @foreach ($especialidades as $especialidad)
+                                                <option value="{{ $especialidad }}" {{ request('especialidad') == $especialidad ? 'selected' : '' }}>{{ $especialidad }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="me-2">
+                                        <label class="form-label me-2">Grupo:</label>
+                                        <select class="form-select form-select-sm" name="grupo">
+                                            <option value="">Todos</option>
+                                            @foreach($grupos as $grupo)
+                                                <option value="{{ $grupo }}" {{ request('grupo') == $grupo ? 'selected' : '' }}>{{ $grupo }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="me-2">
+                                        <label class="form-label me-2">Tipo de Pago:</label>
+                                        <select class="form-select form-select-sm" name="tipo_pago">
+                                            <option value="">Tipo</option>
+                                            @foreach($tipo_pagos as $tipo_pago)
+                                                <option value="{{ $tipo_pago }}" {{ request('tipo_pago') == $tipo_pago ? 'selected' : '' }}>{{ $tipo_pago }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <button type="submit" class="btn btn-primary btn-sm">Filtrar</button>
                                     </div>
                                 </div>
-                            </div>
+                            </form>
                         </div>
                         <div class="table-responsive min-vh-100">
                             <table class="table card-table table-vcenter text-nowrap datatable">
@@ -94,13 +115,19 @@
                                             <td>{{ $formulario->tipo_pago }}</td>
                                             <td>{{ $formulario->fecha_pago }}</td>
                                             <td>
-                                                @if ($formulario->materias)
-                                                    {{ implode(', ', array_column(json_decode($formulario->materias, true), 'nombre')) }}
-                                                @else
-                                                    No hay materias
-                                                @endif
+                                                <span class="materias-tooltip" data-bs-toggle="tooltip" title="{{ $formulario->materias ? implode(', ', array_column(json_decode($formulario->materias, true), 'nombre')) : 'No hay materias' }}">
+                                                    @if ($formulario->materias)
+                                                        {{ array_column(json_decode($formulario->materias, true), 'nombre')[0] }}...
+                                                    @else
+                                                        No hay materias
+                                                    @endif
+                                                </span>
                                             </td>
-                                            <td>{{ $formulario->status }}</td>
+                                            <td>
+                                                <span class="status-tooltip" data-bs-toggle="tooltip" title="{{ $formulario->comentario ?? 'No hay comentario' }}">
+                                                    {{ $formulario->status }}
+                                                </span>
+                                            </td>
                                             <td>
                                                 <div class="btn-list flex-nowrap">
                                                     <div class="dropdown">
@@ -109,6 +136,10 @@
                                                             Acciones
                                                         </button>
                                                         <div class="dropdown-menu dropdown-menu-end">
+                                                            <!-- Nuevo botón Ver -->
+                                                            <a href="{{ route('gestions.gestionE', $formulario->id) }}" class="dropdown-item">
+                                                                Ver
+                                                            </a>
                                                             <form action="{{ route('formulario.destroy', $formulario->id) }}" method="POST" class="delete-form">
                                                                 @csrf
                                                                 @method('DELETE')
@@ -141,5 +172,12 @@
 @endsection
 
 @section('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            })
+        });
+    </script>
 @endsection
-

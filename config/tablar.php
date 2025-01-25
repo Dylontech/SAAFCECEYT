@@ -142,7 +142,7 @@ return [
     |
     */
 
-    'menu' => [
+'menu' => [
     // Navbar items:
     [
         'text' => 'Home',
@@ -156,24 +156,9 @@ return [
         'icon' => 'ti ti-user',
         'roles' => ['control_escolar', 'admin'] // Excluir rol 'alumno'
     ],
-    [
-        'text' => 'Materias',
-        'url' => 'materias',
-        'icon' => 'ti ti-help',
-        'roles' => ['control_escolar', 'admin'] // Excluir rol 'alumno'
-    ],
-    [
-        'text' => 'Especialidades',
-        'url' => 'especialidades',
-        'icon' => 'ti ti-help',
-        'roles' => ['control_escolar', 'admin'] // Excluir rol 'alumno'
-    ],
-    [
-        'text' => 'Solicitudes',
-        'url' => 'solicitudes',
-        'icon' => 'ti ti-help',
-        'roles' => ['control_escolar', 'admin', 'servicio_financiero'] // Excluir rol 'alumno'
-    ],
+    
+  
+   
     // Ítem de menú para el formulario de examen, visible solo para alumnos
     [
         'text' => 'Nueva solicitud de pago de examenes',
@@ -195,7 +180,21 @@ return [
         'icon' => 'ti ti-folder',
         'roles' => ['alumno']
     ],
+    // Ítem de menú para la vista de expedientes de servicios sociales, visible solo para control_escolar
+    [
+        'text' => 'Expedientes de Solicitudes de Servicios',
+        'url' => 'control_user/expedientes-finalizados',
+        'icon' => 'ti ti-folder',
+        'roles' => ['control_escolar', 'admin']
+    ],
+    [
+        'text' => 'Materias',
+        'url' => 'materias',
+        'icon' => 'ti ti-folder',
+        'roles' => ['control_escolar','Admin']
+    ],
 ],
+
 
 
 

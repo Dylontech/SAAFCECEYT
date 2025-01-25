@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Model;
  * Class Materia
  *
  * @property $id
- * @property $Profesor
- * @property $Nombre
- * @property $Tipo
+ * @property $materia
+ * @property $semestre
+ * @property $especialidad
  * @property $created_at
  * @property $updated_at
  *
@@ -21,9 +21,7 @@ class Materia extends Model
 {
     
     static $rules = [
-		'Profesor' => 'required',
-		'Nombre' => 'required',
-		'Tipo' => 'required',
+		'materia' => 'required',
     ];
 
     protected $perPage = 20;
@@ -33,7 +31,7 @@ class Materia extends Model
      *
      * @var array
      */
-    protected $fillable = ['Profesor','Nombre','Tipo'];
+    protected $fillable = ['materia','semestre','especialidad'];
 
 
 

@@ -79,7 +79,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col">
-                        <a href="https://wa.me/{{ $whatsappSettings->phone_number }}?text={{ urlencode($whatsappSettings->message) }}" class="btn btn-white w-100">
+                        <a href="https://wa.me/{{ $whatsappSettings['phone_number'] }}?text={{ urlencode($whatsappSettings['message']) }}" class="btn btn-white w-100">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon text-whatsapp" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24V24H0z" fill="none"/>
                                 <path d="M3 21l1.65 -4.65a8 8 0 1 1 3.6 3.6l-4.65 1.65m4.65 -1.65a8 8 0 1 1 -3.6 -3.6l4.65 1.65"/>

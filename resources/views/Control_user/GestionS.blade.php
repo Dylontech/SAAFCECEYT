@@ -35,23 +35,51 @@
                             <h3 class="card-title">Solicitudes</h3>
                         </div>
                         <div class="card-body border-bottom py-3">
-                            <div class="d-flex">
-                                <div class="text-muted">
-                                    Mostrar
-                                    <div class="mx-2 d-inline-block">
-                                        <input type="text" class="form-control form-control-sm" value="10" size="3"
-                                               aria-label="Invoices count">
-                                    </div>
-                                    Registros
+                            <form method="GET" action="{{ route('Control_user.GestionS') }}" class="d-flex flex-wrap align-items-end mb-3">
+                                <div class="me-2">
+                                    <label class="form-label">Especialidad</label>
+                                    <select name="especialidad" class="form-select form-select-sm" aria-label="Filtrar por especialidad">
+                                        <option value="" selected>Todas</option>
+                                        @foreach($especialidades as $especialidad)
+                                            <option value="{{ $especialidad }}">{{ $especialidad }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
-                                <div class="ms-auto text-muted">
-                                    Buscar:
-                                    <div class="ms-2 d-inline-block">
-                                        <input type="text" class="form-control form-control-sm"
-                                               aria-label="Search invoice">
-                                    </div>
+                                <div class="me-2">
+                                    <label class="form-label">Grupos</label>
+                                    <select name="grupo" class="form-select form-select-sm" aria-label="Filtrar por grupo">
+                                        <option value="" selected>Todos</option>
+                                        @foreach($grupos as $grupo)
+                                            <option value="{{ $grupo }}">{{ $grupo }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
-                            </div>
+                                <div class="me-2">
+                                    <label class="form-label">No control</label>
+                                    <select name="control" class="form-select form-select-sm" aria-label="Filtrar por NO. Control">
+                                        <option value="" selected>Todos</option>
+                                        @foreach($controles as $control)
+                                            <option value="{{ $control }}">{{ $control }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="me-2">
+                                    <label class="form-label">Tipo de servicio</label>
+                                    <select name="tipo_servicio" class="form-select form-select-sm" aria-label="Filtrar por tipo de servicio">
+                                        <option value="" selected>Todos</option>
+                                        @foreach($tipos_servicio as $tipo_servicio)
+                                            <option value="{{ $tipo_servicio }}">{{ $tipo_servicio }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="me-2">
+                                    <label class="form-label">Buscar</label>
+                                    <input type="text" name="buscar" class="form-control form-control-sm" aria-label="Search invoice">
+                                </div>
+                                <div>
+                                    <button type="submit" class="btn btn-primary btn-sm">Filtrar</button>
+                                </div>
+                            </form>
                         </div>
                         <div class="table-responsive min-vh-100">
                             <table class="table card-table table-vcenter text-nowrap datatable">
@@ -63,7 +91,6 @@
                                     <th>No. Control</th>
                                     <th>Especialidad</th>
                                     <th>Grupo</th>
-                                    <th>Generación</th>
                                     <th>Semestre</th>
                                     <th>Fecha</th>
                                     <th>CURP</th>
@@ -74,6 +101,9 @@
                                 </thead>
                                 <tbody>
                                 @forelse ($formularios as $formulario)
+                                    @if($formulario->comprobante && $formulario->updated_at->lt(\Carbon\Carbon::now()->subDay()))
+                                        @continue
+                                    @endif
                                     <tr>
                                         <td><input class="form-check-input m-0 align-middle" type="checkbox"
                                                    aria-label="Select solicitud"></td>
@@ -81,7 +111,6 @@
                                         <td>{{ $formulario->control }}</td>
                                         <td>{{ $formulario->especialidad }}</td>
                                         <td>{{ $formulario->grupo }}</td>
-                                        <td>{{ $formulario->generacion }}</td>
                                         <td>{{ $formulario->semestre }}</td>
                                         <td>{{ $formulario->fecha }}</td>
                                         <td>
@@ -91,7 +120,7 @@
                                             <span title="{{ $formulario->tipo_servicio }}">{{ Str::limit($formulario->tipo_servicio, 10) }}</span>
                                         </td>
                                         <td>
-                                            {{ $formulario->comprobante_alumno ? 'subir comprobante' : $formulario->status }}
+                                            {{ $formulario->comprobante ? 'Finalizada' : $formulario->status }}
                                         </td>
                                         <td>
                                             <div class="btn-list flex-nowrap">
@@ -101,7 +130,7 @@
                                                         Acciones
                                                     </button>
                                                     <div class="dropdown-menu dropdown-menu-end">
-                                                        <a href="{{ route('gestions.show', $formulario->id) }}" class="dropdown-item">
+                                                       
                                                             Ver
                                                         </a>
                                                     </div>
@@ -111,7 +140,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="12">Sin información</td>
+                                        <td colspan="11">Sin información</td>
                                     </tr>
                                 @endforelse
                                 </tbody>

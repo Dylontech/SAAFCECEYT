@@ -13,7 +13,7 @@
         </div>
         <div class="mb-3">
             <label for="control" class="form-label">No. de Control:</label>
-            <input type="text" id="control" name="control" class="form-control" value="{{ old('control', Auth::guard('alumno')->user()->numero_control ?? '') }}">
+           <input type="text" id="control" name="control" class="form-control" value="{{ old('control', Auth::guard('alumno')->user()->numero_control ?? '') }}">
         </div>
         <div class="mb-3">
             <label for="especialidad" class="form-label">Especialidad:</label>
@@ -38,14 +38,30 @@
         <div class="mb-3">
             <label for="tipo_servicio" class="form-label">Tipo de Servicio:</label>
             <select id="tipo_servicio" name="tipo_servicio" class="form-control">
+                <option value="">Selecciona un tipo de servicio</option>
                 <option value="Constancia de Inscripción y/o Estudios">Constancia de Inscripción y/o Estudios</option>
                 <option value="Duplicado de Credencial">Duplicado de Credencial</option>
                 <option value="Certificado Incompleto (Parcial)">Certificado Incompleto (Parcial)</option>
                 <option value="Duplicado de Certificado de Estudios">Duplicado de Certificado de Estudios</option>
                 <option value="Examen de Titulación (Protocolo)">Examen de Titulación (Protocolo)</option>
                 <option value="Titulación (Tit. y Exp. de Ced. Prof.)">Titulación (Tit. y Exp. de Ced. Prof.)</option>
+                <option value="reinscripcion">Reinscripción</option>
             </select>
         </div>
+        
+        <div class="form-group">
+            <label for="semestre">Selecciona el semestre</label>
+            <select id="semestre" name="semestre" class="form-control">
+                <option value="">Selecciona un semestre</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+            </select>
+        </div>
+
+
         <button type="submit" class="btn btn-primary w-100 mt-4">Enviar Solicitud</button>
     </form>
 </div>

@@ -1,3 +1,38 @@
+{{-- 
+
+    Esta plantilla Blade extiende el diseño 'tablar::page' y define el contenido para la página 'Solicitudes E'.
+    Incluye un encabezado de página, un formulario de filtro y una tabla para mostrar las solicitudes.
+
+    Secciones:
+    - title: Establece el título de la página a 'Solicitudes E'.
+    - content: Contiene el contenido principal de la página, incluyendo el encabezado, el formulario de filtro y la tabla.
+
+    JavaScript:
+    - fetchFilteredData(url, data, showAll): Obtiene datos filtrados usando AJAX y actualiza el cuerpo de la tabla.
+    - $('#filterButton').on('click'): Maneja el evento de clic del botón de filtro para obtener datos filtrados.
+    - $('#resetButton').on('click'): Maneja el evento de clic del botón de reinicio para obtener todos los registros y restablecer el formulario.
+--}}
+
+{{-- 
+    Función: fetchFilteredData
+    Descripción: Obtiene datos filtrados usando AJAX y actualiza el cuerpo de la tabla.
+    Parámetros:
+    - url (string): La URL a la que se enviará la solicitud AJAX.
+    - data (object): Los datos que se enviarán con la solicitud AJAX.
+    - showAll (boolean): Si se deben obtener todos los registros (true) o solo los registros filtrados (false).
+--}}
+
+{{-- 
+    Manejador de Eventos: $('#filterButton').on('click')
+    Descripción: Maneja el evento de clic del botón de filtro para obtener datos filtrados.
+    Previene el envío predeterminado del formulario y envía una solicitud AJAX con los datos del formulario.
+--}}
+
+{{-- 
+    Manejador de Eventos: $('#resetButton').on('click')
+    Descripción: Maneja el evento de clic del botón de reinicio para obtener todos los registros y restablecer el formulario.
+    Previene la acción predeterminada del botón, restablece el formulario y envía una solicitud AJAX para obtener todos los registros.
+--}}
 @extends('tablar::page')
 
 @section('title')
@@ -11,9 +46,7 @@
             <div class="row g-2 align-items-center">
                 <div class="col">
                     <!-- Page pre-title -->
-                    <div class="page-pretitle">
-                        
-                    </div>
+                    <div class="page-pretitle"></div>
                     <h2 class="page-title">
                         {{ __('Solicitudes ') }}
                     </h2>
@@ -35,57 +68,63 @@
                             <h3 class="card-title">Solicitudes</h3>
                         </div>
                         <div class="card-body border-bottom py-3">
-                            <div class="d-flex">
-                                <div class="text-muted">
-                                    Mostrar
-                                    <div class="mx-2 d-inline-block">
-                                        <input type="text" class="form-control form-control-sm" value="10" size="3"
-                                               aria-label="Invoices count">
+                            <form id="filterForm" method="GET">
+                                <div class="d-flex flex-wrap align-items-center">
+                                    <div class="me-2">
+                                        <label for="materias" class="form-label">Materias</label>
+                                        <select id="materias" name="materias" class="form-control">
+                                            <option value="">Todas</option>
+                                            @foreach ($materias as $materia)
+                                                <option value="{{ $materia }}">{{ $materia }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
-                                    Registros
-                                </div>
-                                <div class="ms-auto text-muted">
-                                    Buscar:
-                                    <div class="ms-2 d-inline-block">
-                                        <input type="text" class="form-control form-control-sm"
-                                               aria-label="Search invoice">
+                                    <div class="me-2">
+                                        <label for="tipo_pago" class="form-label">Seleccione el tipo de pago</label>
+                                        <select id="tipo_pago" name="tipo_pago" class="form-control">
+                                            <option value="">Todos</option>
+                                            <option value="recuperacion">Recuperación (R2) Todas las Asignaturas</option>
+                                            <option value="regularizacion">Regularización (3 Asignaturas)</option>
+                                            <option value="curso_intensivo">Curso Intensivo (Submódulos)</option>
+                                            <option value="titulo_suficiencia">Título Suficiencia</option>
+                                            <option value="segundo_curso_intensivo">2º Curso Intensivo (Submódulos)</option>
+                                        </select>
+                                    </div>
+                                    <div class="me-2">
+                                        <label for="fecha_pago" class="form-label">Fecha de Pago</label>
+                                        <input type="date" id="fecha_pago" name="fecha_pago" class="form-control" value="{{ request('fecha_pago') }}">
+                                    </div>
+                                    <div class="me-2 align-self-end">
+                                        <button type="submit" id="filterButton" class="btn btn-primary">Filtrar</button>
+                                    </div>
+                                    <div class="me-2">
+                                        <label for="buscar" class="form-label">Buscar</label>
+                                        <input type="text" id="buscar" name="buscar" class="form-control" value="{{ request('buscar') }}">
                                     </div>
                                 </div>
-                            </div>
+                            </form>
                         </div>
                         <div class="table-responsive min-vh-100">
                             <table class="table card-table table-vcenter text-nowrap datatable">
                                 <thead>
-                                <tr>
-                                    <th class="w-1"><input class="form-check-input m-0 align-middle" type="checkbox"
-                                                           aria-label="Select all invoices"></th>
-                                    <th class="w-1">No.
-                                        <!-- Download SVG icon from http://tabler-icons.io/i/chevron-up -->
-                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                             class="icon icon-sm text-dark icon-thick" width="24" height="24"
-                                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                             stroke-linecap="round" stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                            <polyline points="6 15 12 9 18 15"/>
-                                        </svg>
-                                    </th>
-                                    <th>Nombre del Alumno</th>
-                                    <th>Número de Control</th>
-                                    <th>Especialidad</th>
-                                    <th>Grupo</th>
-                                    <th>Tipo de Pago</th>
-                                    <th>Fecha de Pago</th>
-                                    <th>Materias</th>
-                                    <th>Status</th>
-                                    <th class="w-1"></th>
-                                </tr>
+                                    <tr>
+                                        <th class="w-1"><input class="form-check-input m-0 align-middle" type="checkbox" aria-label="Select all invoices"></th>
+                                        <th class="w-1">No.</th>
+                                        <th>Nombre del Alumno</th>
+                                        <th>Número de Control</th>
+                                        <th>Especialidad</th>
+                                        <th>Grupo</th>
+                                        <th>Tipo de Pago</th>
+                                        <th>Fecha de Pago</th>
+                                        <th>Materias</th>
+                                        <th>Status</th>
+                                        <th class="w-1"></th>
+                                    </tr>
                                 </thead>
-                                <tbody>
-                                @forelse ($formularios as $formulario)
-                                    @if ($formulario->alumno_id == Auth::guard('alumno')->id())
+                                <tbody id="tableBody">
+                                    @forelse ($formularios as $formulario)
                                         <tr>
-                                            <td><input class="form-check-input m-0 align-middle" type="checkbox"
-                                                       aria-label="Select solicitud"></td>
+                                            <td><input class="form-check-input m-0 align-middle" type="checkbox" aria-label="Select solicitud"></td>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $formulario->nombre }}</td>
                                             <td>{{ $formulario->numero_control }}</td>
@@ -93,15 +132,24 @@
                                             <td>{{ $formulario->grupo }}</td>
                                             <td>{{ $formulario->tipo_pago }}</td>
                                             <td>{{ $formulario->fecha_pago }}</td>
-                                            <td>{{ implode(', ', array_column(json_decode($formulario->materias, true), 'nombre')) }}</td>
+                                            <td>
+                                                @php
+                                                    $materiasArray = array_column(json_decode($formulario->materias, true), 'nombre');
+                                                    $materiasText = implode(', ', $materiasArray);
+                                                @endphp
+                                                @if (count($materiasArray) > 1)
+                                                    <span data-bs-toggle="tooltip" title="{{ $materiasText }}">
+                                                        {{ $materiasArray[0] }}, ...
+                                                    </span>
+                                                @else
+                                                    {{ $materiasText }}
+                                                @endif
+                                            </td>
                                             <td>{{ $formulario->status }}</td>
                                             <td>
                                                 <div class="btn-list flex-nowrap">
                                                     <div class="dropdown">
-                                                        <button class="btn dropdown-toggle align-text-top"
-                                                                data-bs-toggle="dropdown">
-                                                            Acciones
-                                                        </button>
+                                                        <button class="btn dropdown-toggle align-text-top" data-bs-toggle="dropdown">Acciones</button>
                                                         <div class="dropdown-menu dropdown-menu-end">
                                                             <form action="{{ route('formulario.destroy', $formulario->id) }}" method="POST" class="delete-form">
                                                                 @csrf
@@ -115,25 +163,53 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                    @endif
-                                @empty
-                                    <tr>
-                                        <td colspan="10">Sin información</td>
-                                    </tr>
-                                @endforelse
+                                    @empty
+                                        <tr>
+                                            <td colspan="10">Sin información</td>
+                                        </tr>
+                                    @endforelse
                                 </tbody>
                             </table>
-                        </div>
-                       <div class="card-footer d-flex align-items-center">
-                            {!! $formularios->links('tablar::pagination') !!}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-@endsection
+    @endsection
 
-@section('scripts')
-@endsection
+    @section('scripts')
+        <script>
+            $(document).ready(function() {
+                function fetchFilteredData(url, data, showAll = false) {
+                    if (showAll) {
+                        data = {}; // Clear the data to fetch all records
+                    }
+                    $.ajax({
+                        url: url,
+                        type: 'GET',
+                        data: data,
+                        success: function(response) {
+                            var newTableBody = $(response).find('#tableBody').html();
+                            $('#tableBody').html(newTableBody);
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error: ' + error);
+                        }
+                    });
+                }
 
+                // Filtrar utilizando AJAX
+                $('#filterButton').on('click', function(event) {
+                    event.preventDefault();
+                    var data = $('#filterForm').serialize();
+                    fetchFilteredData('{{ route("formularios.index") }}', data);
+                });
+                // Mostrar todos los registros
+                $('#resetButton').on('click', function(event) {
+                    event.preventDefault();
+                    $('#filterForm').trigger('reset');
+                    fetchFilteredData('{{ route("formularios.index") }}', {}, true);
+                });
+            });
+        </script>
+    @endsection

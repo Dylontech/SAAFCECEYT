@@ -19,7 +19,12 @@
     <div class="form-group mb-3">
         <label class="form-label">{{ Form::label('especialidad', 'Especialidad') }}</label>
         <div>
-            {{ Form::text('especialidad', $alumno->especialidad, ['class' => 'form-control' . ($errors->has('especialidad') ? 'is-invalid' : ''), 'placeholder' => 'Especialidad']) }}
+            {{ Form::select('especialidad', [
+                'diseño grafico digital' => 'Diseño Gráfico Digital',
+                'ventas' => 'Ventas',
+                'produccion industrial de alimentos' => 'Producción Industrial de Alimentos',
+                'NA' => 'NA'
+            ], $alumno->especialidad, ['class' => 'form-control' . ($errors->has('especialidad') ? 'is-invalid' : ''), 'placeholder' => 'Selecciona una especialidad']) }}
             {!! $errors->first('especialidad', '<div class="invalid-feedback">:message</div>') !!}
             <small class="form-hint">Por favor, ingresa la nueva especialidad del alumno.</small>
         </div>

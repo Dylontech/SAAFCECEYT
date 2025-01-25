@@ -7,20 +7,65 @@ use App\Models\Formulario;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 
 class GestionSController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
-        $formularios = Formulario::paginate(10);
+
+        // Obtener los filtros de la solicitud
+        $especialidad = $request->input('especialidad');
+        $grupo = $request->input('grupo');
+        $control = $request->input('control');
+        $tipo_servicio = $request->input('tipo_servicio');
+        $buscar = $request->input('buscar');
+
+        // Obtener las listas para los filtros
+        $especialidades = Formulario::distinct()->pluck('especialidad');
+        $grupos = Formulario::distinct()->pluck('grupo');
+        $controles = Formulario::distinct()->pluck('control');
+        $tipos_servicio = Formulario::distinct()->pluck('tipo_servicio');
+
+        // Construir la consulta con los filtros
+        $query = Formulario::query();
+
+        if ($especialidad) {
+            $query->where('especialidad', $especialidad);
+        }
+
+        if ($grupo) {
+            $query->where('grupo', $grupo);
+        }
+
+        if ($control) {
+            $query->where('control', $control);
+        }
+
+        if ($tipo_servicio) {
+            $query->where('tipo_servicio', $tipo_servicio);
+        }
+
+        if ($buscar) {
+            $query->where(function($q) use ($buscar) {
+                $q->where('nombre', 'LIKE', "%$buscar%")
+                  ->orWhere('control', 'LIKE', "%$buscar%")
+                  ->orWhere('curp', 'LIKE', "%$buscar%")
+                  ->orWhere('tipo_servicio', 'LIKE', "%$buscar%");
+            });
+        }
+
+        $formularios = $query->paginate(10);
 
         foreach ($formularios as $formulario) {
             $this->revisarYActualizarEstatus($formulario);
         }
 
-        return view('Control_user.GestionS', compact('formularios'));
+        return view('Control_user.GestionS', compact('formularios', 'especialidades', 'grupos', 'controles', 'tipos_servicio'));
     }
+
 
     public function updateStatus(Request $request, $id)
     {
@@ -97,6 +142,11 @@ class GestionSController extends Controller
         return $this->downloadFile($id, 'comprobante_oficial');
     }
 
+    public function downloadComprobante($id) // Añadido
+    {
+        return $this->downloadFile($id, 'comprobante');
+    }
+
     private function downloadFile($id, $fileType)
     {
         $formulario = Formulario::findOrFail($id);
@@ -104,18 +154,23 @@ class GestionSController extends Controller
         // Obtener solo el nombre del archivo
         $fileName = basename($formulario->$fileType);
 
-        // Construir la ruta completa del archivo
-        $filePath = storage_path('app/public/' . $formulario->$fileType);
+        // Directorio base donde buscar
+        $directorioBase = storage_path('app');
+        $rutaArchivo = $this->buscarArchivoRecursivamente($directorioBase, $fileName);
 
-        if (!file_exists($filePath)) {
+        Log::info("Buscando el archivo: $fileName en el directorio: $directorioBase");
+
+        if (!$rutaArchivo) {
+            Log::error("El archivo no existe: $fileName en $directorioBase");
             return redirect()->back()->with('error', 'El archivo no existe.');
         }
 
-        if (!$this->archivoValido($filePath)) {
+        if (!$this->archivoValido($rutaArchivo)) {
+            Log::error("Tipo de archivo no permitido: $rutaArchivo");
             return redirect()->back()->with('error', 'Tipo de archivo no permitido.');
         }
 
-        return response()->download($filePath);
+        return response()->download($rutaArchivo);
     }
 
     private function archivoValido($filePath)
@@ -124,5 +179,34 @@ class GestionSController extends Controller
         $mimeType = mime_content_type($filePath);
 
         return in_array($mimeType, $allowedMimeTypes);
+    }
+
+    private function buscarArchivoRecursivamente($directorio, $nombreArchivo)
+    {
+        $archivos = File::allFiles($directorio);
+
+        foreach ($archivos as $archivo) {
+            if ($archivo->getFilename() == $nombreArchivo) {
+                Log::info('Archivo encontrado en: ' . $archivo->getRealPath());
+                return $archivo->getRealPath();
+            }
+        }
+
+        $subdirectorios = File::directories($directorio);
+        foreach ($subdirectorios as $subdirectorio) {
+            $rutaArchivo = $this->buscarArchivoRecursivamente($subdirectorio, $nombreArchivo);
+            if ($rutaArchivo) {
+                return $rutaArchivo;
+            }
+        }
+
+        return false;
+    }
+
+    // Método añadido para mostrar expedientes finalizados
+    public function expedientesFinalizados()
+    {
+        $solicitudes = Formulario::whereNotNull('comprobante')->paginate(10);
+        return view('control_user.ExpedientesSS', compact('solicitudes'));
     }
 }

@@ -1,6 +1,6 @@
 @extends('tablar::page')
 
-@section('title', 'Create Materia')
+@section('title', 'Crear Materia')
 
 @section('content')
     <!-- Page header -->
@@ -10,7 +10,7 @@
                 <div class="col">
                     <!-- Page pre-title -->
                     <div class="page-pretitle">
-                        
+                        Crear
                     </div>
                     <h2 class="page-title">
                         {{ __('Materia ') }}
@@ -28,7 +28,7 @@
                                 <line x1="12" y1="5" x2="12" y2="19"/>
                                 <line x1="5" y1="12" x2="19" y2="12"/>
                             </svg>
-                            Inicio
+                            Lista de Materias
                         </a>
                     </div>
                 </div>
@@ -45,7 +45,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Detalles</h3>
+                            <h3 class="card-title">Detalles de la Materia</h3>
                         </div>
                         <div class="card-body">
                             <form method="POST" action="{{ route('materias.store') }}" id="ajaxForm" role="form"

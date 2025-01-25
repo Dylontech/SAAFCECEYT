@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('alumno_id'); // Relacionar con el alumno que creó la solicitud
             $table->string('nombre'); // Nombre del alumno
+            $table->string('curp'); // CURP del alumno
             $table->string('numero_control'); // Número de control del alumno
             $table->string('especialidad'); // Especialidad del alumno
             $table->string('numero_lista'); // Número de lista del alumno
@@ -23,6 +24,12 @@ return new class extends Migration
             $table->date('fecha_pago'); // Fecha de pago
             $table->json('materias'); // Almacenar las materias y tipos de examen en formato JSON
             $table->string('status')->default('pendiente'); // Campo status con valor predeterminado 'pendiente'
+            $table->text('comentario')->nullable(); // Comentario del formulario
+            $table->text('comentario_financiero')->nullable(); // Comentario para financieros
+            $table->string('liga_de_pago')->nullable(); // Liga de pago
+            $table->string('comprobante_alumno')->nullable(); // Comprobante de alumno
+            $table->string('comprobante')->nullable(); // Comprobante
+            $table->string('comprobante_oficial')->nullable(); // Comprobante oficial
             $table->timestamps(); // Marcas de tiempo para la creación y actualización del registro
 
             // Clave foránea

@@ -14,6 +14,7 @@ use App\Http\Controllers\FormularioController;
 use App\Http\Controllers\ControlUserController; // Importa el controlador
 use App\Http\Controllers\GestionSController; // Importa el nuevo controlador
 use App\Http\Controllers\FinanzasUserController; // Importa el nuevo controlador
+use App\Http\Controllers\GestionEController;
 
 // Página principal
 Route::get('/', function () {
@@ -39,8 +40,8 @@ Route::post('/password/reset', [\App\Http\Controllers\Auth\ResetPasswordControll
 Route::middleware(['auth:web'])->group(function () {
     Route::get('/home', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::resource('/alumnos', AlumnoController::class);
-    Route::resource('/materias', \App\Http\Controllers\MateriaController::class);
-    Route::resource('/especialidades', \App\Http\Controllers\EspecialidadeController::class);
+    
+   
     Route::resource('/solicitudes', \App\Http\Controllers\SolicitudeController::class);
     Route::get('/search', [\App\Http\Controllers\SearchController::class, 'search'])->name('search');
     Route::get('/configuracion', [RoleController::class, 'index'])->name('roles.index');
@@ -58,9 +59,7 @@ Route::middleware(['auth:alumno'])->group(function () {
     })->name('alumnos_user.index');
 
     // Ruta para el formulario independiente
-    Route::get('/formulario', function () {
-        return view('alumnos_user.formulario');
-    })->name('formulario');
+    Route::get('/formulario', [FormularioEController::class, 'create'])->name('formulario');
 
     // Rutas para el controlador FormularioEController
     Route::get('/formulario/create', [FormularioEController::class, 'create'])->name('formulario.create');
@@ -94,6 +93,7 @@ Route::middleware(['auth:alumno'])->group(function () {
     // Ruta para eliminar una solicitud
     Route::delete('/formularios/{id}', [FormularioController::class, 'destroy'])->name('formulario.destroy');
 });
+
 // Ruta para la vista de administración sin bloqueo de rol
 Route::get('/admin/index', function () {
     $tables = \Illuminate\Support\Facades\DB::select('SHOW TABLES');
@@ -131,7 +131,6 @@ Route::get('/download/comprobante/{id}', [FormularioController::class, 'download
 
 // Rutas para GestionSController
 Route::get('/gestions/{id}', [GestionSController::class, 'show'])->name('gestions.show');
-Route::get('/gestions/{id}', [GestionSController::class, 'show'])->name('gestions.show');
 Route::get('/gestions/comprobante-alumno/{id}', [GestionSController::class, 'downloadComprobanteAlumno'])->name('gestions.downloadComprobanteAlumno');
 Route::post('/gestions/upload-comprobante/{id}', [GestionSController::class, 'uploadComprobante'])->name('gestions.uploadComprobante');
 
@@ -142,5 +141,35 @@ Route::get('alumnos/search', [AlumnoController::class, 'search'])->name('alumnos
 Route::get('gestions/downloadComprobanteOficial/{id}', [GestionSController::class, 'downloadComprobanteOficial'])->name('gestions.downloadComprobanteOficial');
 //ruta para revision
 Route::get('finanzas/downloadComprobanteOficial/{id}', [App\Http\Controllers\FinanzasUserController::class, 'downloadComprobanteOficial'])->name('finanzas.downloadComprobanteOficial');
+// Rutas para la vista de expedientes finalizados para control escolar
+Route::get('control_user/expedientes-finalizados', [App\Http\Controllers\GestionSController::class, 'expedientesFinalizados'])->name('control_user.expedientesFinalizados');
+Route::get('control_user/{id}', [App\Http\Controllers\GestionSController::class, 'show'])->name('control_user.show');
+Route::get('gestions/downloadComprobante/{id}', [App\Http\Controllers\GestionSController::class, 'downloadComprobante'])->name('gestions.downloadComprobante');
 
+
+Route::resource('/materias', App\Http\Controllers\MateriaController::class);
+// Rutas para el controlador FormularioEController
+Route::get('/formulario/{id}/edit', [FormularioEController::class, 'edit'])->name('formulario.edit');
+Route::put('/formulario/{id}', [FormularioEController::class, 'update'])->name('formulario.update');
+
+
+
+
+
+// Ruta para mostrar una solicitud específica
+Route::get('/gestions/{id}', [GestionEController::class, 'show'])->name('gestions.gestionE');
+
+// Ruta para actualizar el estado de una solicitud específica
+Route::patch('/gestions/{id}/updateStatus', [GestionEController::class, 'updateStatus'])->name('gestions.updateStatus');
+
+// Ruta para subir un comprobante para una solicitud específica
+Route::post('/gestions/{id}/uploadComprobante', [GestionEController::class, 'uploadComprobante'])->name('gestions.uploadComprobante');
+
+// Ruta para descargar un comprobante de una solicitud específica
+Route::get('/gestions/{id}/downloadComprobante/{type}', [GestionEController::class, 'downloadComprobante'])->name('gestions.downloadComprobante');
+
+Route::get('/control_user.index', [GestionEController::class, 'index'])->name('control_user.index');
+
+// Ruta para la gestión de solicitudes
+Route::get('/gestionS', [GestionSController::class, 'index'])->name('Control_user.GestionS');
 

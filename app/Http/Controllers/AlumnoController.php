@@ -16,13 +16,35 @@ class AlumnoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        $alumnos = Alumno::paginate(10);
+    public function index(Request $request)
+{
+    $query = Alumno::query();
 
-        return view('alumno.index', compact('alumnos'))
-            ->with('i', (request()->input('page', 1) - 1) * $alumnos->perPage());
+    if ($request->filled('search')) {
+        $query->where('Nombre', 'like', '%' . $request->search . '%')
+              ->orWhere('numero_control', 'like', '%' . $request->search . '%')
+              ->orWhere('CURP', 'like', '%' . $request->search . '%')
+              ->orWhere('email', 'like', '%' . $request->search . '%');
     }
+
+    if ($request->filled('grupo')) {
+        $query->where('Grupo', $request->grupo);
+    }
+
+    if ($request->filled('especialidad')) {
+        $query->where('especialidad', $request->especialidad);
+    }
+    
+
+    $alumnos = $query->paginate(10);
+
+    // Definir los grupos y especialidades
+    $grupos = Alumno::select('Grupo')->distinct()->pluck('Grupo');
+    $especialidades = Alumno::select('especialidad')->distinct()->pluck('especialidad');
+
+    return view('alumno.index', compact('alumnos', 'grupos', 'especialidades'))
+        ->with('i', (request()->input('page', 1) - 1) * $alumnos->perPage());
+}
 
     /**
      * Muestra el formulario para crear un nuevo recurso.

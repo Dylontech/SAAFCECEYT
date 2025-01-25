@@ -12,7 +12,7 @@
                 <div class="col">
                     <!-- Page pre-title -->
                     <div class="page-pretitle">
-                        
+                        Lista
                     </div>
                     <h2 class="page-title">
                         {{ __('Materia ') }}
@@ -30,7 +30,7 @@
                                 <line x1="12" y1="5" x2="12" y2="19"/>
                                 <line x1="5" y1="12" x2="19" y2="12"/>
                             </svg>
-                            Nueva Materia
+                            Crear Materia
                         </a>
                     </div>
                 </div>
@@ -47,26 +47,32 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Materias</h3>
+                            <h3 class="card-title">Materia</h3>
                         </div>
                         <div class="card-body border-bottom py-3">
-                            <div class="d-flex">
-                                <div class="text-muted">
-                                    Mostras
-                                    <div class="mx-2 d-inline-block">
-                                        <input type="text" class="form-control form-control-sm" value="10" size="3"
-                                               aria-label="Invoices count">
+                            {{-- <form method="GET" action="{{ route('materias.index') }}">
+                                <div class="d-flex align-items-center">
+                                    <div class="text-muted me-3">
+                                        <label class="form-label d-none d-sm-inline-block">Buscar:</label>
+                                        <input type="text" name="search" class="form-control form-control-sm" id="searchInput" aria-label="Search invoice" value="{{ request()->input('search') }}">
                                     </div>
-                                    Registros
-                                </div>
-                                <div class="ms-auto text-muted">
-                                    Buscar:
-                                    <div class="ms-2 d-inline-block">
-                                        <input type="text" class="form-control form-control-sm"
-                                               aria-label="Search invoice">
+                                    <div class="text-muted me-3">
+                                        <label class="form-label d-none d-sm-inline-block">Semestre:</label>
+                                        <select name="semester" class="form-control form-control-sm" id="semesterFilter">
+                                            <option value="">Todos</option>
+                                            <option value="1" {{ request()->input('semester') == 1 ? 'selected' : '' }}>Semestre 1</option>
+                                            <option value="2" {{ request()->input('semester') == 2 ? 'selected' : '' }}>Semestre 2</option>
+                                            <option value="3" {{ request()->input('semester') == 3 ? 'selected' : '' }}>Semestre 3</option>
+                                            <option value="4" {{ request()->input('semester') == 4 ? 'selected' : '' }}>Semestre 4</option>
+                                            <option value="5" {{ request()->input('semester') == 5 ? 'selected' : '' }}>Semestre 5</option>
+                                            <option value="6" {{ request()->input('semester') == 6 ? 'selected' : '' }}>Semestre 6</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <button type="submit" class="btn btn-primary btn-sm">filtrar</button>
                                     </div>
                                 </div>
-                            </div>
+                            </form> --}}
                         </div>
                         <div class="table-responsive min-vh-100">
                             <table class="table card-table table-vcenter text-nowrap datatable">
@@ -85,9 +91,9 @@
                                         </svg>
                                     </th>
                                     
-										<th>Profesor</th>
-										<th>Nombre</th>
-										<th>Tipo</th>
+                                        <th>Materia</th>
+                                        <th>Semestre</th>
+                                        <th>Especialidad</th>
 
                                     <th class="w-1"></th>
                                 </tr>
@@ -100,9 +106,9 @@
                                                    aria-label="Select materia"></td>
                                         <td>{{ ++$i }}</td>
                                         
-											<td>{{ $materia->Profesor }}</td>
-											<td>{{ $materia->Nombre }}</td>
-											<td>{{ $materia->Tipo }}</td>
+                                            <td>{{ $materia->materia }}</td>
+                                            <td>{{ $materia->semestre }}</td>
+                                            <td>{{ $materia->especialidad }}</td>
 
                                         <td>
                                             <div class="btn-list flex-nowrap">
@@ -114,41 +120,23 @@
                                                     <div class="dropdown-menu dropdown-menu-end">
                                                         <a class="dropdown-item"
                                                            href="{{ route('materias.show',$materia->id) }}">
-                                                            Vista general
+                                                            Ver
                                                         </a>
                                                         <a class="dropdown-item"
                                                            href="{{ route('materias.edit',$materia->id) }}">
                                                             Editar
                                                         </a>
-                                                        <form action="{{ route('materias.destroy', $materia->id) }}" method="POST">
+                                                        <form
+                                                            action="{{ route('materias.destroy',$materia->id) }}"
+                                                            method="POST">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit" class="dropdown-item text-red" onclick="return confirmDelete(event)">
-                                                                <i class="fa fa-fw fa-trash"></i> Eliminar
+                                                            <button type="submit"
+                                                                    onclick="if(!confirm('¿Desea proceder?')){return false;}"
+                                                                    class="dropdown-item text-red"><i
+                                                                    class="fa fa-fw fa-trash"></i>
+                                                                Eliminar
                                                             </button>
-                                                        </form>
-                                                        
-                                                        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-                                                        <script>
-                                                            function confirmDelete(event) {
-                                                                event.preventDefault();
-                                                                Swal.fire({
-                                                                    title: "¿Estás seguro?",
-                                                                    text: "¡No podrás revertir esto!",
-                                                                    icon: "warning",
-                                                                    showCancelButton: true,
-                                                                    confirmButtonColor: "#3085d6",
-                                                                    cancelButtonColor: "#d33",
-                                                                    confirmButtonText: "Sí, elimínalo",
-                                                                    cancelButtonText: "Cancelar"
-                                                                }).then((result) => {
-                                                                    if (result.isConfirmed) {
-                                                                        event.target.closest('form').submit();
-                                                                    }
-                                                                });
-                                                            }
-                                                        </script>
-                                                        
                                                         </form>
                                                     </div>
                                                 </div>
@@ -156,7 +144,7 @@
                                         </td>
                                     </tr>
                                 @empty
-                                    <td>Sin datos</td>
+                                    <td>No se encontraron datos</td>
                                 @endforelse
                                 </tbody>
 

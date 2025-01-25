@@ -37,21 +37,42 @@
                             <h3 class="card-title">Solicitudes</h3>
                         </div>
                         <div class="card-body border-bottom py-3">
-                            <div class="d-flex">
-                                <div class="text-muted">
-                                    Mostrar
-                                    <div class="mx-2 d-inline-block">
-                                        <input type="text" class="form-control form-control-sm" value="10" size="3" aria-label="Invoices count">
-                                    </div>
-                                    Registros
+                            <form action="{{ route('finanzas.index') }}" method="GET" class="d-flex flex-wrap align-items-end">
+                                <div class="me-2">
+                                    <label class="form-label">No. control</label>
+                                    <select class="form-select form-select-sm" id="control" name="control">
+                                        <option value="">Todos</option>
+                                        @foreach ($controles as $control)
+                                            <option value="{{ $control }}">{{ $control }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
-                                <div class="ms-auto text-muted">
-                                    Buscar:
-                                    <div class="ms-2 d-inline-block">
-                                        <input type="text" class="form-control form-control-sm" aria-label="Search invoice">
-                                    </div>
+                                <div class="me-2">
+                                    <label class="form-label">Especialidad</label>
+                                    <select class="form-select form-select-sm" id="especialidad" name="especialidad">
+                                        <option value="">Todas</option>
+                                        @foreach ($especialidades as $especialidad)
+                                            <option value="{{ $especialidad }}">{{ $especialidad }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
-                            </div>
+                                <div class="me-2">
+                                    <label class="form-label">Tipo de Servicio</label>
+                                    <select class="form-select form-select-sm" id="tipo_servicio" name="tipo_servicio">
+                                        <option value="">Todos</option>
+                                        @foreach ($tipos_servicio as $tipo_servicio)
+                                            <option value="{{ $tipo_servicio }}">{{ $tipo_servicio }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="me-2">
+                                    <label class="form-label">Buscar</label>
+                                    <input type="text" class="form-control form-control-sm" name="buscar" value="{{ request('buscar') }}" aria-label="Search invoice">
+                                </div>
+                                <div class="me-2">
+                                    <input type="submit" class="btn btn-primary btn-sm" value="Filtrar">
+                                </div>
+                            </form>
                         </div>
                         <div class="table-responsive min-vh-100">
                             <table class="table card-table table-vcenter text-nowrap datatable">
@@ -98,7 +119,9 @@
                                                                 </button>
                                                             @endif
                                                             <a href="{{ route('finanzas.show', $formulario->id) }}" class="dropdown-item">
-                                                                @if ($formulario->comprobante_alumno)
+                                                                @if ($formulario->comprobante_oficial)
+                                                                    <i class="fa fa-fw fa-info-circle"></i> Detalles
+                                                                @elseif ($formulario->comprobante_alumno)
                                                                     <i class="fa fa-fw fa-download"></i> Descargar Comprobante del Alumno
                                                                 @else
                                                                     <i class="fa fa-fw fa-upload"></i> Subir Liga de Pago
@@ -136,7 +159,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <p>{{ $formulario->comentario_financiero }}</p>
+                            <p>{{ $formulario->comentario_financiero }}<br>Solicitud Finalizada</p>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>

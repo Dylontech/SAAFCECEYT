@@ -84,43 +84,52 @@
                                 <strong>Tipo de Servicio:</strong>
                                 {{ $formulario->tipo_servicio }}
                             </div>
-                            <div class="form-group">
-                                <strong>Status:</strong>
-                                <form action="{{ route('gestions.updateStatus', $formulario->id) }}" method="POST" id="status-form">
-                                    @csrf
-                                    @method('PATCH')
-                                    <select name="status" id="status-select" class="form-control mb-3">
-                                        <option value="aprobada" {{ $formulario->status == 'aprobada' ? 'selected' : '' }}>Aprobada</option>
-                                        <option value="generando_liga_pago" {{ $formulario->status == 'generando_liga_pago' ? 'selected' : '' }}>Generando Liga de Pago</option>
-                                        <option value="declinada" {{ $formulario->status == 'declinada' ? 'selected' : '' }}>Declinada</option>
-                                    </select>
-                                    <div id="comentario-div" class="mt-3">
-                                        <label for="comentario">Comentario:</label>
-                                        <textarea name="comentario" id="comentario" class="form-control">{{ $formulario->comentario }}</textarea>
-                                    </div>
-                                    <div class="mt-3">
-                                        <label for="comentario_financiero">Comentario a Servicio Financiero:</label>
-                                        <textarea name="comentario_financiero" id="comentario_financiero" class="form-control">{{ $formulario->comentario_financiero }}</textarea>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary mt-3">Guardar</button>
-                                </form>
-                            </div>
+                            @if(!$formulario->comprobante_oficial)
+                                <div class="form-group">
+                                    <strong>Status:</strong>
+                                    <form action="{{ route('gestions.updateStatus', $formulario->id) }}" method="POST" id="status-form">
+                                        @csrf
+                                        @method('PATCH')
+                                        <select name="status" id="status-select" class="form-control mb-3">
+                                            <option value="aprobada" {{ $formulario->status == 'aprobada' ? 'selected' : '' }}>Aprobada</option>
+                                            <option value="generando_liga_pago" {{ $formulario->status == 'generando_liga_pago' ? 'selected' : '' }}>Generando Liga de Pago</option>
+                                            <option value="declinada" {{ $formulario->status == 'declinada' ? 'selected' : '' }}>Declinada</option>
+                                        </select>
+                                        <div id="comentario-div" class="mt-3">
+                                            <label for="comentario">Comentario:</label>
+                                            <textarea name="comentario" id="comentario" class="form-control">{{ $formulario->comentario }}</textarea>
+                                        </div>
+                                        <div class="mt-3">
+                                            <label for="comentario_financiero">Comentario a Servicio Financiero:</label>
+                                            <textarea name="comentario_financiero" id="comentario_financiero" class="form-control">{{ $formulario->comentario_financiero }}</textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary mt-3">Guardar</button>
+                                    </form>
+                                </div>
+                            @endif
                             <div class="form-group mt-4">
                                 <a href="{{ route('finanzas.downloadComprobanteOficial', $formulario->id) }}" class="btn btn-secondary mt-2"
                                    @if(!$formulario->comprobante_oficial) style="display: none;" @endif>
                                     Descargar Comprobante Oficial
                                 </a>
                             </div>
+                            @if($formulario->comprobante_oficial)
+                                <div class="form-group mt-4">
+                                    <form action="{{ route('gestions.uploadComprobante', $formulario->id) }}" method="POST" enctype="multipart/form-data">
+                                        @csrf
+                                        <label for="comprobante">Subir Comprobante:</label>
+                                        <input type="file" name="comprobante" id="comprobante" class="form-control">
+                                        <div class="alert alert-warning mt-2" role="alert">
+                                            El tamaño máximo permitido para los archivos es de 10 MB.
+                                        </div>
+                                        <button type="submit" class="btn btn-primary mt-3">Subir</button>
+                                    </form>
+                                </div>
+                            @endif
                             <div class="form-group mt-4">
-                                <form action="{{ route('gestions.uploadComprobante', $formulario->id) }}" method="POST" enctype="multipart/form-data">
-                                    @csrf
-                                    <label for="comprobante">Subir Comprobante:</label>
-                                    <input type="file" name="comprobante" id="comprobante" class="form-control">
-                                    <div class="alert alert-warning mt-2" role="alert">
-                                        El tamaño máximo permitido para los archivos es de 10 MB.
-                                    </div>
-                                    <button type="submit" class="btn btn-primary mt-3">Subir</button>
-                                </form>
+                                <a href="{{ route('gestions.downloadComprobante', $formulario->id) }}" class="btn btn-secondary mt-2">
+                                    Descargar Comprobante
+                                </a>
                             </div>
                         </div>
                     </div>

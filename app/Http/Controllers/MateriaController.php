@@ -6,26 +6,37 @@ use App\Models\Materia;
 use Illuminate\Http\Request;
 
 /**
- * Clase MateriaController
+ * Class MateriaController
  * @package App\Http\Controllers
  */
 class MateriaController extends Controller
 {
     /**
-     * Muestra una lista de los recursos.
+     * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        $materias = Materia::paginate(10);
+    public function index(Request $request)
+{
+    $query = Materia::query();
 
-        return view('materia.index', compact('materias'))
-            ->with('i', (request()->input('page', 1) - 1) * $materias->perPage());
+    // Aplicar filtro de búsqueda
+    if ($request->has('search') && !empty($request->input('search'))) {
+        $query->where('materia', 'like', '%' . $request->input('search') . '%');
     }
 
+    // Aplicar filtro por semestre
+    if ($request->has('semester') && !empty($request->input('semester'))) {
+        $query->where('semestre', $request->input('semester'));
+    }
+
+    $materias = $query->paginate(10);
+
+    return view('materia.index', compact('materias'))
+        ->with('i', (request()->input('page', 1) - 1) * $materias->perPage());
+}
     /**
-     * Muestra el formulario para crear un nuevo recurso.
+     * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
@@ -36,7 +47,7 @@ class MateriaController extends Controller
     }
 
     /**
-     * Almacena un recurso recién creado en el almacenamiento.
+     * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
@@ -52,7 +63,7 @@ class MateriaController extends Controller
     }
 
     /**
-     * Muestra el recurso especificado.
+     * Display the specified resource.
      *
      * @param  int $id
      * @return \Illuminate\Http\Response
@@ -65,7 +76,7 @@ class MateriaController extends Controller
     }
 
     /**
-     * Muestra el formulario para editar el recurso especificado.
+     * Show the form for editing the specified resource.
      *
      * @param  int $id
      * @return \Illuminate\Http\Response
@@ -78,7 +89,7 @@ class MateriaController extends Controller
     }
 
     /**
-     * Actualiza el recurso especificado en el almacenamiento.
+     * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
      * @param  Materia $materia
@@ -95,8 +106,6 @@ class MateriaController extends Controller
     }
 
     /**
-     * Elimina el recurso especificado.
-     *
      * @param int $id
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Exception

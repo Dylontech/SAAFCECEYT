@@ -12,6 +12,10 @@
             <input type="text" id="nombre" name="nombre" class="form-control" value="{{ old('nombre', Auth::guard('alumno')->user()->Nombre ?? '') }}">
         </div>
         <div class="mb-3">
+            <label for="curp" class="form-label">CURP</label>
+            <input type="text" id="curp" name="curp" class="form-control" value="{{ old('curp', Auth::guard('alumno')->user()->CURP ?? '') }}">
+        </div>
+        <div class="mb-3">
             <label for="numero_control" class="form-label">No. de Control</label>
             <input type="text" id="numero_control" name="numero_control" class="form-control" value="{{ old('numero_control', Auth::guard('alumno')->user()->numero_control ?? '') }}">
         </div>
@@ -20,12 +24,11 @@
             <input type="text" id="especialidad" name="especialidad" class="form-control" value="{{ old('especialidad', Auth::guard('alumno')->user()->especialidad ?? '') }}">
         </div>
         <div class="mb-3">
-            <label for="numero_lista" class="form-label">Nº Lista</label>
-            <input type="text" id="numero_lista" name="numero_lista" class="form-control" value="{{ old('numero_lista', Auth::guard('alumno')->user()->numero_lista ?? '') }}">
+            <input type="hidden" id="numero_lista" name="numero_lista" value="1">
         </div>
         <div class="mb-3">
             <label for="grupo" class="form-label">Grupo</label>
-            <input type="text" id="grupo" name="grupo" class="form-control" value="{{ old('grupo', Auth::guard('alumno')->user()->grupo ?? '') }}">
+            <input type="text" id="grupo" name="grupo" class="form-control" value="{{ old('grupo', Auth::guard('alumno')->user()->Grupo ?? '') }}">
         </div>
 
         <h3 class="mt-4">Tipo de Pago</h3>
@@ -38,6 +41,7 @@
                 <option value="curso_intensivo">Curso Intensivo (Submódulos)</option>
                 <option value="titulo_suficiencia">Título Suficiencia</option>
                 <option value="segundo_curso_intensivo">2º Curso Intensivo (Submódulos)</option>
+                
             </select>
         </div>
 
@@ -46,29 +50,27 @@
             <input type="date" id="fecha_pago" name="fecha_pago" class="form-control" value="{{ date('Y-m-d') }}">
         </div>
 
-        <h3 class="mt-4">Materias y Exámenes</h3>
+        <h3 class="mt-4">Materias</h3>
         <div class="mb-3">
             <table class="table">
                 <thead>
                     <tr>
                         <th>Nº</th>
                         <th>Materia</th>
-                        <th>Tipo de Examen</th>
                     </tr>
                 </thead>
                 <tbody>
                     @for ($i = 1; $i <= 7; $i++)
                         <tr>
                             <td>{{ $i }}</td>
-                            <td><input type="text" name="materias[{{ $i }}][nombre]" class="form-control"></td>
                             <td>
-                                <select name="materias[{{ $i }}][tipo_examen]" class="form-control">
-                                    <option value="R2">R2</option>
-                                    <option value="REG">REG</option>
-                                    <option value="CI">C.I.</option>
-                                    <option value="TS">T.S.</option>
-                                    <option value="2CI">2º C.I.</option>
+                                <select name="materias[{{ $i }}][nombre]" class="form-control">
+                                    <option value="">Seleccione</option>
+                                    @foreach ($materias as $materia)
+                                        <option value="{{ $materia->materia }}">{{ $materia->materia }}</option>
+                                    @endforeach
                                 </select>
+                                <input type="hidden" name="materias[{{ $i }}][tipo_examen]" value="R2">
                             </td>
                         </tr>
                     @endfor
@@ -82,8 +84,3 @@
     </form>
 </div>
 @endsection
-
-@section('scripts')
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-@endsection
-

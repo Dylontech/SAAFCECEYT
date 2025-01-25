@@ -19,6 +19,7 @@ class FormularioE extends Model
     protected $fillable = [
         'alumno_id',
         'nombre',
+        'curp',
         'numero_control',
         'especialidad',
         'numero_lista',
@@ -26,7 +27,13 @@ class FormularioE extends Model
         'tipo_pago',
         'fecha_pago',
         'materias',
-        'status'
+        'status',
+        'comentario',
+        'comentario_financiero',
+        'liga_de_pago',
+        'comprobante_alumno',
+        'comprobante',
+        'comprobante_oficial',
     ];
 
     /**
@@ -35,5 +42,15 @@ class FormularioE extends Model
     public function alumno()
     {
         return $this->belongsTo(Alumno::class);
+    }
+
+    /**
+     * Query scope para buscar por materias, tipo de pago y fecha de pago.
+     */
+    public function scopeFiltrarPorMateriaTipoYFecha($query, $materias, $tipoPago, $fechaPago)
+    {
+        return $query->where('materias', 'like', "%$materias%")
+                     ->where('tipo_pago', $tipoPago)
+                     ->where('fecha_pago', $fechaPago);
     }
 }

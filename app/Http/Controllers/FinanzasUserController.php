@@ -10,13 +10,46 @@ use Illuminate\Support\Facades\File;
 
 class FinanzasUserController extends Controller
 {
-    public function index()
-    {
-        $formularios = Formulario::where('status', 'generando_liga_pago')
-                                  ->orWhereNotNull('comprobante_alumno')
-                                  ->paginate(10);
-        return view('financiero_user.SolicitudesServiciosF', compact('formularios'));
+    public function index(Request $request)
+{
+    // Obtener los filtros de la solicitud
+    $control = $request->input('control');
+    $especialidad = $request->input('especialidad');
+    $tipo_servicio = $request->input('tipo_servicio');
+    $buscar = $request->input('buscar');
+
+    // Construir la consulta con los filtros
+    $query = Formulario::query();
+
+    if ($control) {
+        $query->where('control', $control);
     }
+
+    if ($especialidad) {
+        $query->where('especialidad', $especialidad);
+    }
+
+    if ($tipo_servicio) {
+        $query->where('tipo_servicio', $tipo_servicio);
+    }
+
+    if ($buscar) {
+        $query->where(function($q) use ($buscar) {
+            $q->where('nombre', 'LIKE', "%$buscar%")
+              ->orWhere('control', 'LIKE', "%$buscar%")
+              ->orWhere('curp', 'LIKE', "%$buscar%");
+        });
+    }
+
+    $formularios = $query->paginate(10);
+
+    // Obtener las listas para los filtros
+    $controles = Formulario::distinct()->pluck('control');
+    $especialidades = Formulario::distinct()->pluck('especialidad');
+    $tipos_servicio = Formulario::distinct()->pluck('tipo_servicio');
+
+    return view('financiero_user.SolicitudesServiciosF', compact('formularios', 'controles', 'especialidades', 'tipos_servicio'));
+}
 
     public function create()
     {

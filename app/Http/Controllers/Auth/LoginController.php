@@ -90,4 +90,19 @@ class LoginController extends Controller
             'password' => 'required|string',
         ]);
     }
+    public function showLoginForm()
+    {
+        $whatsappSettings = [
+            'phone_number' => '1234567890', // Reemplaza con el número de teléfono real
+            'message' => 'Hola, necesito ayuda con el inicio de sesión.' // Reemplaza con el mensaje real
+        ];
+        return view('vendor.tablar.auth.login', compact('whatsappSettings'));
+    }
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('/');
+    }
 }
