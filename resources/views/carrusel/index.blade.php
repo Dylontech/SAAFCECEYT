@@ -86,9 +86,8 @@
                                     </th>
                                     
 										<th>Description</th>
-										<th>Urlfoto</th>
-										<th>Link</th>
-										<th>Orden</th>
+										
+										
 
                                     <th class="w-1"></th>
                                 </tr>
@@ -102,9 +101,8 @@
                                         <td>{{ ++$i }}</td>
                                         
 											<td>{{ $carrusel->Description }}</td>
-											<td>{{ $carrusel->Urlfoto }}</td>
-											<td>{{ $carrusel->link }}</td>
-											<td>{{ $carrusel->orden }}</td>
+									
+											
 
                                         <td>
                                             <div class="btn-list flex-nowrap">

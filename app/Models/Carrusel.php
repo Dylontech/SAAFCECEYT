@@ -24,8 +24,6 @@ class Carrusel extends Model
     static $rules = [
 		'Description' => 'required',
 		'Urlfoto' => 'required',
-		'link' => 'required',
-		'orden' => 'required',
     ];
 
     protected $perPage = 20;

@@ -57,14 +57,7 @@
 <strong>Urlfoto:</strong>
 {{ $carrusel->Urlfoto }}
 </div>
-<div class="form-group">
-<strong>Link:</strong>
-{{ $carrusel->link }}
-</div>
-<div class="form-group">
-<strong>Orden:</strong>
-{{ $carrusel->orden }}
-</div>
+
 
                         </div>
                     </div>

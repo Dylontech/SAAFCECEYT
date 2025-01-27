@@ -151,6 +151,12 @@ return [
         'roles' => ['admin', 'control_escolar', 'servicio_financiero'] // Excluir rol 'alumno'
     ],
     [
+        'text' => 'Home',
+        'url' => 'alumnos_user',
+        'icon' => 'ti ti-home',
+        'roles' => ['alumno',]
+    ],
+    [
         'text' => 'Alumnos',
         'url' => 'alumnos',
         'icon' => 'ti ti-user',
@@ -199,6 +205,7 @@ return [
         'icon' => 'ti ti-folder',
         'roles' => ['control_escolar','Admin','servicio_financiero',]
     ],
+   
    
 ],
 

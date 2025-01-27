@@ -17,24 +17,7 @@
         <small class="form-hint">carrusel <b>Urlfoto</b> instruction.</small>
     </div>
 </div>
-<div class="form-group mb-3">
-    <label class="form-label">   {{ Form::label('link') }}</label>
-    <div>
-        {{ Form::text('link', $carrusel->link, ['class' => 'form-control' .
-        ($errors->has('link') ? ' is-invalid' : ''), 'placeholder' => 'Link']) }}
-        {!! $errors->first('link', '<div class="invalid-feedback">:message</div>') !!}
-        <small class="form-hint">carrusel <b>link</b> instruction.</small>
-    </div>
-</div>
-<div class="form-group mb-3">
-    <label class="form-label">   {{ Form::label('orden') }}</label>
-    <div>
-        {{ Form::text('orden', $carrusel->orden, ['class' => 'form-control' .
-        ($errors->has('orden') ? ' is-invalid' : ''), 'placeholder' => 'Orden']) }}
-        {!! $errors->first('orden', '<div class="invalid-feedback">:message</div>') !!}
-        <small class="form-hint">carrusel <b>orden</b> instruction.</small>
-    </div>
-</div>
+
 
     <div class="form-footer">
         <div class="text-end">
