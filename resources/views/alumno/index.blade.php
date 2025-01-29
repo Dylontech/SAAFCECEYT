@@ -50,6 +50,7 @@
                             <h3 class="card-title">Alumnos</h3>
                         </div>
                         <div class="card-body border-bottom py-3">
+<<<<<<< Updated upstream
                             <div class="d-flex">
                                 <div class="text-muted">
                                     Mostrar
@@ -64,10 +65,40 @@
                                     <div class="ms-2 d-inline-block">
                                         <input type="text" class="form-control form-control-sm"
                                                aria-label="Search invoice">
+=======
+                            <form method="GET" action="{{ route('alumnos.index') }}">
+                                <div class="row align-items-center">
+                                    <div class="col-lg-3 col-md-4 col-sm-6 mb-2">
+                                        <label for="grupo" class="form-label">Grupos</label>
+                                        <select class="form-control form-control-md" name="grupo">
+                                            <option value="">Todos</option>
+                                            @foreach($grupos as $grupo)
+                                                <option value="{{ $grupo }}" {{ request('grupo') == $grupo ? 'selected' : '' }}>{{ $grupo }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-3 col-md-4 col-sm-6 mb-2">
+                                        <label for="especialidad" class="form-label">Especialidad</label>
+                                        <select class="form-control form-control-md" name="especialidad">
+                                            <option value="">Todas</option>
+                                            @foreach($especialidades as $especialidad)
+                                                <option value="{{ $especialidad }}" {{ request('especialidad') == $especialidad ? 'selected' : '' }}>{{ $especialidad }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-3 col-md-4 col-sm-6 mb-2">
+                                        <label for="search" class="form-label">Buscar</label>
+                                        <input type="text" class="form-control form-control-md" name="search" value="{{ request('search') }}" aria-label="Search invoice">
+                                    </div>
+                                    <div class="col-lg-3 col-md-4 col-sm-6 mb-2">
+                                        <label class="form-label d-md-block d-none">&nbsp;</label>
+                                        <button type="submit" class="btn btn-primary btn-md w-100">Filtrar</button>
+>>>>>>> Stashed changes
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        
                         <div class="table-responsive min-vh-100">
                             <table class="table card-table table-vcenter text-nowrap datatable">
                                 <thead>

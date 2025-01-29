@@ -151,6 +151,12 @@ return [
         'roles' => ['admin', 'control_escolar', 'servicio_financiero'] // Excluir rol 'alumno'
     ],
     [
+        'text' => 'Home',
+        'url' => 'alumnos_user',
+        'icon' => 'ti ti-home',
+        'roles' => ['alumno',]
+    ],
+    [
         'text' => 'Alumnos',
         'url' => 'alumnos',
         'icon' => 'ti ti-user',
@@ -195,6 +201,30 @@ return [
         'icon' => 'ti ti-folder',
         'roles' => ['alumno']
     ],
+<<<<<<< Updated upstream
+=======
+    // Ítem de menú para la vista de expedientes de servicios sociales, visible solo para control_escolar
+    [
+        'text' => 'Expedientes de Solicitudes de Servicios',
+        'url' => 'control_user/expedientes-finalizados',
+        'icon' => 'ti ti-folder',
+        'roles' => ['control_escolar', 'admin']
+    ],
+    [
+        'text' => 'Materias',
+        'url' => 'materias',
+        'icon' => 'ti ti-folder',
+        'roles' => ['control_escolar','Admin']
+    ],
+    [
+        'text' => 'Carrusel',
+        'url' => 'carrusel',
+        'icon' => 'ti ti-folder',
+        'roles' => ['control_escolar','Admin','servicio_financiero',]
+    ],
+   
+   
+>>>>>>> Stashed changes
 ],
 
 
