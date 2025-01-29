@@ -1,3 +1,4 @@
+<!-- filepath: /c:/Users/dilan/Desktop/profa/SAAFCECEYT/resources/views/alumno/index.blade.php -->
 @extends('tablar::page')
 
 @section('title')
@@ -32,6 +33,9 @@
                             </svg>
                             Registrar Nuevo Alumno
                         </a>
+                        <button class="btn btn-secondary d-none d-sm-inline-block" id="edit-multiple">
+                            Editar Seleccionados
+                        </button>
                     </div>
                 </div>
             </div>
@@ -87,101 +91,72 @@
                             </form>
                         </div>
                         <div class="table-responsive min-vh-100">
-                            <table class="table card-table table-vcenter text-nowrap datatable">
-                                <thead>
-                                <tr>
-                                    <th>Numero de Control</th>
-                                    <th>Curp</th>
-                                    <th>Especialidad</th>
-                                    <th>Semestre</th> <!-- Añadido -->
-                                    <th>Grupo</th>
-                                    <th>Nombre</th>
-                                    <th>Email</th>
-                                    <th>Estatus</th>
-
-                                    <th class="w-1"></th>
-                                </tr>
-                                </thead>
-
-                                <tbody>
-                                @forelse ($alumnos as $alumno)
+                            <form method="POST" action="{{ route('alumnos.updateMultiple') }}" id="edit-multiple-form">
+                                @csrf
+                                @method('PATCH')
+                                <table class="table card-table table-vcenter text-nowrap datatable">
+                                    <thead>
                                     <tr>
-                                        <td>{{ $alumno->numero_control }}</td>
-                                        <td>{{ $alumno->CURP }}</td>
-                                        <td>{{ $alumno->especialidad }}</td>
-                                        <td>{{ $alumno->semestre }}</td> <!-- Añadido -->
-                                        <td>{{ $alumno->Grupo }}</td>
-                                        <td>{{ $alumno->Nombre }}</td>
-                                        <td>{{ $alumno->email }}</td>
-                                        <td>{{ $alumno->estatus }}</td>
-
-                                        <td>
-                                            <div class="btn-list flex-nowrap">
-                                                <div class="dropdown">
-                                                    <button class="btn dropdown-toggle align-text-top"
-                                                            data-bs-toggle="dropdown">
-                                                        Acciones
-                                                    </button>
-                                                    <div class="dropdown-menu dropdown-menu-end">
-                                                        <a class="dropdown-item"
-                                                           href="{{ route('alumnos.show',$alumno->id) }}">
-                                                            Vista general
-                                                        </a>
-                                                        <a class="dropdown-item"
-                                                           href="{{ route('alumnos.edit',$alumno->id) }}">
-                                                            Editar
-                                                        </a>
-                                                        <form
-                                                            action="{{ route('alumnos.destroy',$alumno->id) }}"
-                                                            method="POST">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <form action="{{ route('alumnos.destroy', $alumno->id) }}" method="POST">
+                                        <th><input type="checkbox" id="select-all"></th>
+                                        <th>Numero de Control</th>
+                                        <th>Curp</th>
+                                        <th>Especialidad</th>
+                                        <th>Semestre</th> <!-- Añadido -->
+                                        <th>Grupo</th>
+                                        <th>Nombre</th>
+                                        <th>Email</th>
+                                        <th>Estatus</th>
+                                        <th class="w-1"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @forelse ($alumnos as $alumno)
+                                        <tr>
+                                            <td><input type="checkbox" name="ids[]" value="{{ $alumno->id }}"></td>
+                                            <td>{{ $alumno->numero_control }}</td>
+                                            <td>{{ $alumno->CURP }}</td>
+                                            <td>{{ $alumno->especialidad }}</td>
+                                            <td>{{ $alumno->semestre }}</td> <!-- Añadido -->
+                                            <td>{{ $alumno->Grupo }}</td>
+                                            <td>{{ $alumno->Nombre }}</td>
+                                            <td>{{ $alumno->email }}</td>
+                                            <td>{{ $alumno->estatus }}</td>
+                                            <td>
+                                                <div class="btn-list flex-nowrap">
+                                                    <div class="dropdown">
+                                                        <button class="btn dropdown-toggle align-text-top"
+                                                                data-bs-toggle="dropdown">
+                                                            Acciones
+                                                        </button>
+                                                        <div class="dropdown-menu dropdown-menu-end">
+                                                            <a class="dropdown-item"
+                                                               href="{{ route('alumnos.show',$alumno->id) }}">
+                                                                Vista general
+                                                            </a>
+                                                            <a class="dropdown-item"
+                                                               href="{{ route('alumnos.edit',$alumno->id) }}">
+                                                                Editar
+                                                            </a>
+                                                            <form
+                                                                action="{{ route('alumnos.destroy',$alumno->id) }}"
+                                                                method="POST">
                                                                 @csrf
                                                                 @method('DELETE')
                                                                 <button type="button" class="dropdown-item text-red" onclick="confirmDelete(event)">
                                                                     <i class="fa fa-fw fa-trash"></i> Eliminar
                                                                 </button>
                                                             </form>
-                                                            
-                                                            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-                                                            <script>
-                                                                function confirmDelete(event) {
-                                                                    event.preventDefault();
-                                                                    Swal.fire({
-                                                                        title: "¿Estás seguro?",
-                                                                        text: "¡No podrás revertir esto!",
-                                                                        icon: "warning",
-                                                                        showCancelButton: true,
-                                                                        confirmButtonColor: "#3085d6",
-                                                                        cancelButtonColor: "#d33",
-                                                                        confirmButtonText: "Sí, elimínalo",
-                                                                        cancelButtonText: "Cancelar"
-                                                                    }).then((result) => {
-                                                                        if (result.isConfirmed) {
-                                                                            event.target.closest('form').submit();
-                                                                            Swal.fire({
-                                                                                title: "¡Eliminado!",
-                                                                                text: "Tu archivo ha sido eliminado.",
-                                                                                icon: "success"
-                                                                            });
-                                                                        }
-                                                                    });
-                                                                }
-                                                            </script>
-                                                            
-                                                        </form>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <td>Sin informacion</td>
-                                @endforelse
-                                </tbody>
-
-                            </table>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <td>Sin informacion</td>
+                                    @endforelse
+                                    </tbody>
+                                </table>
+                            </form>
                         </div>
                        <div class="card-footer d-flex align-items-center">
                             {!! $alumnos->links('tablar::pagination') !!}
@@ -191,4 +166,38 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.getElementById('select-all').addEventListener('click', function(event) {
+            const checkboxes = document.querySelectorAll('input[name="ids[]"]');
+            checkboxes.forEach(checkbox => checkbox.checked = event.target.checked);
+        });
+
+        document.getElementById('edit-multiple').addEventListener('click', function() {
+            document.getElementById('edit-multiple-form').submit();
+        });
+
+        function confirmDelete(event) {
+            event.preventDefault();
+            Swal.fire({
+                title: "¿Estás seguro?",
+                text: "¡No podrás revertir esto!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Sí, elimínalo",
+                cancelButtonText: "Cancelar"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    event.target.closest('form').submit();
+                    Swal.fire({
+                        title: "¡Eliminado!",
+                        text: "Tu archivo ha sido eliminado.",
+                        icon: "success"
+                    });
+                }
+            });
+        }
+    </script>
 @endsection

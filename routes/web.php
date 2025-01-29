@@ -43,8 +43,7 @@ Route::middleware(['auth:web'])->group(function () {
     Route::resource('/alumnos', AlumnoController::class);
     
    
-    Route::resource('/solicitudes', \App\Http\Controllers\SolicitudeController::class);
-    Route::get('/search', [\App\Http\Controllers\SearchController::class, 'search'])->name('search');
+
     Route::get('/configuracion', [RoleController::class, 'index'])->name('roles.index');
     Route::post('/configuracion/asignar', [RoleController::class, 'assignRoles'])->name('roles.assign');
     Route::resource('users', UserController::class);
@@ -56,8 +55,7 @@ Route::middleware(['auth:web'])->group(function () {
 // Rutas para alumnos autenticados
 Route::middleware(['auth:alumno'])->group(function () {
     Route::get('/alumnos_user', [App\Http\Controllers\alumnos_userController::class, 'index'])->name('alumnos_user.index');
-
-    // Ruta para el formulario independiente
+ // Ruta para el formulario independiente
     Route::get('/formulario', [FormularioEController::class, 'create'])->name('formulario');
 
     // Rutas para el controlador FormularioEController
@@ -177,3 +175,6 @@ Route::get('/gestionS', [GestionSController::class, 'index'])->name('Control_use
 Route::resource('carrusels', CarruselController::class);
 Route::resource('/carrusel', App\Http\Controllers\CarruselController::class);
 Route::resource('/carrusel', App\Http\Controllers\CarruselController::class);
+
+Route::get('/alumnos/edit-multiple', [App\Http\Controllers\AlumnoController::class, 'editMultiple'])->name('alumnos.editMultiple');
+Route::patch('/alumnos/update-multiple', [App\Http\Controllers\AlumnoController::class, 'updateMultiple'])->name('alumnos.updateMultiple');

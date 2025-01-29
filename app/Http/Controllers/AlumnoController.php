@@ -163,4 +163,32 @@ class AlumnoController extends Controller
         return redirect()->route('alumnos.index')
             ->with('success', 'Alumno eliminado exitosamente');
     }
+    public function editMultiple(Request $request)
+{
+    
+    return view('alumno.edit_multiple', compact('ids'));
 }
+
+public function updateMultiple(Request $request)
+{
+    
+    $data = $request->only(['especialidad', 'semestre', 'Grupo']);
+
+    // Verificar que los IDs no estén vacíos
+    if (empty($ids)) {
+        return redirect()->route('alumnos.index')->with('error', 'No se seleccionaron alumnos.');
+    }
+
+    // Verificar que al menos un campo esté presente para la actualización
+    if (empty(array_filter($data))) {
+        return redirect()->route('alumnos.index')->with('error', 'No se proporcionaron datos para actualizar.');
+    }
+
+    // Actualizar los registros
+    Alumno::whereIn('id', $ids)->update(array_filter($data));
+
+    return redirect()->route('alumnos.index')->with('success', 'Alumnos actualizados exitosamente.');
+}
+
+}
+
