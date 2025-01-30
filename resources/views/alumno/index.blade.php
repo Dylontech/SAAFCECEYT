@@ -91,7 +91,7 @@
                             </form>
                         </div>
                         <div class="table-responsive min-vh-100">
-                            <form method="POST" action="{{ route('alumnos.updateMultiple') }}" id="edit-multiple-form">
+                            <form method="POST" action="{{ route('alumnos.editMultiple') }}" id="edit-multiple-form">
                                 @csrf
                                 @method('PATCH')
                                 <table class="table card-table table-vcenter text-nowrap datatable">

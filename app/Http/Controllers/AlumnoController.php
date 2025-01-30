@@ -165,13 +165,13 @@ class AlumnoController extends Controller
     }
     public function editMultiple(Request $request)
 {
-    
+    $ids = $request->input('ids');
     return view('alumno.edit_multiple', compact('ids'));
 }
 
 public function updateMultiple(Request $request)
 {
-    
+    $ids = explode(',', $request->input('ids'));
     $data = $request->only(['especialidad', 'semestre', 'Grupo']);
 
     // Verificar que los IDs no estén vacíos
