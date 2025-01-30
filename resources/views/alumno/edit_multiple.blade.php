@@ -1,4 +1,5 @@
 <!-- filepath: /c:/Users/dilan/Desktop/profa/SAAFCECEYT/resources/views/alumno/edit_multiple.blade.php -->
+
 @extends('tablar::page')
 
 @section('title', 'Editar Alumnos')

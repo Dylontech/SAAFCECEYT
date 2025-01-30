@@ -178,3 +178,4 @@ Route::resource('/carrusel', App\Http\Controllers\CarruselController::class);
 
 Route::get('/alumnos/edit-multiple', [App\Http\Controllers\AlumnoController::class, 'editMultiple'])->name('alumnos.editMultiple');
 Route::patch('/alumnos/update-multiple', [App\Http\Controllers\AlumnoController::class, 'updateMultiple'])->name('alumnos.updateMultiple');
+Route::post('/alumnos/edit-multiple', [AlumnoController::class, 'editMultiple'])->name('alumnos.editMultiple');
