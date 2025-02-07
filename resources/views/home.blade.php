@@ -1,3 +1,4 @@
+<!-- filepath: /c:/Users/dilan/Desktop/profa/SAAFCECEYT/resources/views/home.blade.php -->
 @extends('tablar::page')
 
 @section('title', 'Home')
@@ -18,7 +19,6 @@
                 <div class="card">
                     <div class="card-header text-center">
                         Bienvenido
-            
                     </div>
                 </div>
             </div>
@@ -41,7 +41,7 @@
                           <div class="carousel-inner">
                               @foreach($carrusels as $index => $carrusel)
                                   <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
-                                      <img class="d-block w-100" alt="{{ $carrusel->Description }}" src="{{ $carrusel->Urlfoto }}" />
+                                      <img class="d-block w-100" alt="{{ $carrusel->Description }}" src="{{ route('carrusel.image', ['id' => $carrusel->id]) }}" />
                                   </div>
                               @endforeach
                           </div>
@@ -53,11 +53,10 @@
                               <span class="carousel-control-next-icon" aria-hidden="true"></span>
                               <span class="visually-hidden">Next</span>
                           </a>
-                      </div>>
+                      </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 @endsection

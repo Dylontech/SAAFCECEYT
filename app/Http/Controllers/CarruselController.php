@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Carrusel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * Class CarruselController
@@ -45,7 +46,12 @@ class CarruselController extends Controller
     {
         request()->validate(Carrusel::$rules);
 
-        $carrusel = Carrusel::create($request->all());
+        $data = $request->all();
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('carrusel', 'public');
+        }
+
+        $carrusel = Carrusel::create($data);
 
         return redirect()->route('carrusels.index')
             ->with('success', 'Carrusel created successfully.');
@@ -88,7 +94,16 @@ class CarruselController extends Controller
     {
         request()->validate(Carrusel::$rules);
 
-        $carrusel->update($request->all());
+        $data = $request->all();
+        if ($request->hasFile('image')) {
+            // Delete the old image
+            if ($carrusel->image) {
+                Storage::disk('public')->delete($carrusel->image);
+            }
+            $data['image'] = $request->file('image')->store('carrusel', 'public');
+        }
+
+        $carrusel->update($data);
 
         return redirect()->route('carrusels.index')
             ->with('success', 'Carrusel updated successfully');
@@ -105,5 +120,10 @@ class CarruselController extends Controller
 
         return redirect()->route('carrusels.index')
             ->with('success', 'Carrusel deleted successfully');
+    }
+    public function getImage($id)
+    {
+        $carrusel = Carrusel::findOrFail($id);
+        return response()->file(storage_path('app/public/' . $carrusel->image));
     }
 }

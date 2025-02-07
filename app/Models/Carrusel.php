@@ -3,15 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * Class Carrusel
  *
  * @property $id
  * @property $Description
- * @property $Urlfoto
  * @property $link
  * @property $orden
+ * @property $image
  * @property $created_at
  * @property $updated_at
  *
@@ -20,21 +21,18 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Carrusel extends Model
 {
-    
     static $rules = [
-		'Description' => 'required',
-		'Urlfoto' => 'required',
+        'Description' => 'required',
+        'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
     ];
 
     protected $perPage = 20;
 
-    /**
-     * Attributes that should be mass-assignable.
-     *
-     * @var array
-     */
-    protected $fillable = ['Description','Urlfoto','link','orden'];
+    protected $fillable = ['Description', 'link', 'orden', 'image'];
 
-
-
+    // Accessor to get the full URL of the image
+    public function getUrlfotoAttribute()
+    {
+        return Storage::url($this->image);
+    }
 }

@@ -48,17 +48,10 @@
                             <h3 class="card-title">Carrusel De Imagenes</h3>
                         </div>
                         <div class="card-body">
-                            
-<div class="form-group">
-<strong>Descripcion:</strong>
-{{ $carrusel->Description }}
-</div>
-<div class="form-group">
-<strong>Urlfoto:</strong>
-{{ $carrusel->Urlfoto }}
-</div>
-
-
+                            <div class="form-group">
+                                <strong>Descripcion:</strong>
+                                {{ $carrusel->Description }}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -66,5 +59,3 @@
         </div>
     </div>
 @endsection
-
-

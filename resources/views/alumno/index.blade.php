@@ -94,6 +94,7 @@
                             <form method="POST" action="{{ route('alumnos.editMultiple') }}" id="edit-multiple-form">
                                 @csrf
                                 @method('PATCH')
+                                <input type="hidden" name="ids" id="selected-ids">
                                 <table class="table card-table table-vcenter text-nowrap datatable">
                                     <thead>
                                     <tr>
@@ -101,7 +102,7 @@
                                         <th>Numero de Control</th>
                                         <th>Curp</th>
                                         <th>Especialidad</th>
-                                        <th>Semestre</th> <!-- Añadido -->
+                                        <th>Semestre</th>
                                         <th>Grupo</th>
                                         <th>Nombre</th>
                                         <th>Email</th>
@@ -116,7 +117,7 @@
                                             <td>{{ $alumno->numero_control }}</td>
                                             <td>{{ $alumno->CURP }}</td>
                                             <td>{{ $alumno->especialidad }}</td>
-                                            <td>{{ $alumno->semestre }}</td> <!-- Añadido -->
+                                            <td>{{ $alumno->semestre }}</td>
                                             <td>{{ $alumno->Grupo }}</td>
                                             <td>{{ $alumno->Nombre }}</td>
                                             <td>{{ $alumno->email }}</td>

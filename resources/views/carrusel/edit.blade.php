@@ -1,3 +1,4 @@
+<!-- filepath: /c:/Users/dilan/Desktop/profa/SAAFCECEYT/resources/views/carrusel/edit.blade.php -->
 @extends('tablar::page')
 
 @section('title', 'Update Carrusel')
@@ -54,6 +55,7 @@
                                 {{ method_field('PATCH') }}
                                 @csrf
                                 @include('carrusel.form')
+                                <button type="submit" class="btn btn-primary">Actualizar</button>
                             </form>
                         </div>
                     </div>
@@ -62,6 +64,3 @@
         </div>
     </div>
 @endsection
-
-
-

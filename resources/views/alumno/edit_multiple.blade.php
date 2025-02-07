@@ -1,5 +1,4 @@
 <!-- filepath: /c:/Users/dilan/Desktop/profa/SAAFCECEYT/resources/views/alumno/edit_multiple.blade.php -->
-
 @extends('tablar::page')
 
 @section('title', 'Editar Alumnos')
@@ -28,6 +27,10 @@
                             <div class="mb-3">
                                 <label for="Grupo" class="form-label">Grupo</label>
                                 <input type="text" class="form-control" id="Grupo" name="Grupo">
+                            </div>
+                            <div class="mb-3">
+                                <label for="estatus" class="form-label">Estatus</label>
+                                <input type="text" class="form-control" id="estatus" name="estatus">
                             </div>
                             <button type="submit" class="btn btn-primary">Actualizar</button>
                         </form>

@@ -1,3 +1,4 @@
+<!-- filepath: /c:/Users/dilan/Desktop/profa/SAAFCECEYT/resources/views/carrusel/create.blade.php -->
 @extends('tablar::page')
 
 @section('title', 'Create Carrusel')
@@ -9,7 +10,6 @@
             <div class="row g-2 align-items-center">
                 <div class="col">
                     <!-- Page pre-title -->
-                    
                     <h2 class="page-title">
                         {{ __('Imagenes ') }}
                     </h2>
@@ -50,6 +50,7 @@
                                   enctype="multipart/form-data">
                                 @csrf
                                 @include('carrusel.form')
+                                <button type="submit" class="btn btn-primary">Guardar</button>
                             </form>
                         </div>
                     </div>
@@ -58,4 +59,3 @@
         </div>
     </div>
 @endsection
-
