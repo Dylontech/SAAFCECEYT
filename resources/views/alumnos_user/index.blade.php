@@ -47,7 +47,7 @@
                           <div class="carousel-inner">
                               @foreach($carrusels as $index => $carrusel)
                                   <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
-                                      <img class="d-block w-100" alt="{{ $carrusel->Description }}" src="{{ $carrusel->Urlfoto }}" />
+                                      <img class="d-block w-100" alt="{{ $carrusel->Description }}" src="{{ route('carrusel.image', ['id' => $carrusel->id]) }}" />
                                   </div>
                               @endforeach
                           </div>
@@ -59,7 +59,7 @@
                               <span class="carousel-control-next-icon" aria-hidden="true"></span>
                               <span class="visually-hidden">Next</span>
                           </a>
-                      </div>>
+                      </div>
                     </div>
                 </div>
             </div>

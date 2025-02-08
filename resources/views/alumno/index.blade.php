@@ -158,47 +158,42 @@
                                     </tbody>
                                 </table>
                             </form>
-                        </div>
-                       <div class="card-footer d-flex align-items-center">
-                            {!! $alumnos->links('tablar::pagination') !!}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        document.getElementById('select-all').addEventListener('click', function(event) {
-            const checkboxes = document.querySelectorAll('input[name="ids[]"]');
-            checkboxes.forEach(checkbox => checkbox.checked = event.target.checked);
-        });
-
-        document.getElementById('edit-multiple').addEventListener('click', function() {
-            document.getElementById('edit-multiple-form').submit();
-        });
-
-        function confirmDelete(event) {
-            event.preventDefault();
-            Swal.fire({
-                title: "¿Estás seguro?",
-                text: "¡No podrás revertir esto!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Sí, elimínalo",
-                cancelButtonText: "Cancelar"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    event.target.closest('form').submit();
-                    Swal.fire({
-                        title: "¡Eliminado!",
-                        text: "Tu archivo ha sido eliminado.",
-                        icon: "success"
-                    });
-                }
-            });
-        }
-    </script>
+                            
+                            <script>
+                                document.getElementById('select-all').addEventListener('click', function(event) {
+                                    const checkboxes = document.querySelectorAll('input[name="ids[]"]');
+                                    checkboxes.forEach(checkbox => checkbox.checked = event.target.checked);
+                                });
+                            
+                                document.getElementById('edit-multiple').addEventListener('click', function() {
+                                    const selectedIds = Array.from(document.querySelectorAll('input[name="ids[]"]:checked'))
+                                        .map(checkbox => checkbox.value)
+                                        .join(',');
+                                    document.getElementById('selected-ids').value = selectedIds;
+                                    document.getElementById('edit-multiple-form').submit();
+                                });
+                            
+                                function confirmDelete(event) {
+                                    event.preventDefault();
+                                    Swal.fire({
+                                        title: "¿Estás seguro?",
+                                        text: "¡No podrás revertir esto!",
+                                        icon: "warning",
+                                        showCancelButton: true,
+                                        confirmButtonColor: "#3085d6",
+                                        cancelButtonColor: "#d33",
+                                        confirmButtonText: "Sí, elimínalo",
+                                        cancelButtonText: "Cancelar"
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            event.target.closest('form').submit();
+                                            Swal.fire({
+                                                title: "¡Eliminado!",
+                                                text: "Tu archivo ha sido eliminado.",
+                                                icon: "success"
+                                            });
+                                        }
+                                    });
+                                }
+                            </script>
 @endsection
