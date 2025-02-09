@@ -12,45 +12,38 @@ class FormularioController extends Controller
 {
 
     public function index(Request $request)
-{
-    $search = $request->input('search');
-    $especialidad = $request->input('especialidad');
-    $grupo = $request->input('grupo');
-    $control = $request->input('control');
+    {
+        $search = $request->input('search');
+        $especialidad = $request->input('especialidad');
+        $grupo = $request->input('grupo');
+        $control = $request->input('control');
+        
+        $query = Formulario::query();
+        
+        if ($request->filled('search')) {
+            $query->where('Nombre', 'like', '%' . $request->search . '%')
+                  ->orWhere('numero_control', 'like', '%' . $request->search . '%')
+                  ->orWhere('CURP', 'like', '%' . $request->search . '%')
+                  ->orWhere('email', 'like', '%' . $request->search . '%');
+        }
+        if ($request->filled('tipo_servicio')) {
+            $query->where('tipo_servicio', $request->tipo_servicio);
+        }
+        if ($request->filled('fecha_solicitud')) {
+            $query->whereDate('fecha', $request->fecha_solicitud);
+        }
     
-    $query = Formulario::query();
-
-    // Filtrar por el alumno autenticado
-    if (Auth::guard('alumno')->check()) {
-        $query->where('alumno_id', Auth::guard('alumno')->id());
-    } else {
-        return redirect()->route('login')->with('error', 'No tienes permisos para acceder a esta sección.');
-    }
+        $formularios = $query->paginate(10);
     
-    if ($request->filled('search')) {
-        $query->where('Nombre', 'like', '%' . $request->search . '%')
-              ->orWhere('numero_control', 'like', '%' . $request->search . '%')
-              ->orWhere('CURP', 'like', '%' . $request->search . '%')
-              ->orWhere('email', 'like', '%' . $request->search . '%');
+        $tipos_servicio = Formulario::select('tipo_servicio')->distinct()->get();
+        $fecha_solicitud = Formulario::select('fecha')->distinct()->get();
+        $especialidades = Formulario::distinct()->pluck('especialidad');
+        $grupos = Formulario::distinct()->pluck('grupo');
+        $controles = Formulario::distinct()->pluck('control');
+    
+        return view('alumnos_user.SolicitudesS', compact('formularios', 'especialidades', 'grupos', 'controles'))
+            ->with('i', (request()->input('page', 1) - 1) * $formularios->perPage());
     }
-    if ($request->filled('tipo_servicio')) {
-        $query->where('tipo_servicio', $request->tipo_servicio);
-    }
-    if ($request->filled('fecha_solicitud')) {
-        $query->whereDate('fecha', $request->fecha_solicitud);
-    }
-
-    $formularios = $query->paginate(10);
-
-    $tipos_servicio = Formulario::select('tipo_servicio')->distinct()->get();
-    $fecha_solicitud = Formulario::select('fecha')->distinct()->get();
-    $especialidades = Formulario::distinct()->pluck('especialidad');
-    $grupos = Formulario::distinct()->pluck('grupo');
-    $controles = Formulario::distinct()->pluck('control');
-
-    return view('alumnos_user.SolicitudesS', compact('formularios', 'especialidades', 'grupos', 'controles'))
-        ->with('i', (request()->input('page', 1) - 1) * $formularios->perPage());
-}
 
     public function expediente()
     {

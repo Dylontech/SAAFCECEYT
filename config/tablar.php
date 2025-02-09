@@ -180,12 +180,12 @@ return [
         'roles' => ['alumno']
     ],
     // Ítem de menú para el expediente de solicitudes, visible solo para alumnos
-    [
-        'text' => 'Expediente de solicitudes',
-        'url' => 'expediente',
-        'icon' => 'ti ti-folder',
-        'roles' => ['alumno']
-    ],
+    // [
+    //     'text' => 'Expediente de solicitudes',
+    //     'url' => 'expediente',
+    //     'icon' => 'ti ti-folder',
+    //     'roles' => ['alumno']
+    // ],
     // Ítem de menú para la vista de expedientes de servicios sociales, visible solo para control_escolar
     [
         'text' => 'Expedientes de Solicitudes de Servicios',

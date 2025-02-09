@@ -1,24 +1,24 @@
 @extends('tablar::page')
 
 @section('title')
-    Solicitudes de Servicios Financieros
+    Solicitudes de Servicios de Exámenes
 @endsection
 
 @section('content')
-    <!-- Page header -->
+    <!-- Encabezado de página -->
     <div class="page-header d-print-none">
         <div class="container-xl">
             <div class="row g-2 align-items-center">
                 <div class="col">
                     <div class="page-pretitle"></div>
                     <h2 class="page-title">
-                        {{ __('Solicitudes de Servicios Financieros') }}
+                        {{ __('Solicitudes de Servicios de Exámenes') }}
                     </h2>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Page body -->
+    <!-- Cuerpo de la página -->
     <div class="page-body">
         <div class="container-xl">
             @if(session('success'))
@@ -37,7 +37,7 @@
                             <h3 class="card-title">Solicitudes</h3>
                         </div>
                         <div class="card-body border-bottom py-3">
-                            <form action="{{ route('finanzas.index') }}" method="GET" class="d-flex flex-wrap align-items-end">
+                            <form action="{{ route('solicitudes-servicios-s.index') }}" method="GET" class="d-flex flex-wrap align-items-end">
                                 <div class="me-2">
                                     <label class="form-label">No. control</label>
                                     <select class="form-select form-select-sm" id="control" name="control">
@@ -57,17 +57,17 @@
                                     </select>
                                 </div>
                                 <div class="me-2">
-                                    <label class="form-label">Tipo de Servicio</label>
-                                    <select class="form-select form-select-sm" id="tipo_servicio" name="tipo_servicio">
+                                    <label class="form-label">Grupo</label>
+                                    <select class="form-select form-select-sm" id="grupo" name="grupo">
                                         <option value="">Todos</option>
-                                        @foreach ($tipos_servicio as $tipo_servicio)
-                                            <option value="{{ $tipo_servicio }}">{{ $tipo_servicio }}</option>
+                                        @foreach ($grupos as $grupo)
+                                            <option value="{{ $grupo }}">{{ $grupo }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="me-2">
                                     <label class="form-label">Buscar</label>
-                                    <input type="text" class="form-control form-control-sm" name="buscar" value="{{ request('buscar') }}" aria-label="Search invoice">
+                                    <input type="text" class="form-control form-control-sm" name="buscar" value="{{ request('buscar') }}" aria-label="Buscar">
                                 </div>
                                 <div class="me-2">
                                     <input type="submit" class="btn btn-primary btn-sm" value="Filtrar">
@@ -82,21 +82,21 @@
                                         <th>Número de Control</th>
                                         <th>Especialidad</th>
                                         <th>Grupo</th>
-                                        <th>Tipo de Servicio</th>
+                                        <th>Tipo de Pago</th>
                                         <th>Fecha de Solicitud</th>
                                         <th>Status</th>
-                                        <th class="w-1"></th>
+                                        <th>Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @forelse ($formularios as $formulario)
                                         <tr>
                                             <td>{{ $formulario->nombre }}</td>
-                                            <td>{{ $formulario->control }}</td>
+                                            <td>{{ $formulario->numero_control }}</td>
                                             <td>{{ $formulario->especialidad }}</td>
                                             <td>{{ $formulario->grupo }}</td>
-                                            <td>{{ $formulario->tipo_servicio }}</td>
-                                            <td>{{ $formulario->fecha }}</td>
+                                            <td>{{ $formulario->tipo_pago }}</td>
+                                            <td>{{ $formulario->fecha_pago }}</td>
                                             <td data-bs-toggle="tooltip" title="{{ $formulario->comentario_financiero ?? 'Sin comentario' }}">
                                                 @if($formulario->comprobante_oficial)
                                                     Finalizada
@@ -113,20 +113,14 @@
                                                             Acciones
                                                         </button>
                                                         <div class="dropdown-menu dropdown-menu-end">
+                                                            <a href="{{ route('finanzas.comprobantes', $formulario->id) }}" class="dropdown-item">
+                                                                <i class="fa fa-fw fa-info-circle"></i> Detalles
+                                                            </a>
                                                             @if ($formulario->comentario_financiero)
                                                                 <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#comentarioModal{{ $formulario->id }}">
                                                                     <i class="fa fa-fw fa-eye"></i> Ver Comentario
                                                                 </button>
                                                             @endif
-                                                            <a href="{{ route('finanzas.show', $formulario->id) }}" class="dropdown-item">
-                                                                @if ($formulario->comprobante_oficial)
-                                                                    <i class="fa fa-fw fa-info-circle"></i> Detalles
-                                                                @elseif ($formulario->comprobante_alumno)
-                                                                    <i class="fa fa-fw fa-download"></i> Descargar Comprobante del Alumno
-                                                                @else
-                                                                    <i class="fa fa-fw fa-upload"></i> Subir Liga de Pago
-                                                                @endif
-                                                            </a>
                                                         </div>
                                                     </div>
                                                 </div>

@@ -58,7 +58,7 @@ class GestionEController extends Controller
         $comprobanteAlumnoExiste = Storage::exists('public/' . $formulario->comprobante_alumno);
         $comprobanteOficialExiste = Storage::exists('public/' . $formulario->comprobante_oficial);
 
-        return view('Control_user.GestionE', compact('formulario', 'ligaDePagoExiste', 'comprobanteExiste', 'comprobanteAlumnoExiste', 'comprobanteOficialExiste'));
+        return view('control_user.showE', compact('formulario', 'ligaDePagoExiste', 'comprobanteExiste', 'comprobanteAlumnoExiste', 'comprobanteOficialExiste'));
     }
 
     public function updateStatus(Request $request, $id)
@@ -105,5 +105,173 @@ class GestionEController extends Controller
 
         return response()->download(storage_path('app/' . $filePath));
     }
+
+    public function indexServicios(Request $request)
+    {
+        // Obtener los filtros de la solicitud
+        $search = $request->input('buscar');
+        $especialidad = $request->input('especialidad');
+        $grupo = $request->input('grupo');
+        
+        // Construir la consulta con los filtros
+        $query = FormularioE::query();
+
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('nombre', 'LIKE', "%$search%")
+                  ->orWhere('numero_control', 'LIKE', "%$search%")
+                  ->orWhere('curp', 'LIKE', "%$search%");
+            });
+        }
+
+        if ($especialidad) {
+            $query->where('especialidad', $especialidad);
+        }
+
+        if ($grupo) {
+            $query->where('grupo', $grupo);
+        }
+
+        $formularios = $query->paginate(10);
+
+        // Obtener las listas para los filtros
+        $controles = FormularioE::distinct()->pluck('numero_control');
+        $especialidades = FormularioE::distinct()->pluck('especialidad');
+        $grupos = FormularioE::distinct()->pluck('grupo');
+        
+        return view('financiero_user.SolicitudesServiciosS', compact('formularios', 'controles', 'especialidades', 'grupos'));
+    }
+
+    public function indexComprobantes($id)
+    {
+        $formulario = FormularioE::findOrFail($id);
     
+        // Verificar si el archivo existe
+        $ligaDePagoExiste = Storage::exists('public/' . $formulario->liga_de_pago);
+        $comprobanteExiste = Storage::exists('public/' . $formulario->comprobante);
+        $comprobanteAlumnoExiste = Storage::exists('public/' . $formulario->comprobante_alumno);
+        $comprobanteOficialExiste = Storage::exists('public/' . $formulario->comprobante_oficial);
+    
+        return view('financiero_user.comprobantesE', compact('formulario', 'ligaDePagoExiste', 'comprobanteExiste', 'comprobanteAlumnoExiste', 'comprobanteOficialExiste'));
+    }
+
+    public function uploadLigaDePago(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'liga_de_pago' => 'required|file|mimes:jpeg,jpg,png,pdf|max:10240'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput()->with('error', 'Error al subir la liga de pago.');
+        }
+
+        $formulario = FormularioE::findOrFail($id);
+        if ($request->hasFile('liga_de_pago')) {
+            $filePath = $request->file('liga_de_pago')->store('public/liga_de_pago');
+            $formulario->liga_de_pago = $filePath;
+            $formulario->save();
+        }
+
+        // Redirigir a la vista de todas las solicitudes después de subir la liga de pago
+        return redirect()->route('solicitudes-servicios-s.index')->with('success', 'Liga de pago subida correctamente.');
+    }
+
+    public function downloadLigaDePago($id)
+    {
+        return $this->downloadFile($id, 'liga_de_pago', 'public/liga_de_pago');
+    }
+
+    public function uploadComprobanteAlumno(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'comprobante_alumno' => 'required|file|mimes:jpeg,jpg,png,pdf|max:10240'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput()->with('error', 'Error al subir el comprobante del alumno.');
+        }
+
+        $formulario = FormularioE::findOrFail($id);
+        if ($request->hasFile('comprobante_alumno')) {
+            $filePath = $request->file('comprobante_alumno')->store('public/comprobantes_alumno');
+            $formulario->comprobante_alumno = $filePath;
+            $formulario->save();
+        }
+
+        // Retornar con mensaje de éxito
+        return redirect()->back()->with('success', 'Comprobante del alumno subido correctamente.');
+    }
+
+    public function downloadComprobanteAlumno($id)
+    {
+        return $this->downloadFile($id, 'comprobante_alumno', 'public/comprobantes_alumno');
+    }
+
+    private function downloadFile($id, $fileType, $directory)
+    {
+        $formulario = FormularioE::findOrFail($id);
+        $filePath = $directory . '/' . basename($formulario->$fileType);
+
+        if (!Storage::exists($filePath)) {
+            return redirect()->back()->with('error', 'El archivo no existe.');
+        }
+
+        return Storage::download($filePath);
+    }
+    public function uploadComprobanteOficial(Request $request, $id)
+{
+    $validator = Validator::make($request->all(), [
+        'comprobante_oficial' => 'required|file|mimes:jpeg,jpg,png,pdf|max:10240'
+    ]);
+
+    if ($validator->fails()) {
+        return redirect()->back()->withErrors($validator)->withInput()->with('error', 'Error al subir el comprobante oficial.');
+    }
+
+    $formulario = FormularioE::findOrFail($id);
+    if ($request->hasFile('comprobante_oficial')) {
+        $filePath = $request->file('comprobante_oficial')->store('public/comprobantes_oficiales');
+        $formulario->comprobante_oficial = $filePath;
+        $formulario->save();
+    }
+
+    // Retornar con mensaje de éxito
+    return redirect()->back()->with('success', 'Comprobante oficial subido correctamente.');
+}
+public function downloadComprobanteOficial($id)
+{
+    return $this->downloadFile($id, 'comprobante_oficial', 'public/comprobantes_oficiales');
+}
+public function uploadStudentReceipt(Request $request, $id)
+{
+    $validator = Validator::make($request->all(), [
+        'comprobante' => 'required|file|mimes:jpeg,jpg,png,pdf|max:10240'
+    ]);
+
+    if ($validator->fails()) {
+        return redirect()->back()->withErrors($validator)->withInput()->with('error', 'Error al subir el comprobante.');
+    }
+
+    $formulario = FormularioE::findOrFail($id);
+    if ($request->hasFile('comprobante')) {
+        $filePath = $request->file('comprobante')->store('public/comprobantes');
+        $formulario->comprobante = $filePath;
+        $formulario->save();
+    }
+
+    // Retornar con mensaje de éxito
+    return redirect()->back()->with('success', 'Comprobante subido correctamente.');
+}
+public function downloadStudentReceipt($id)
+{
+    $formulario = FormularioE::findOrFail($id);
+    $filePath = 'public/comprobantes/' . basename($formulario->comprobante);
+
+    if (!Storage::exists($filePath)) {
+        return redirect()->back()->with('error', 'El archivo no existe.');
+    }
+
+    return Storage::download($filePath);
+}
+
 }

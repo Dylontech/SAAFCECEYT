@@ -43,7 +43,7 @@ Route::middleware(['auth:web'])->group(function () {
     Route::resource('/alumnos', AlumnoController::class);
     
    
-
+    
     Route::get('/configuracion', [RoleController::class, 'index'])->name('roles.index');
     Route::post('/configuracion/asignar', [RoleController::class, 'assignRoles'])->name('roles.assign');
     Route::resource('users', UserController::class);
@@ -55,7 +55,8 @@ Route::middleware(['auth:web'])->group(function () {
 // Rutas para alumnos autenticados
 Route::middleware(['auth:alumno'])->group(function () {
     Route::get('/alumnos_user', [App\Http\Controllers\alumnos_userController::class, 'index'])->name('alumnos_user.index');
- // Ruta para el formulario independiente
+
+    // Ruta para el formulario independiente
     Route::get('/formulario', [FormularioEController::class, 'create'])->name('formulario');
 
     // Rutas para el controlador FormularioEController
@@ -107,12 +108,12 @@ Route::get('/admin/whatsapp-settings', [WhatsappSettingsController::class, 'edit
 Route::post('/admin/update-whatsapp-settings', [WhatsappSettingsController::class, 'update'])->name('update.whatsapp.settings');
 
 // Ruta temporal sin autenticación para prueba
-Route::get('/control_user_temp', [ControlUserController::class, 'index'])->name('control_user.index'); // Actualiza la ruta para usar el controlador y define el nombre
+
 
 // Nuevas rutas para GestionSController
 Route::get('/gestions', [GestionSController::class, 'index'])->name('gestions.index'); // Ruta para la vista principal
 Route::get('/formularios/{id}', [GestionSController::class, 'show'])->name('formularios.show'); // Ruta para ver la solicitud
-Route::patch('/formularios/{id}/status', [GestionSController::class, 'updateStatus'])->name('gestions.updateStatus'); // Corregida la ruta para actualizar el estado de la solicitud
+Route::patch('/formulario/{id}/status', [GestionSController::class, 'updateStatus'])->name('gestions.updateStatus'); // Corregida la ruta para actualizar el estado de la solicitud
 
 // Rutas para la vista de finanzas sin protección de middleware
 Route::get('/finanzas', [FinanzasUserController::class, 'index'])->name('finanzas.index');
@@ -131,6 +132,7 @@ Route::get('/download/comprobante/{id}', [FormularioController::class, 'download
 Route::get('/gestions/{id}', [GestionSController::class, 'show'])->name('gestions.show');
 Route::get('/gestions/comprobante-alumno/{id}', [GestionSController::class, 'downloadComprobanteAlumno'])->name('gestions.downloadComprobanteAlumno');
 Route::post('/gestions/upload-comprobante/{id}', [GestionSController::class, 'uploadComprobante'])->name('gestions.uploadComprobante');
+Route::get('/control_user/gestions', [GestionSController::class, 'index'])->name('Control_user.GestionS');
 
 // Ruta para la nueva vista ExpedienteSS
 Route::get('/expediente', [FormularioController::class, 'expediente'])->name('formularios.expediente'); // Ruta para la nueva vista
@@ -151,30 +153,50 @@ Route::get('/formulario/{id}/edit', [FormularioEController::class, 'edit'])->nam
 Route::put('/formulario/{id}', [FormularioEController::class, 'update'])->name('formulario.update');
 
 
-
-
-
-// Ruta para mostrar una solicitud específica
-Route::get('/gestions/{id}', [GestionEController::class, 'show'])->name('gestions.gestionE');
-
-// Ruta para actualizar el estado de una solicitud específica
-Route::patch('/gestions/{id}/updateStatus', [GestionEController::class, 'updateStatus'])->name('gestions.updateStatus');
-
-// Ruta para subir un comprobante para una solicitud específica
-Route::post('/gestions/{id}/uploadComprobante', [GestionEController::class, 'uploadComprobante'])->name('gestions.uploadComprobante');
-
-// Ruta para descargar un comprobante de una solicitud específica
-Route::get('/gestions/{id}/downloadComprobante/{type}', [GestionEController::class, 'downloadComprobante'])->name('gestions.downloadComprobante');
-
-Route::get('/control_user.index', [GestionEController::class, 'index'])->name('control_user.index');
-
-// Ruta para la gestión de solicitudes
-Route::get('/gestionS', [GestionSController::class, 'index'])->name('Control_user.GestionS');
-
 // Ruta para el carrusel
 Route::resource('carrusels', CarruselController::class);
 Route::resource('/carrusel', App\Http\Controllers\CarruselController::class);
 Route::resource('/carrusel', App\Http\Controllers\CarruselController::class);
+Route::get('gestions/{id}', [GestionSController::class, 'show'])->name('gestions.show');
+
+
+
+
+// Rutas para GestionEController
+Route::get('/control_user', [GestionEController::class, 'index'])->name('control_user.index');
+Route::get('/control_user/{id}', [GestionEController::class, 'show'])->name('control_user.show');
+Route::patch('/control_user/{id}/updateStatus', [GestionEController::class, 'updateStatus'])->name('control_user.updateStatus');
+Route::post('/control_user/{id}/uploadComprobante', [GestionEController::class, 'uploadComprobante'])->name('control_user.uploadComprobante');
+Route::get('/control_user/{id}/downloadComprobante/{type}', [GestionEController::class, 'downloadComprobante'])->name('control_user.downloadComprobante');
+// Definir la ruta para la vista de solicitudes de servicios financieros
+Route::get('/solicitudes-servicios-s', [GestionEController::class, 'indexServicios'])->name('financiero_user.SolicitudesServiciosS');
+
+// Ruta para subir la liga de pago
+Route::post('/formularios/{id}/upload-liga-de-pago', [GestionEController::class, 'uploadLigaDePago'])->name('formularios.uploadLigaDePago');
+
+// Ruta para ver los comprobantes financieros
+Route::get('/finanzas/comprobantes/{id}', [GestionEController::class, 'indexComprobantes'])->name('finanzas.comprobantes');
+
+// Ruta para mostrar los detalles financieros
+Route::get('/finanzas/{id}', [FinanzasUserController::class, 'show'])->name('finanzas.show');
+
+// Ruta para descargar el archivo de liga de pago
+Route::get('/formularios/{id}/download-liga-de-pago', [GestionEController::class, 'downloadLigaDePago'])->name('formularios.downloadLigaDePago');
+// Ruta para subir el comprobante del alumno
+Route::post('/formularios/{id}/upload-comprobante-alumno', [GestionEController::class, 'uploadComprobanteAlumno'])->name('formularios.uploadComprobanteAlumno');
+Route::get('/solicitudes-servicios-s', [GestionEController::class, 'indexServicios'])->name('financiero_user.SolicitudesServiciosS');
+Route::get('/solicitudes-servicios-s', [GestionEController::class, 'indexServicios'])->name('solicitudes-servicios-s.index');
+// Ruta para descargar el comprobante del alumno
+Route::get('/formularios/{id}/download-comprobante-alumno', [GestionEController::class, 'downloadComprobanteAlumno'])->name('formularios.downloadComprobanteAlumno');
+// Ruta para subir el comprobante oficial
+Route::post('/formularios/{id}/upload-comprobante-oficial', [GestionEController::class, 'uploadComprobanteOficial'])->name('formularios.uploadComprobanteOficial');
+// Rutas para subir y descargar el comprobante oficial
+Route::post('/formularios/{id}/upload-comprobante-oficial', [GestionEController::class, 'uploadComprobanteOficial'])->name('formularios.uploadComprobanteOficial');
+Route::get('/formularios/{id}/download-comprobante-oficial', [GestionEController::class, 'downloadComprobanteOficial'])->name('formularios.downloadComprobanteOficial');
+// Rutas para subir y descargar el comprobante
+Route::post('/formularios/{id}/upload-student-receipt', [GestionEController::class, 'uploadStudentReceipt'])->name('formularios.uploadStudentReceipt');
+Route::get('/formularios/{id}/download-student-receipt', [GestionEController::class, 'downloadStudentReceipt'])->name('formularios.downloadStudentReceipt');
+
 
 Route::get('/alumnos/edit-multiple', [App\Http\Controllers\AlumnoController::class, 'editMultiple'])->name('alumnos.editMultiple');
 Route::patch('/alumnos/update-multiple', [App\Http\Controllers\AlumnoController::class, 'updateMultiple'])->name('alumnos.updateMultiple');

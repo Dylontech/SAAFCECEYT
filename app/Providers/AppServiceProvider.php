@@ -52,4 +52,9 @@ class AppServiceProvider extends ServiceProvider
        // $settings = DB::table('whatsapp_settings')->first();
        // View::share('whatsappSettings', $settings);
     }
+    protected $listen = [
+        'App\Events\SolicitudRealizada' => [
+            'App\Listeners\EnviarNotificacionDepartamento',
+        ],
+    ];
 }

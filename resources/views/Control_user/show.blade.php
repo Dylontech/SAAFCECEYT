@@ -91,7 +91,6 @@
                                         @csrf
                                         @method('PATCH')
                                         <select name="status" id="status-select" class="form-control mb-3">
-                                            <option value="aprobada" {{ $formulario->status == 'aprobada' ? 'selected' : '' }}>Aprobada</option>
                                             <option value="generando_liga_pago" {{ $formulario->status == 'generando_liga_pago' ? 'selected' : '' }}>Generando Liga de Pago</option>
                                             <option value="declinada" {{ $formulario->status == 'declinada' ? 'selected' : '' }}>Declinada</option>
                                         </select>
@@ -126,11 +125,6 @@
                                     </form>
                                 </div>
                             @endif
-                            <div class="form-group mt-4">
-                                <a href="{{ route('gestions.downloadComprobante', $formulario->id) }}" class="btn btn-secondary mt-2">
-                                    Descargar Comprobante
-                                </a>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -150,3 +144,4 @@
         });
     </script>
 @endsection
+

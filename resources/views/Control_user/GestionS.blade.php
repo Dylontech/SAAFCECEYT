@@ -130,10 +130,11 @@
                                                         Acciones
                                                     </button>
                                                     <div class="dropdown-menu dropdown-menu-end">
-                                                       
+                                                        <a href="{{ route('gestions.show', $formulario->id) }}" class="dropdown-item">
                                                             Ver
                                                         </a>
                                                     </div>
+
                                                 </div>
                                             </div>
                                         </td>

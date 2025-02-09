@@ -30,7 +30,7 @@ class GestionSController extends Controller
         $tipos_servicio = Formulario::distinct()->pluck('tipo_servicio');
 
         // Construir la consulta con los filtros
-        $query = Formulario::query();
+        $query = Formulario::query();// posible conflicto con las vistas de los alumnos
 
         if ($especialidad) {
             $query->where('especialidad', $especialidad);
@@ -75,7 +75,7 @@ class GestionSController extends Controller
         $formulario->comentario_financiero = $request->input('comentario_financiero'); // Añadido
         $formulario->save();
 
-        return redirect()->route('gestions.index')->with('success', 'Estado actualizado correctamente.');
+        return redirect()->route('Control_user.GestionS')->with('success', 'Estado actualizado correctamente.');
     }
 
     public function show($id)

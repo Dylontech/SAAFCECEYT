@@ -115,13 +115,14 @@
                                             <td>{{ $formulario->tipo_pago }}</td>
                                             <td>{{ $formulario->fecha_pago }}</td>
                                             <td>
-                                                <span class="materias-tooltip" data-bs-toggle="tooltip" title="{{ $formulario->materias ? implode(', ', array_column(json_decode($formulario->materias, true), 'nombre')) : 'No hay materias' }}">
+                                                <span class="materias-tooltip" data-bs-toggle="tooltip" title="{{ $formulario->materias ? implode(', ', array_filter(array_column(json_decode($formulario->materias, true), 'nombre'))) : 'No hay materias' }}">
                                                     @if ($formulario->materias)
-                                                        {{ array_column(json_decode($formulario->materias, true), 'nombre')[0] }}...
+                                                        {{ array_filter(array_column(json_decode($formulario->materias, true), 'nombre'))[0] }}...
                                                     @else
                                                         No hay materias
                                                     @endif
                                                 </span>
+                                                
                                             </td>
                                             <td>
                                                 <span class="status-tooltip" data-bs-toggle="tooltip" title="{{ $formulario->comentario ?? 'No hay comentario' }}">
@@ -131,24 +132,17 @@
                                             <td>
                                                 <div class="btn-list flex-nowrap">
                                                     <div class="dropdown">
-                                                        <button class="btn dropdown-toggle align-text-top"
-                                                                data-bs-toggle="dropdown">
+                                                        <button class="btn dropdown-toggle align-text-top" data-bs-toggle="dropdown">
                                                             Acciones
                                                         </button>
                                                         <div class="dropdown-menu dropdown-menu-end">
-                                                            <!-- Nuevo botón Ver -->
-                                                            <a href="{{ route('gestions.gestionE', $formulario->id) }}" class="dropdown-item">
+                                                            <!-- Botón Ver modificado para redirigir directamente -->
+                                                            <a href="{{ route('control_user.show', ['id' => $formulario->id]) }}" class="dropdown-item">
                                                                 Ver
                                                             </a>
-                                                            <form action="{{ route('formulario.destroy', $formulario->id) }}" method="POST" class="delete-form">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button type="submit" class="dropdown-item text-red delete-button">
-                                                                    <i class="fa fa-fw fa-trash"></i> Eliminar
-                                                                </button>
-                                                            </form>
                                                         </div>
                                                     </div>
+                                                    
                                                 </div>
                                             </td>
                                         </tr>

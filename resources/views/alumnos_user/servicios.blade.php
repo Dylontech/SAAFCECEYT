@@ -49,17 +49,7 @@
             </select>
         </div>
         
-        <div class="form-group">
-            <label for="semestre">Selecciona el semestre</label>
-            <select id="semestre" name="semestre" class="form-control">
-                <option value="">Selecciona un semestre</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-            </select>
-        </div>
+        
 
 
         <button type="submit" class="btn btn-primary w-100 mt-4">Enviar Solicitud</button>

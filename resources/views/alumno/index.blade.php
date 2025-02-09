@@ -84,7 +84,7 @@
                                             <input type="text" class="form-control form-control-sm" name="search" value="{{ request('search') }}" aria-label="Search invoice">
                                         </div>
                                     </div>
-                                    <div class="ms-2">
+                                    <div class="me-2 align-self-end">
                                         <button type="submit" class="btn btn-primary btn-sm">Filtrar</button>
                                     </div>
                                 </div>
@@ -98,7 +98,7 @@
                                 <table class="table card-table table-vcenter text-nowrap datatable">
                                     <thead>
                                     <tr>
-                                        <th><input type="checkbox" id="select-all"></th>
+                                        {{-- <th><input type="checkbox" id="select-all"></th> --}}
                                         <th>Numero de Control</th>
                                         <th>Curp</th>
                                         <th>Especialidad</th>
@@ -113,7 +113,7 @@
                                     <tbody>
                                     @forelse ($alumnos as $alumno)
                                         <tr>
-                                            <td><input type="checkbox" name="ids[]" value="{{ $alumno->id }}"></td>
+                                            {{-- <td><input type="checkbox" name="ids[]" value="{{ $alumno->id }}"></td> --}}
                                             <td>{{ $alumno->numero_control }}</td>
                                             <td>{{ $alumno->CURP }}</td>
                                             <td>{{ $alumno->especialidad }}</td>

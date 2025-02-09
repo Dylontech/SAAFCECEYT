@@ -66,6 +66,7 @@
     @elseif (Auth::check() && Auth::user()->hasRole('servicio_financiero'))
         <!-- Botón para servicio financiero -->
         <a href="{{ route('finanzas.index') }}" class="btn-filter">Solicitudes de Servicios Financieros</a>
+        <a href="{{ route('solicitudes-servicios-s.index') }}" class="btn-filter">Ver Solicitudes de Servicios S</a>
     @endif
 
     <div id="results"></div>
@@ -86,4 +87,3 @@
         @endif
     @endif
 </body>
-</html>
