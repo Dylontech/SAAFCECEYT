@@ -52,6 +52,20 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
             z-index: 1000;
         }
+        @media (max-width: 768px) {
+            .btn-filter {
+                width: 100%;
+                font-size: 14px;
+                padding: 10px;
+                margin: 5px 0;
+            }
+        }
+        @media (max-width: 480px) {
+            .btn-filter {
+                font-size: 12px;
+                padding: 8px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -61,12 +75,12 @@
         <a href="{{ route('formularios.index') }}" class="btn-filter">Ver Solicitudes de Servicios</a>
     @elseif (Auth::check() && Auth::user()->hasRole('control_escolar') && !Auth::user()->hasRole('admin'))
         <!-- Botones para control escolar, excluyendo admin -->
-        <a href="{{ route('control_user.index') }}" class="btn-filter">Solicitudes de Examenes</a>
-        <a href="{{ route('gestions.index') }}" class="btn-filter">Solicitudes de Servicios</a>
+        <a href="{{ route('control_user.index') }}" class="btn-filter">Ver Solicitudes de Examenes</a>
+        <a href="{{ route('gestions.index') }}" class="btn-filter">Ver Solicitudes de Servicios</a>
     @elseif (Auth::check() && Auth::user()->hasRole('servicio_financiero'))
         <!-- Botón para servicio financiero -->
-        <a href="{{ route('finanzas.index') }}" class="btn-filter">Solicitudes de Servicios Financieros</a>
-        <a href="{{ route('solicitudes-servicios-s.index') }}" class="btn-filter">Ver Solicitudes de Servicios S</a>
+        <a href="{{ route('solicitudes-servicios-s.index') }}" class="btn-filter">Ver Solicitudes de Examenes </a>
+        <a href="{{ route('finanzas.index') }}" class="btn-filter">Ver Solicitudes de Servicios</a>
     @endif
 
     <div id="results"></div>
@@ -87,3 +101,4 @@
         @endif
     @endif
 </body>
+</html>
