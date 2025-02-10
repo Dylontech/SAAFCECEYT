@@ -1,7 +1,7 @@
 @extends('tablar::page')
 
 @section('title')
-    Solicitudes de Servicios Financieros
+    Solicitudes de Servicios (Financiero)
 @endsection
 
 @section('content')
@@ -12,7 +12,7 @@
                 <div class="col">
                     <div class="page-pretitle"></div>
                     <h2 class="page-title">
-                        {{ __('Solicitudes de Servicios Financieros') }}
+                        {{ __('Solicitudes de Servicios (Financiero)') }}
                     </h2>
                 </div>
             </div>
@@ -78,6 +78,16 @@
                             <table class="table card-table table-vcenter text-nowrap datatable">
                                 <thead>
                                     <tr>
+                                        <th class="w-1">No.
+                                            <!-- Download SVG icon from http://tabler-icons.io/i/chevron-up -->
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                 class="icon icon-sm text-dark icon-thick" width="24" height="24"
+                                                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                                 stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                <polyline points="6 15 12 9 18 15"/>
+                                            </svg>
+                                        </th>
                                         <th>Nombre del Alumno</th>
                                         <th>Número de Control</th>
                                         <th>Especialidad</th>
@@ -91,6 +101,7 @@
                                 <tbody>
                                     @forelse ($formularios as $formulario)
                                         <tr>
+                                            <td>{{ $loop->iteration }}</td>
                                             <td>{{ $formulario->nombre }}</td>
                                             <td>{{ $formulario->control }}</td>
                                             <td>{{ $formulario->especialidad }}</td>

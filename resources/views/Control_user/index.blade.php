@@ -15,7 +15,7 @@
                         
                     </div>
                     <h2 class="page-title">
-                        {{ __('Nuevas solicitudes de Servicios de Examenes') }}
+                        {{ __('Nuevas solicitudes de Examenes') }}
                     </h2>
                 </div>
             </div>
@@ -78,8 +78,7 @@
                             <table class="table card-table table-vcenter text-nowrap datatable">
                                 <thead>
                                 <tr>
-                                    <th class="w-1"><input class="form-check-input m-0 align-middle" type="checkbox"
-                                                           aria-label="Select all invoices"></th>
+                                    
                                     <th class="w-1">No.
                                         <!-- Download SVG icon from http://tabler-icons.io/i/chevron-up -->
                                         <svg xmlns="http://www.w3.org/2000/svg"
@@ -105,8 +104,7 @@
                                 @forelse ($formularios as $formulario)
                                     @if (Auth::user()->hasRole('control_escolar') || $formulario->alumno_id == Auth::guard('alumno')->id())
                                         <tr>
-                                            <td><input class="form-check-input m-0 align-middle" type="checkbox"
-                                                       aria-label="Select solicitud"></td>
+                                            
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $formulario->nombre }}</td>
                                             <td>{{ $formulario->numero_control }}</td>

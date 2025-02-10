@@ -189,9 +189,15 @@ return [
     // Ítem de menú para la vista de expedientes de servicios sociales, visible solo para control_escolar
     [
         'text' => 'Expedientes de Solicitudes de Servicios',
-        'url' => 'control_user/expedientes-finalizados',
+        'url' => 'control_user/expedientesSS',
         'icon' => 'ti ti-folder',
-        'roles' => ['control_escolar', 'admin']
+        'roles' => ['alumno', 'control_escolar', 'admin']
+    ],
+    [
+        'text' => 'Expedientes de Solicitudes de Examenes',
+        'url' => 'control_user/expedientesEE',
+        'icon' => 'ti ti-folder',
+        'roles' => ['alumno', 'control_escolar', 'admin']
     ],
     [
         'text' => 'Materias',

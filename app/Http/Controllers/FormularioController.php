@@ -21,10 +21,18 @@ class FormularioController extends Controller
         $query = Formulario::query();
         
         if ($request->filled('search')) {
-            $query->where('Nombre', 'like', '%' . $request->search . '%')
-                  ->orWhere('numero_control', 'like', '%' . $request->search . '%')
-                  ->orWhere('CURP', 'like', '%' . $request->search . '%')
-                  ->orWhere('email', 'like', '%' . $request->search . '%');
+            $query->where(function($q) use ($search) {
+                $q->where('Nombre', 'like', '%' . $search . '%')
+                  ->orWhere('numero_control', 'like', '%' . $search . '%')
+                  ->orWhere('CURP', 'like', '%' . $search . '%')
+                  ->orWhere('email', 'like', '%' . $search . '%')
+                  ->orWhere('especialidad', 'like', '%' . $search . '%')
+                  ->orWhere('grupo', 'like', '%' . $search . '%')
+                  ->orWhere('semestre', 'like', '%' . $search . '%')
+                  ->orWhere('fecha', 'like', '%' . $search . '%')
+                  ->orWhere('tipo_servicio', 'like', '%' . $search . '%')
+                  ->orWhere('status', 'like', '%' . $search . '%');
+            });    
         }
         if ($request->filled('tipo_servicio')) {
             $query->where('tipo_servicio', $request->tipo_servicio);
@@ -115,35 +123,40 @@ class FormularioController extends Controller
     }
 
     // Método para subir el comprobante del alumno
-    public function uploadComprobanteAlumno(Request $request, $id)
-    {
-        // Validar la solicitud
-        $request->validate([
-            'comprobante_alumno' => 'required|file|mimes:pdf,jpg,png|max:10240', // Tamaño actualizado
-        ]);
+    public function subirComprobanteAlumno(Request $request, $id)
+{
+    // Validar la solicitud
+    $request->validate([
+        'comprobante_alumno' => 'required|file|mimes:pdf,jpg,png|max:10240', // Tamaño actualizado
+    ]);
 
-        // Subir el archivo
-        if ($request->hasFile('comprobante_alumno')) {
-            $file = $request->file('comprobante_alumno');
-            $path = $file->store('comprobantes', 'public');
+    // Subir el archivo
+    if ($request->hasFile('comprobante_alumno')) {
+        $file = $request->file('comprobante_alumno');
+        $path = $file->store('comprobantes', 'public');
+        $fileName = basename($path); // Obtener el nombre del archivo guardado
 
-            // Obtener el formulario específico usando el identificador de solicitud
-            $formulario = Formulario::where('alumno_id', Auth::guard('alumno')->id())->where('id', $id)->first();
+        // Obtener el formulario específico usando el identificador de solicitud
+        $formulario = Formulario::where('alumno_id', Auth::guard('alumno')->id())->where('id', $id)->first();
 
-            if ($formulario) {
-                // Actualizar el campo comprobante_alumno del formulario específico
-                $formulario->comprobante_alumno = $path;
-                $formulario->save();
+        if ($formulario) {
+            // Actualizar el campo comprobante_alumno del formulario específico
+            $formulario->comprobante_alumno = $path;
+            $formulario->save();
 
-                return redirect()->back()->with('success', 'Comprobante subido exitosamente.');
-            } else {
-                return redirect()->back()->with('error', 'No se encontró un formulario para este alumno con el identificador proporcionado.');
-            }
+            // Obtener el nombre de la tabla
+            $tableName = $formulario->getTable();
+
+            return redirect()->back()->with('success', 'Comprobante subido exitosamente. Nombre del archivo guardado: ' . $fileName . '. Guardado en la tabla: ' . $tableName);
+        } else {
+            return redirect()->back()->with('error', 'No se encontró un formulario para este alumno con el identificador proporcionado.');
         }
-
-        return redirect()->back()->with('error', 'Error al subir el comprobante.');
     }
 
+    return redirect()->back()->with('error', 'Error al subir el comprobante.');
+}
+
+    
     // Método para descargar la liga de pago
     public function downloadLigaDePago($id)
     {

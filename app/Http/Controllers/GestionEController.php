@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\FormularioE;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class GestionEController extends Controller
 {
@@ -39,7 +40,8 @@ class GestionEController extends Controller
         if ($tipo_pago) {
             $query->where('tipo_pago', $tipo_pago);
         }
-    
+        // Ordenar por fecha de creación en orden descendente
+        $query->orderBy('created_at', 'desc');
         $formularios = $query->paginate(10);
     
         // Obtener las listas para los filtros
@@ -120,7 +122,13 @@ class GestionEController extends Controller
             $query->where(function($q) use ($search) {
                 $q->where('nombre', 'LIKE', "%$search%")
                   ->orWhere('numero_control', 'LIKE', "%$search%")
-                  ->orWhere('curp', 'LIKE', "%$search%");
+                  ->orWhere('curp', 'LIKE', "%$search%")
+                  ->orWhere('especialidad', 'LIKE', "%$search%")
+                  ->orWhere('grupo', 'LIKE', "%$search%")
+                  ->orWhere('tipo_pago', 'LIKE', "%$search%")
+                  ->orWhere('fecha_pago', 'LIKE', "%$search%")
+                  ->orWhere('materias', 'LIKE', "%$search%")
+                  ->orWhere('status', 'LIKE', "%$search%");
             });
         }
 
@@ -182,30 +190,36 @@ class GestionEController extends Controller
     }
 
     public function uploadComprobanteAlumno(Request $request, $id)
-    {
-        $validator = Validator::make($request->all(), [
-            'comprobante_alumno' => 'required|file|mimes:jpeg,jpg,png,pdf|max:10240'
-        ]);
+{
+    $validator = Validator::make($request->all(), [
+        'comprobante_alumno' => 'required|file|mimes:jpeg,jpg,png,pdf|max:10240'
+    ]);
 
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput()->with('error', 'Error al subir el comprobante del alumno.');
-        }
-
-        $formulario = FormularioE::findOrFail($id);
-        if ($request->hasFile('comprobante_alumno')) {
-            $filePath = $request->file('comprobante_alumno')->store('public/comprobantes_alumno');
-            $formulario->comprobante_alumno = $filePath;
-            $formulario->save();
-        }
-
-        // Retornar con mensaje de éxito
-        return redirect()->back()->with('success', 'Comprobante del alumno subido correctamente.');
+    if ($validator->fails()) {
+        return redirect()->back()->withErrors($validator)->withInput()->with('error', 'Error al subir el comprobante del alumno.');
     }
 
-    public function downloadComprobanteAlumno($id)
-    {
-        return $this->downloadFile($id, 'comprobante_alumno', 'public/comprobantes_alumno');
+    $formulario = FormularioE::findOrFail($id);
+    if ($request->hasFile('comprobante_alumno')) {
+        $file = $request->file('comprobante_alumno');
+        $filePath = $file->store('public/comprobantes_alumno');
+        $fileName = basename($filePath); // Obtener el nombre del archivo guardado
+
+        $formulario->comprobante_alumno = $filePath;
+        $formulario->save();
+
+        // Retornar con mensaje de éxito y el nombre del archivo guardado
+        return redirect()->back()->with('success', 'Comprobante del alumno subido correctamente. Nombre del archivo guardado: ' . $fileName);
     }
+
+    return redirect()->back()->with('error', 'Error al subir el comprobante.');
+}
+
+public function downloadComprobanteAlumno($id)
+{
+    return $this->downloadFile($id, 'comprobante_alumno', 'public/comprobantes_alumno');
+}
+
 
     private function downloadFile($id, $fileType, $directory)
     {
@@ -273,5 +287,22 @@ public function downloadStudentReceipt($id)
 
     return Storage::download($filePath);
 }
+public function expedientesFinalizados()
+{
+    $user = Auth::user();
+
+    if ($user->role == 'alumno') {
+        // Si el usuario es un alumno, mostrar solo sus solicitudes finalizadas
+        $solicitudes = FormularioE::where('user_id', $user->id)
+                                 ->where('status', 'finalizado')
+                                 ->paginate(10);
+    } else {
+        // Si el usuario no es un alumno, mostrar todas las solicitudes finalizadas
+        $solicitudes = FormularioE::where('status', 'finalizado')->paginate(10);
+    }
+
+    return view('control_user.ExpedientesEE', compact('solicitudes'));
+}
+
 
 }

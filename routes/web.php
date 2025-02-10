@@ -87,7 +87,8 @@ Route::middleware(['auth:alumno'])->group(function () {
     Route::post('/formularios/upload', [FormularioController::class, 'upload'])->name('formularios.upload');
     Route::get('/formularios/download-liga/{id}', [FormularioController::class, 'downloadLigaDePago'])->name('formularios.downloadLigaDePago');
     Route::get('/formularios/download-comprobante/{id}', [FormularioController::class, 'downloadComprobanteAlumno'])->name('formularios.downloadComprobanteAlumno');
-    Route::post('/formularios/upload-comprobante-alumno/{id}', [FormularioController::class, 'uploadComprobanteAlumno'])->name('formularios.uploadComprobanteAlumno'); // Nueva ruta añadida
+    Route::post('/formularios/subir-comprobante-alumno/{id}', [FormularioController::class, 'subirComprobanteAlumno'])->name('formularios.subirComprobanteAlumno');
+
 
     // Ruta para eliminar una solicitud
     Route::delete('/formularios/{id}', [FormularioController::class, 'destroy'])->name('formulario.destroy');
@@ -196,6 +197,8 @@ Route::get('/formularios/{id}/download-comprobante-oficial', [GestionEController
 // Rutas para subir y descargar el comprobante
 Route::post('/formularios/{id}/upload-student-receipt', [GestionEController::class, 'uploadStudentReceipt'])->name('formularios.uploadStudentReceipt');
 Route::get('/formularios/{id}/download-student-receipt', [GestionEController::class, 'downloadStudentReceipt'])->name('formularios.downloadStudentReceipt');
+
+
 
 
 Route::get('/alumnos/edit-multiple', [App\Http\Controllers\AlumnoController::class, 'editMultiple'])->name('alumnos.editMultiple');

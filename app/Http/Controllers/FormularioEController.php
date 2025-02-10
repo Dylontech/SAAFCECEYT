@@ -17,6 +17,20 @@ class FormularioEController extends Controller
 
     // Obtener las solicitudes del alumno autenticado
     $query = FormularioE::where('alumno_id', $alumnoId);
+    
+    if ($request->filled('search')) {
+        $search = $request->input('search');
+        $query->where(function($q) use ($search) {
+            $q->where('nombre', 'like', '%' . $search . '%')
+              ->orWhere('numero_control', 'like', '%' . $search . '%')
+              ->orWhere('especialidad', 'like', '%' . $search . '%')
+              ->orWhere('grupo', 'like', '%' . $search . '%')
+              ->orWhere('tipo_pago', 'like', '%' . $search . '%')
+              ->orWhere('fecha_pago', 'like', '%' . $search . '%')
+              ->orWhere('materias', 'like', '%' . $search . '%')
+              ->orWhere('status', 'like', '%' . $search . '%');
+        });
+    }
 
     if ($request->filled('materias')) {
         $query->where('materias', 'like', '%' . $request->materias . '%');

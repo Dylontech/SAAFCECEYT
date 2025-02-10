@@ -21,10 +21,15 @@ class AlumnoController extends Controller
     $query = Alumno::query();
 
     if ($request->filled('search')) {
-        $query->where('Nombre', 'like', '%' . $request->search . '%')
-              ->orWhere('numero_control', 'like', '%' . $request->search . '%')
-              ->orWhere('CURP', 'like', '%' . $request->search . '%')
-              ->orWhere('email', 'like', '%' . $request->search . '%');
+        $search = '%' . $request->search . '%';
+        $query->where('Nombre', 'like', $search)
+              ->orWhere('numero_control', 'like', $search)
+              ->orWhere('CURP', 'like', $search)
+              ->orWhere('email', 'like', $search)
+              ->orWhere('especialidad', 'like', $search)
+              ->orWhere('semestre', 'like', $search)
+              ->orWhere('Grupo', 'like', $search)
+              ->orWhere('estatus', 'like', $search);
     }
 
     if ($request->filled('grupo')) {

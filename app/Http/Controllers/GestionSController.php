@@ -52,11 +52,17 @@ class GestionSController extends Controller
             $query->where(function($q) use ($buscar) {
                 $q->where('nombre', 'LIKE', "%$buscar%")
                   ->orWhere('control', 'LIKE', "%$buscar%")
+                  ->orWhere('especialidad', 'LIKE', "%$buscar%")
+                  ->orWhere('grupo', 'LIKE', "%$buscar%")
+                  ->orWhere('semestre', 'LIKE', "%$buscar%")
+                  ->orWhere('fecha', 'LIKE', "%$buscar%")
                   ->orWhere('curp', 'LIKE', "%$buscar%")
-                  ->orWhere('tipo_servicio', 'LIKE', "%$buscar%");
+                  ->orWhere('tipo_servicio', 'LIKE', "%$buscar%")
+                  ->orWhere('status', 'LIKE', "%$buscar%");
             });
         }
-
+         // Ordenar por fecha de creación en orden descendente
+          $query->orderBy('created_at', 'desc');
         $formularios = $query->paginate(10);
 
         foreach ($formularios as $formulario) {
@@ -205,8 +211,19 @@ class GestionSController extends Controller
 
     // Método añadido para mostrar expedientes finalizados
     public function expedientesFinalizados()
-    {
-        $solicitudes = Formulario::whereNotNull('comprobante')->paginate(10);
-        return view('control_user.ExpedientesSS', compact('solicitudes'));
+{
+    $user = Auth::user();
+
+    if ($user->role == 'alumno') {
+        // Si el usuario es un alumno, mostrar solo sus solicitudes finalizadas
+        $solicitudes = Formulario::where('user_id', $user->id)
+                                 ->where('status', 'finalizado')
+                                 ->paginate(10);
+    } else {
+        // Si el usuario no es un alumno, mostrar todas las solicitudes finalizadas
+        $solicitudes = Formulario::where('status', 'finalizado')->paginate(10);
     }
+
+    return view('control_user.ExpedientesSS', compact('solicitudes'));
+}
 }

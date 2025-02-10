@@ -1,7 +1,7 @@
 @extends('tablar::page')
 
 @section('title')
-    Solicitudes de Servicios de Exámenes
+    Solicitudes de Exámenes (Financiero)
 @endsection
 
 @section('content')
@@ -12,7 +12,7 @@
                 <div class="col">
                     <div class="page-pretitle"></div>
                     <h2 class="page-title">
-                        {{ __('Solicitudes de Servicios de Exámenes') }}
+                        {{ __('Solicitudes de Exámenes (Financiero)') }}
                     </h2>
                 </div>
             </div>

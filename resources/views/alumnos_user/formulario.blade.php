@@ -41,7 +41,6 @@
                 <option value="curso_intensivo">Curso Intensivo (Submódulos)</option>
                 <option value="titulo_suficiencia">Título Suficiencia</option>
                 <option value="segundo_curso_intensivo">2º Curso Intensivo (Submódulos)</option>
-                
             </select>
         </div>
 
