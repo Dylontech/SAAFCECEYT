@@ -191,13 +191,25 @@ return [
         'text' => 'Expedientes de Solicitudes de Servicios',
         'url' => 'control_user/expedientesSS',
         'icon' => 'ti ti-folder',
-        'roles' => ['alumno', 'control_escolar', 'admin']
+        'roles' => ['servicio_financiero', 'control_escolar', 'admin']
     ],
     [
         'text' => 'Expedientes de Solicitudes de Examenes',
         'url' => 'control_user/expedientesEE',
         'icon' => 'ti ti-folder',
-        'roles' => ['alumno', 'control_escolar', 'admin']
+        'roles' => ['servicio_financiero', 'control_escolar', 'admin']
+    ],
+    [
+        'text' => 'Expedientes de Solicitudes de Servicios',
+        'url' => 'alumno_user/expedientesSS',
+        'icon' => 'ti ti-folder',
+        'roles' => ['alumno']
+    ],
+    [
+        'text' => 'Expedientes de Solicitudes de Examenes',
+        'url' => 'alumno_user/expedientesEE',
+        'icon' => 'ti ti-folder',
+        'roles' => ['alumno']
     ],
     [
         'text' => 'Materias',

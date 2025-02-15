@@ -214,15 +214,12 @@ class GestionSController extends Controller
 {
     $user = Auth::user();
 
-    if ($user->role == 'alumno') {
-        // Si el usuario es un alumno, mostrar solo sus solicitudes finalizadas
-        $solicitudes = Formulario::where('user_id', $user->id)
-                                 ->where('status', 'finalizado')
-                                 ->paginate(10);
-    } else {
-        // Si el usuario no es un alumno, mostrar todas las solicitudes finalizadas
-        $solicitudes = Formulario::where('status', 'finalizado')->paginate(10);
-    }
+    // Mostrar todas las solicitudes que tengan información en todos los campos especificados
+    $solicitudes = Formulario::whereNotNull('liga_de_pago')
+        ->whereNotNull('comprobante_alumno')
+        ->whereNotNull('comprobante')
+        ->whereNotNull('comprobante_oficial')
+        ->paginate(10);
 
     return view('control_user.ExpedientesSS', compact('solicitudes'));
 }

@@ -16,6 +16,7 @@ use App\Http\Controllers\GestionSController; // Importa el nuevo controlador
 use App\Http\Controllers\FinanzasUserController; // Importa el nuevo controlador
 use App\Http\Controllers\GestionEController;
 use App\Http\Controllers\CarruselController;
+use App\Http\Controllers\alumnos_userController;
 
 // Página principal
 Route::get('/', function () {
@@ -55,7 +56,9 @@ Route::middleware(['auth:web'])->group(function () {
 // Rutas para alumnos autenticados
 Route::middleware(['auth:alumno'])->group(function () {
     Route::get('/alumnos_user', [App\Http\Controllers\alumnos_userController::class, 'index'])->name('alumnos_user.index');
-
+    // Rutas para la vista de expedientes
+    Route::get('alumno_user/expedientesSS', [alumnos_userController::class, 'expedientesSS']);
+    Route::get('alumno_user/expedientesEE', [alumnos_userController::class, 'expedientesEE']);
     // Ruta para el formulario independiente
     Route::get('/formulario', [FormularioEController::class, 'create'])->name('formulario');
 
@@ -143,7 +146,8 @@ Route::get('gestions/downloadComprobanteOficial/{id}', [GestionSController::clas
 //ruta para revision
 Route::get('finanzas/downloadComprobanteOficial/{id}', [App\Http\Controllers\FinanzasUserController::class, 'downloadComprobanteOficial'])->name('finanzas.downloadComprobanteOficial');
 // Rutas para la vista de expedientes finalizados para control escolar
-Route::get('control_user/expedientes-finalizados', [App\Http\Controllers\GestionSController::class, 'expedientesFinalizados'])->name('control_user.expedientesFinalizados');
+Route::get('control_user/expedientesSS', [App\Http\Controllers\GestionSController::class, 'expedientesFinalizados'])->name('control_user.expedientesSS');
+Route::get('control_user/expedientesEE', [App\Http\Controllers\GestionEController::class, 'expedientesFinalizados'])->name('control_user.expedientesEE');
 Route::get('control_user/{id}', [App\Http\Controllers\GestionSController::class, 'show'])->name('control_user.show');
 Route::get('gestions/downloadComprobante/{id}', [App\Http\Controllers\GestionSController::class, 'downloadComprobante'])->name('gestions.downloadComprobante');
 
@@ -205,3 +209,6 @@ Route::get('/alumnos/edit-multiple', [App\Http\Controllers\AlumnoController::cla
 Route::patch('/alumnos/update-multiple', [App\Http\Controllers\AlumnoController::class, 'updateMultiple'])->name('alumnos.updateMultiple');
 Route::post('/alumnos/edit-multiple', [AlumnoController::class, 'editMultiple'])->name('alumnos.editMultiple');
 Route::get('carrusel/image/{id}', [CarruselController::class, 'getImage'])->name('carrusel.image');
+
+
+
