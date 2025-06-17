@@ -66,6 +66,15 @@
                                     </select>
                                 </div>
                                 <div class="me-2">
+                                    <label class="form-label">Tipo de Pago</label>
+                                    <select class="form-select form-select-sm" id="tipo_pago" name="tipo_pago">
+                                        <option value="">Todos</option>
+                                        @foreach ($tipo_pagos as $tipo)
+                                            <option value="{{ $tipo }}">{{ $tipo }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="me-2">
                                     <label class="form-label">Buscar</label>
                                     <input type="text" class="form-control form-control-sm" name="buscar" value="{{ request('buscar') }}" aria-label="Buscar">
                                 </div>
