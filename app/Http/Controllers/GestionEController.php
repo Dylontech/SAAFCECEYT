@@ -114,6 +114,7 @@ class GestionEController extends Controller
         $search = $request->input('buscar');
         $especialidad = $request->input('especialidad');
         $grupo = $request->input('grupo');
+        $tipo_pago = $request->input('tipo_pago');
         
         // Construir la consulta con los filtros
         $query = FormularioE::query();
@@ -140,14 +141,19 @@ class GestionEController extends Controller
             $query->where('grupo', $grupo);
         }
 
+        if ($tipo_pago) {
+            $query->where('tipo_pago', $tipo_pago);
+        }
+
         $formularios = $query->paginate(10);
 
         // Obtener las listas para los filtros
         $controles = FormularioE::distinct()->pluck('numero_control');
         $especialidades = FormularioE::distinct()->pluck('especialidad');
         $grupos = FormularioE::distinct()->pluck('grupo');
-        
-        return view('financiero_user.SolicitudesServiciosS', compact('formularios', 'controles', 'especialidades', 'grupos'));
+        $tipo_pagos = FormularioE::distinct()->pluck('tipo_pago');
+
+        return view('financiero_user.SolicitudesServiciosS', compact('formularios', 'controles', 'especialidades', 'grupos', 'tipo_pagos'));
     }
 
     public function indexComprobantes($id)
