@@ -16,7 +16,7 @@ use App\Http\Controllers\GestionSController; // Importa el nuevo controlador
 use App\Http\Controllers\FinanzasUserController; // Importa el nuevo controlador
 use App\Http\Controllers\GestionEController;
 use App\Http\Controllers\CarruselController;
-use App\Http\Controllers\alumnos_userController;
+use App\Http\Controllers\AlumnosUserController;
 
 // Página principal
 Route::get('/', function () {
@@ -55,10 +55,10 @@ Route::middleware(['auth:web'])->group(function () {
 
 // Rutas para alumnos autenticados
 Route::middleware(['auth:alumno'])->group(function () {
-    Route::get('/alumnos_user', [App\Http\Controllers\alumnos_userController::class, 'index'])->name('alumnos_user.index');
+    Route::get('/alumnos_user', [App\Http\Controllers\AlumnosUserController::class, 'index'])->name('alumnos_user.index');
     // Rutas para la vista de expedientes
-    Route::get('alumno_user/expedientesSS', [alumnos_userController::class, 'expedientesSS']);
-    Route::get('alumno_user/expedientesEE', [alumnos_userController::class, 'expedientesEE']);
+    Route::get('alumno_user/expedientesSS', [AlumnosUserController::class, 'expedientesSS']);
+    Route::get('alumno_user/expedientesEE', [AlumnosUserController::class, 'expedientesEE']);
     // Ruta para el formulario independiente
     Route::get('/formulario', [FormularioEController::class, 'create'])->name('formulario');
 

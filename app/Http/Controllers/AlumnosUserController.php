@@ -9,7 +9,7 @@ use App\Models\Formulario;
 use App\Models\FormularioE;
 
 
-class alumnos_userController extends Controller
+class AlumnosUserController extends Controller
 {
     public function index(Request $request)
     {
