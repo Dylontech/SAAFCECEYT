@@ -111,10 +111,7 @@ Route::post('/admin/download-backup-table', [AdminController::class, 'downloadBa
 Route::get('/admin/whatsapp-settings', [WhatsappSettingsController::class, 'edit'])->name('edit.whatsapp.settings');
 Route::post('/admin/update-whatsapp-settings', [WhatsappSettingsController::class, 'update'])->name('update.whatsapp.settings');
 
-// Ruta temporal sin autenticación para prueba
-
-
-// Nuevas rutas para GestionSController
+// Rutas para GestionSController
 Route::get('/gestions', [GestionSController::class, 'index'])->name('gestions.index'); // Ruta para la vista principal
 Route::get('/formularios/{id}', [GestionSController::class, 'show'])->name('formularios.show'); // Ruta para ver la solicitud
 Route::patch('/formulario/{id}/status', [GestionSController::class, 'updateStatus'])->name('gestions.updateStatus'); // Corregida la ruta para actualizar el estado de la solicitud
