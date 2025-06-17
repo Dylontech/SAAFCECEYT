@@ -23,7 +23,7 @@ class FormularioController extends Controller
         if ($request->filled('search')) {
             $query->where(function($q) use ($search) {
                 $q->where('Nombre', 'like', '%' . $search . '%')
-                  ->orWhere('numero_control', 'like', '%' . $search . '%')
+                  ->orWhere('control', 'like', '%' . $search . '%')
                   ->orWhere('CURP', 'like', '%' . $search . '%')
                   ->orWhere('email', 'like', '%' . $search . '%')
                   ->orWhere('especialidad', 'like', '%' . $search . '%')
