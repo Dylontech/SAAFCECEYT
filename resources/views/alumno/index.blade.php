@@ -84,11 +84,36 @@
                                             <input type="text" class="form-control form-control-sm" name="search" value="{{ request('search') }}" aria-label="Search invoice">
                                         </div>
                                     </div>
+                                    <div class="text-muted me-3">
+                                        <label for="perPage" class="form-label">Registros por página</label>
+                                        <div class="mx-2 d-inline-block">
+                                            <select class="form-control form-control-sm" name="perPage" onchange="this.form.submit()">
+                                                @foreach([10, 25, 50, 100] as $size)
+                                                    <option value="{{ $size }}" {{ request('perPage', 10) == $size ? 'selected' : '' }}>{{ $size }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
                                     <div class="me-2 align-self-end">
                                         <button type="submit" class="btn btn-primary btn-sm">Filtrar</button>
                                     </div>
                                 </div>
                             </form>
+                            <script>
+                                // Mantener el valor de perPage en los formularios de paginación
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    let paginators = document.querySelectorAll('.pagination a');
+                                    paginators.forEach(function(link) {
+                                        link.addEventListener('click', function(e) {
+                                            e.preventDefault();
+                                            let url = new URL(link.href);
+                                            let perPage = document.querySelector('select[name="perPage"]').value;
+                                            url.searchParams.set('perPage', perPage);
+                                            window.location.href = url.toString();
+                                        });
+                                    });
+                                });
+                            </script>
                         </div>
                         <div class="table-responsive min-vh-100">
                             <form method="POST" action="{{ route('alumnos.editMultiple') }}" id="edit-multiple-form">
@@ -138,12 +163,10 @@
                                                                href="{{ route('alumnos.edit',$alumno->id) }}">
                                                                 Editar
                                                             </a>
-                                                            <form
-                                                                action="{{ route('alumnos.destroy',$alumno->id) }}"
-                                                                method="POST">
+                                                            <form action="{{ route('alumnos.destroy',$alumno->id) }}" method="POST" onsubmit="return confirmDelete(event)">
                                                                 @csrf
                                                                 @method('DELETE')
-                                                                <button type="button" class="dropdown-item text-red" onclick="confirmDelete(event)">
+                                                                <button type="submit" class="dropdown-item text-red">
                                                                     <i class="fa fa-fw fa-trash"></i> Eliminar
                                                                 </button>
                                                             </form>
@@ -158,6 +181,38 @@
                                     </tbody>
                                 </table>
                             </form>
+                            <div class="d-flex justify-content-center mt-3">
+                                <nav aria-label="Paginación personalizada">
+                                    <ul class="pagination justify-content-center mb-0">
+                                        @php
+                                            $current = $alumnos->currentPage();
+                                            $last = $alumnos->lastPage();
+                                            $pages = [];
+                                            // Siempre mostrar las primeras 2 y las últimas 2
+                                            for ($i = 1; $i <= 2; $i++) $pages[] = $i;
+                                            for ($i = $last-1; $i <= $last; $i++) if($i > 2) $pages[] = $i;
+                                            // Mostrar 2 antes y 2 después de la actual
+                                            for ($i = $current-2; $i <= $current+2; $i++) if($i > 2 && $i < $last-1) $pages[] = $i;
+                                            $pages = array_unique($pages);
+                                            sort($pages);
+                                            $prev = 0;
+                                        @endphp
+                                        @foreach ($pages as $page)
+                                            @if ($prev && $page > $prev + 1)
+                                                <li class="page-item disabled"><span class="page-link">&hellip;</span></li>
+                                            @endif
+                                            <li class="page-item {{ $current == $page ? 'active' : '' }}">
+                                                <a class="page-link bg-body-tertiary border-0 text-dark-emphasis dark:text-light-emphasis"
+                                                   href="{{ $alumnos->url($page) }}{{ request()->getQueryString() ? '&'.http_build_query(request()->except('page')) : '' }}"
+                                                   style="cursor:pointer;">
+                                                    {{ $page }}
+                                                </a>
+                                            </li>
+                                            @php $prev = $page; @endphp
+                                        @endforeach
+                                    </ul>
+                                </nav>
+                            </div>
                             
                             <script>
                                 document.getElementById('select-all').addEventListener('click', function(event) {
@@ -175,7 +230,7 @@
                             
                                 function confirmDelete(event) {
                                     event.preventDefault();
-                                    Swal.fire({
+                                    return Swal.fire({
                                         title: "¿Estás seguro?",
                                         text: "¡No podrás revertir esto!",
                                         icon: "warning",
@@ -186,14 +241,9 @@
                                         cancelButtonText: "Cancelar"
                                     }).then((result) => {
                                         if (result.isConfirmed) {
-                                            event.target.closest('form').submit();
-                                            Swal.fire({
-                                                title: "¡Eliminado!",
-                                                text: "Tu archivo ha sido eliminado.",
-                                                icon: "success"
-                                            });
+                                            event.target.form.submit();
                                         }
-                                    });
+                                    }), false;
                                 }
                             </script>
 @endsection

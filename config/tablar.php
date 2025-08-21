@@ -187,30 +187,30 @@ return [
     //     'roles' => ['alumno']
     // ],
     // Ítem de menú para la vista de expedientes de servicios sociales, visible solo para control_escolar
-    [
-        'text' => 'Expedientes de Solicitudes de Servicios',
-        'url' => 'control_user/expedientesSS',
-        'icon' => 'ti ti-folder',
-        'roles' => ['servicio_financiero', 'control_escolar', 'admin']
-    ],
-    [
-        'text' => 'Expedientes de Solicitudes de Examenes',
-        'url' => 'control_user/expedientesEE',
-        'icon' => 'ti ti-folder',
-        'roles' => ['servicio_financiero', 'control_escolar', 'admin']
-    ],
-    [
-        'text' => 'Expedientes de Solicitudes de Servicios',
-        'url' => 'alumno_user/expedientesSS',
-        'icon' => 'ti ti-folder',
-        'roles' => ['alumno']
-    ],
-    [
-        'text' => 'Expedientes de Solicitudes de Examenes',
-        'url' => 'alumno_user/expedientesEE',
-        'icon' => 'ti ti-folder',
-        'roles' => ['alumno']
-    ],
+    // [
+    //     'text' => 'Expedientes de Solicitudes de Servicios',
+    //     'url' => 'control_user/expedientesSS',
+    //     'icon' => 'ti ti-folder',
+    //     'roles' => ['servicio_financiero', 'control_escolar', 'admin']
+    // ],
+    // [
+    //     'text' => 'Expedientes de Solicitudes de Examenes',
+    //     'url' => 'control_user/expedientesEE',
+    //     'icon' => 'ti ti-folder',
+    //     'roles' => ['servicio_financiero', 'control_escolar', 'admin']
+    // ],
+    // [
+    //     'text' => 'Expedientes de Solicitudes de Servicios',
+    //     'url' => 'alumno_user/expedientesSS',
+    //     'icon' => 'ti ti-folder',
+    //     'roles' => ['alumno']
+    // ],
+    // [
+    //     'text' => 'Expedientes de Solicitudes de Examenes',
+    //     'url' => 'alumno_user/expedientesEE',
+    //     'icon' => 'ti ti-folder',
+    //     'roles' => ['alumno']
+    // ],
     [
         'text' => 'Materias',
         'url' => 'materias',
@@ -218,7 +218,7 @@ return [
         'roles' => ['control_escolar','Admin']
     ],
     [
-        'text' => 'Carrusel',
+        'text' => 'Novedades',
         'url' => 'carrusel',
         'icon' => 'ti ti-folder',
         'roles' => ['control_escolar','Admin','servicio_financiero',]

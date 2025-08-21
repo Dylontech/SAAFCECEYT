@@ -39,9 +39,10 @@ class AlumnoController extends Controller
     if ($request->filled('especialidad')) {
         $query->where('especialidad', $request->especialidad);
     }
-    
 
-    $alumnos = $query->paginate(10);
+    // Obtener el valor de perPage del request, por defecto 10
+    $perPage = $request->input('perPage', 10);
+    $alumnos = $query->paginate($perPage);
 
     // Definir los grupos y especialidades
     $grupos = Alumno::select('Grupo')->distinct()->pluck('Grupo');
